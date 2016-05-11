@@ -21,15 +21,25 @@ module.exports = {
   */
   attributes: {
     ds_ap_id: {
+        type: "string",
         primaryKey: true,
-        unique: true,
-        autoIncrement: true 
+        unique: true
     },
     ds_device_type:{ type: "string" },
     ds_platform_type:{ type: "string" },
     ds_push_token:{ type: "string" },
     ds_update:{ type: "date_time" },
     ds_deleted:{ type: "date_time" }
+  },
+  //unique失效使用
+  beforeCreate: function (values, next) {
+    Ds_fingerprint_ap.count({ds_ap_id:values.ds_ap_id}).exec(function countCB(error, found) {
+      if(found==0){
+        next();
+      }else{
+        next( new Error('Limit must be greater than number') );
+      }
+    });
   }
 };
 

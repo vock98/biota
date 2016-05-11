@@ -18,7 +18,6 @@ module.exports = {
     速度 ds_speed 
     製造商 ds_co 
     位置識別碼 ds_addr 
-    資料更新時間 ds_update 
     產品名稱 ds_product 
     連結裝置PK ds_ap_id 
     刪除註記 ds_deleted  
@@ -34,7 +33,6 @@ module.exports = {
     ds_speed:{ type: "string" },
     ds_co:{ type: "string" },
     ds_addr:{ type: "string" },
-    ds_update:{ type: "date_time" },
     ds_product:{ type: "string" },
  // ds_ap_id:{ model: "ds_ap" },
     ds_deleted:{ type: "date_time" }
