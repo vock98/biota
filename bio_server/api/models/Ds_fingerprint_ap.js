@@ -15,7 +15,6 @@ module.exports = {
     設備唯一碼 ds_ap_id 
     設備型態 ds_device_type
     平台型態 ds_platform_type
-    資料更新時間 ds_update
     推播唯一碼 ds_push_token
     刪除註記 ds_deleted
   */
@@ -28,8 +27,10 @@ module.exports = {
     ds_device_type:{ type: "string" },
     ds_platform_type:{ type: "string" },
     ds_push_token:{ type: "string" },
-    ds_update:{ type: "date_time" },
-    ds_deleted:{ type: "date_time" }
+    ds_deleted:{ 
+        type: "datetime",
+        defaultsTo: ''
+    }
   },
   //unique失效使用
   beforeCreate: function (values, next) {
