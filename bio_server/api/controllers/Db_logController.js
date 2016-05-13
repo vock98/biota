@@ -10,7 +10,7 @@ module.exports = {
         用途 : 查看內容
         輸入 : 無
         輸出 : 整個DB
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/find
+        快速連結 : http://localhost:1337/api/Db_log/find
     */
 	find: function(req, res) {
         var params = req.params.all();
