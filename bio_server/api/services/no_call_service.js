@@ -9,15 +9,29 @@ module.exports = {
             return return_str;
     },
     //製作一個快速寫入DB_LOG的function 時間是自動產生不用補
-    write_log:function(table_name, CRUD, input_cond, who){
+    write_log:function(table_name, CRUD, input_cond, who, type){
         var cond = {};
         cond.table_name = table_name;
         cond.CRUD = CRUD;
         cond.input_cond = input_cond;
         cond.who = who;
-        Db_log.create(cond).exec(function(err,create_data){
-            console.log("log",create_data);
-        })
+        if(type=="device"){
+            //設備操作紀錄LOG
+            Db_device_log.create(cond).exec(function(err,create_data){
+                console.log("log",create_data);
+            }) 
+        }else if(type=="human"){
+            //人員資料LOG
+            Db_human_log.create(cond).exec(function(err,create_data){
+                console.log("log",create_data);
+            })            
+        }else{
+            //資料LOG
+            Db_log.create(cond).exec(function(err,create_data){
+                console.log("log",create_data);
+            }) 
+        }
+
     },
 };
 

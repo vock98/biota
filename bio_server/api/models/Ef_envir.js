@@ -20,6 +20,7 @@ module.exports = {
   */
   attributes: {
     ef_envir_pk: {
+        type: "string",
         primaryKey: true,
         unique: true,
         autoIncrement: true 

@@ -24,6 +24,7 @@ module.exports = {
   */
   attributes: {
     ds_human_pk: {
+        type: "string",
         primaryKey: true,
         unique: true,
         autoIncrement: true 
@@ -38,7 +39,7 @@ module.exports = {
     ds_job:{type: "string"},
     ds_name:{type: "string"},
     ds_bind_id:{type: "string"},
-    ds_is_manager:{type: "string"},
+    ds_is_manager:{type: "string"}
   }
 };
 

@@ -32,11 +32,10 @@ module.exports = {
         type: "string",
         enum: ['r-thumb','r-index','r-middle','r-ring','r-pinky','l-thumb','l-index','l-middle','l-ring','l-pinky'] 
     },
-    // ef_envir_pk:{ model: "ef_envir" },
-    // ds_human_pk:{ model: "ds_human" },
-    // ds_device_id:{ model: "ds_device" },
-    // ds_ap_id:{ model: "ds_ap" },
-    f_linked_updated:{ type: "datetime" },
+    ef_envir_pk:{ model: "ef_envir" },
+    ds_human_pk:{ model: "ds_human" },
+    ds_device_id:{ model: "ds_fingerprint_device" },
+    ds_ap_id:{ model: "ds_fingerprint_ap" },
     f_dat_path:{ type: "string" },
     f_pic_path:{ type: "string" } 
   }

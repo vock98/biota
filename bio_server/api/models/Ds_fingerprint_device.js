@@ -24,6 +24,7 @@ module.exports = {
   */
   attributes: {
     ds_device_id: {
+        type: "string",
         primaryKey: true,
         unique: true,
         autoIncrement: true 
