@@ -38,6 +38,7 @@ module.exports = {
       if(found==0){
         next();
       }else{
+        no_call_service.write_log("Ds_fingerprint_ap","C_repeat", values, "");
         next( new Error('Limit must be greater than number') );
       }
     });

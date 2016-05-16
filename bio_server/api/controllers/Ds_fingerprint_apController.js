@@ -5,6 +5,7 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+    var table_name = "Ds_fingerprint_ap";
 module.exports = {
 	/*
         用途 : 查看內容
@@ -14,7 +15,13 @@ module.exports = {
     */
 	find: function(req, res) {
         Ds_fingerprint_ap.find().exec(function(err,find_data){
-                return res.json(find_data);           
+                if(err){
+                    no_call_service.write_log(table_name,"R_all_err", err, req.session.id);
+                    return res.json({error:1001});
+                }else{
+                    no_call_service.write_log(table_name,"R_all", "",req.session.id);
+                    return res.json(find_data);                               
+                }
         })
     },
     /*
@@ -25,24 +32,38 @@ module.exports = {
     */
 	search: function(req, res) {
         var params = req.params.all();
+        var cond = {};
         if(params.ds_ap_id){
             //有ID優先用ID
-            Ds_fingerprint_ap.findOne({ds_ap_id:params.ds_ap_id}).exec(function(err,find_data){
-                    return res.json(find_data);           
+            cond.ds_ap_id = params.ds_ap_id;
+            Ds_fingerprint_ap.findOne(cond).exec(function(err,find_data){
+                    if(err){
+                        no_call_service.write_log(table_name,"R_id_err", err, req.session.id);
+                        return res.json({error:1002});
+                    }else{
+                        no_call_service.write_log(table_name,"R_id", params, req.session.id);
+                        return res.json(find_data);                              
+                    }          
             })
         }else if(params.ds_platform_type!=undefined || params.ds_device_type!=undefined){
             //沒ID使用 ["ds_platform_type", "ds_device_type"]
-            var cond = {};
             if(params.ds_platform_type!=undefined) cond.ds_platform_type = params.ds_platform_type;
             if(params.ds_device_type!=undefined) cond.ds_device_type = params.ds_device_type;
             
             Ds_fingerprint_ap.find(cond).exec(function(err,find_data){
-                    return res.json(find_data);           
+                if(err){
+                    no_call_service.write_log(table_name,"R_cond_err", err, req.session.id);
+                    return res.json({error:1003});
+                }else{
+                    no_call_service.write_log(table_name,"R_cond", params, req.session.id);
+                    return res.json(find_data);                             
+                }          
             })
         }else{
             //其餘一律error
             var error_msg = "error AP001";
             console.log("error_msg",error_msg);
+            no_call_service.write_log(table_name,"R_error", params, req.session.id);
             return res.send(error_msg);
         }
     },
@@ -59,10 +80,20 @@ module.exports = {
         if(check_result==""){
             //參數不缺少
             Ds_fingerprint_ap.create(params).exec(function(err,create_data){
-                return res.json(create_data);           
+                if(err){
+                    no_call_service.write_log(table_name,"C_error", err, req.session.id);
+                    return res.json({error:2001});
+                }else{
+                    console.log(table_name,"C_ok");
+                    console.log(table_name, params);
+                    console.log(table_name, req.session.id);
+                    no_call_service.write_log(table_name,"C_ok", params, req.session.id);
+                    return res.json(create_data);                             
+                }           
             })       
         }else{
             //參數缺少 直接回應內容
+            no_call_service.write_log(table_name,"C_less", params, req.session.id);
             return res.send(check_result);            
         }
     },
@@ -79,10 +110,17 @@ module.exports = {
         if(check_result==""){
             //參數不缺少
             Ds_fingerprint_ap.update({ ds_ap_id: params.ds_ap_id }, params ).exec(function(err,update_data){
-                return res.json(update_data);           
+                if(err){
+                    no_call_service.write_log(table_name,"U_error", err, req.session.id);
+                    return res.json({error:3001});
+                }else{
+                    no_call_service.write_log(table_name,"U_ok", params, req.session.id);
+                    return res.json(update_data);                               
+                }
             })       
         }else{
             //參數缺少 直接回應內容
+            no_call_service.write_log(table_name,"U_less", params, req.session.id);
             return res.send(check_result);            
         }
     },
@@ -100,10 +138,17 @@ module.exports = {
         if(check_result==""){
             //參數不缺少
             Ds_fingerprint_ap.update( { "ds_ap_id": params.ds_ap_id },{"ds_deleted": moment().toISOString()} ).exec(function(err,update_data){
-                return res.json(update_data);           
+                if(err){
+                    no_call_service.write_log(table_name,"D_error", err, req.session.id);
+                    return res.json({error:4001});
+                }else{
+                    no_call_service.write_log(table_name,"D_ok", params, req.session.id);
+                    return res.json(update_data);                                
+                }
             })       
         }else{
             //參數缺少 直接回應內容
+            no_call_service.write_log(table_name,"D_less", params, req.session.id);
             return res.send(check_result);            
         }
     },
