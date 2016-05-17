@@ -35,8 +35,19 @@ module.exports = {
     ds_co:{ type: "string" },
     ds_addr:{ type: "string" },
     ds_product:{ type: "string" },
- // ds_ap_id:{ model: "ds_ap" },
+    ds_ap_id:{ model: "Ds_fingerprint_ap" },
     ds_deleted:{ type: "date_time" }
+  },
+  //unique失效使用
+  beforeCreate: function (values, next) {
+    Ds_fingerprint_device.count({ds_device_id:values.ds_device_id}).exec(function countCB(error, found) {
+      if(found==0){
+        next();
+      }else{
+        no_call_service.write_log("Ds_fingerprint_device","C_repeat", values, "device");
+        next( new Error('Limit must be greater than number') );
+      }
+    });
   }
 };
 

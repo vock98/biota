@@ -26,6 +26,36 @@ module.exports = {
         })
     },
     /*
+        用途 : 創建設備
+        輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
+        輸出 : 創建object or error
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/add?ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
+    */
+	add: function(req, res) {
+        var params = req.params.all();
+        var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
+        var check_result = no_call_service.check_data(params, check_array);
+        if(check_result==""){
+            //參數不缺少
+            Ds_fingerprint_ap.create(params).exec(function(err,create_data){
+                if(err){
+                    no_call_service.write_log(table_name,"C_error", err, req.session.id, log_type);
+                    return res.json({error:2001});
+                }else{
+                    console.log(table_name,"C_ok");
+                    console.log(table_name, params);
+                    console.log(table_name, req.session.id);
+                    no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
+                    return res.json(create_data);                             
+                }           
+            })       
+        }else{
+            //參數缺少 直接回應內容
+            no_call_service.write_log(table_name,"C_less", params, req.session.id, log_type);
+            return res.send(check_result);            
+        }
+    },
+    /*
         用途 : 查看搜尋內容 (R1)
         輸入 : ds_ap_id or ["ds_platform_type", "ds_device_type"]
         輸出 : 整個DB查到的資料(會呈現Human資料給使用者看)
@@ -43,10 +73,24 @@ module.exports = {
             Ds_fingerprint_ap.findOne(cond).exec(function(err,find_data){
                     if(err){
                         no_call_service.write_log(table_name,"R1_err", err, req.session.id, log_type);
-                        return res.json({error:1002});
+                        return res.json({error:10020});
                     }else{
                         no_call_service.write_log(table_name,"R1_ok", params, req.session.id, log_type);
-                        return res.json(find_data);                              
+                        //撈取符合的使用者資料
+                        if( _.isEmpty(find_data) ){
+                            //查無資料直接回傳
+                            return res.json(find_data);    
+                        }else{
+                            F_linked.find({ds_ap_id: cond.ds_ap_id}).exec(function(err,flinked_data){
+                                if(err){
+                                    no_call_service.write_log(table_name,"R1_Flink_err", err, req.session.id, log_type);
+                                    return res.json({error:10021});
+                                }else{
+                                    find_data.human = _.pluck(flinked_data, ds_human_pk);
+                                    return res.json(find_data);                                    
+                                }
+                            });
+                        }                          
                     }          
             })
         }else{
@@ -85,37 +129,7 @@ module.exports = {
             no_call_service.write_log(table_name,"R2_die", params, req.session.id, log_type);
             return res.send(error_msg);
         }
-    },
-    /*
-        用途 : 創建設備
-        輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
-        輸出 : 創建object or error
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/add?ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
-    */
-	add: function(req, res) {
-        var params = req.params.all();
-        var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
-        var check_result = no_call_service.check_data(params, check_array);
-        if(check_result==""){
-            //參數不缺少
-            Ds_fingerprint_ap.create(params).exec(function(err,create_data){
-                if(err){
-                    no_call_service.write_log(table_name,"C_error", err, req.session.id, log_type);
-                    return res.json({error:2001});
-                }else{
-                    console.log(table_name,"C_ok");
-                    console.log(table_name, params);
-                    console.log(table_name, req.session.id);
-                    no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
-                    return res.json(create_data);                             
-                }           
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"C_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },
+    },    
     /*
         用途 : 修改設備
         輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
