@@ -22,7 +22,7 @@ module.exports = {
         unique: true,
         autoIncrement: true 
     },
-    // ds_human_pk:{ model: "ds_human" },
+    ds_human_pk:{ model: "ds_human" },
     ds_deleted:{ type: "datetime" }
   }
 };

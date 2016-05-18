@@ -26,17 +26,19 @@ module.exports = {
     ds_device_id: {
         type: "string",
         primaryKey: true,
-        unique: true,
-        autoIncrement: true 
+        unique: true
     },
     ds_co_id:{ type: "string" },
     ds_ver:{ type: "string" },
     ds_speed:{ type: "string" },
-    ds_co:{ type: "string" },
+    ds_company:{ type: "string" },
     ds_addr:{ type: "string" },
     ds_product:{ type: "string" },
     ds_ap_id:{ model: "Ds_fingerprint_ap" },
-    ds_deleted:{ type: "date_time" }
+    ds_deleted:{ 
+        type: "datetime" ,
+        defaultsTo: ''
+    }
   },
   //unique失效使用
   beforeCreate: function (values, next) {
@@ -45,9 +47,9 @@ module.exports = {
         next();
       }else{
         no_call_service.write_log("Ds_fingerprint_device","C_repeat", values, "device");
-        next( new Error('Limit must be greater than number') );
+        next( new Error('ID重複') );
       }
     });
-  }
+  },
 };
 

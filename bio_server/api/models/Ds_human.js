@@ -24,7 +24,7 @@ module.exports = {
   */
   attributes: {
     ds_human_pk: {
-        type: "string",
+        type: "int",
         primaryKey: true,
         unique: true,
         autoIncrement: true 
@@ -34,12 +34,23 @@ module.exports = {
         enum: ['MAN','WOMAN'] 
     },
     ds_birthday:{ type: "datetime" },
-    ds_deleted:{ type: "datetime" },
     ds_bloodtype:{type: "string"},
     ds_job:{type: "string"},
     ds_name:{type: "string"},
     ds_bind_id:{type: "string"},
-    ds_is_manager:{type: "string"}
+    ds_is_manager:{type: "string"},
+    ds_deleted:{ 
+        type: "datetime" ,
+        defaultsTo: ''
+    },
+    nfcs:{
+        collection: "ds_nfc",
+        via: "ds_human_pk"
+    },
+    f_linkeds:{
+        collection: "f_linked",
+        via: "ds_human_pk"
+    }
   }
 };
 

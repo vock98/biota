@@ -8,6 +8,14 @@ module.exports = {
         });
             return return_str;
     },
+    //驗證不可出現的參數
+	check_ignore_data:function(input_params, check_array){
+        var return_str =false;
+        _.map(check_array, function(num){
+            if(input_params[num]) return_str =true;
+        });
+            return return_str;
+    },
     //製作一個快速寫入DB_LOG的function 時間是自動產生不用補
     write_log:function(table_name, CRUD, input_cond, who, type){
         var cond = {};
@@ -31,7 +39,24 @@ module.exports = {
                 console.log("log",create_data);
             }) 
         }
-
+    },
+    //快速補出條件(必填用)
+	complete_cond:function( input_params, check_array, other_cond ){
+        var now_cond = {};
+        _.map(check_array,function(num){
+            now_cond[num] = input_params[num];
+        })
+        if(other_cond)  now_cond[other_cond] = "";
+        return now_cond;
+    },
+    //快速補出條件(非必填用)
+	complete_not_cond:function( input_params, check_array, other_cond ){
+        var now_cond = {};
+        _.map(check_array,function(num){
+            if(input_params[num]!=undefined)now_cond[num] = input_params[num];
+        })
+        if(other_cond)  now_cond[other_cond] = "";
+        return now_cond;
     },
 };
 

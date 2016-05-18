@@ -26,7 +26,10 @@ module.exports = {
     },
     ds_device_type:{ type: "string" },
     ds_platform_type:{ type: "string" },
-    ds_push_token:{ type: "string" },
+    ds_push_token:{ 
+        type: "string",
+        defaultsTo: ''
+    },
     ds_deleted:{ 
         type: "datetime",
         defaultsTo: ''
@@ -39,7 +42,7 @@ module.exports = {
         next();
       }else{
         no_call_service.write_log("Ds_fingerprint_ap","C_repeat", values, "device");
-        next( new Error('Limit must be greater than number') );
+        next( new Error('ID重複') );
       }
     });
   }
