@@ -18,12 +18,26 @@ module.exports = {
   */
   attributes: {
     ds_nfc_tag_id: {
+        type: "string",
         primaryKey: true,
-        unique: true,
-        autoIncrement: true 
+        unique: true
     },
     ds_human_pk:{ model: "ds_human" },
-    ds_deleted:{ type: "datetime" }
+    ds_deleted:{ 
+        type: "datetime" ,
+        defaultsTo: ''
+    }
+  },
+  //unique失效使用
+  beforeCreate: function (values, next) {
+    Ds_nfc.count({ds_nfc_tag_id:values.ds_nfc_tag_id}).exec(function countCB(error, found) {
+      if(found==0){
+        next();
+      }else{
+        no_call_service.write_log("Ds_nfc","C_repeat", values, "human");
+        next( new Error('ID重複') );
+      }
+    });
   }
 };
 

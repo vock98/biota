@@ -17,7 +17,6 @@ module.exports = {
     採樣設備資料 ds_device_id
     指紋採樣程式 ds_ap_id
     記錄環境主鍵 ef_envir_pk
-    採樣時間 f_linked_updated
     採樣手指 f_which_one
     記錄指紋路徑 f_dat_path
     圖片儲存路徑 f_pic_path

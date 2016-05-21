@@ -192,7 +192,7 @@ module.exports = {
             Ds_human.update( cond ,{"ds_deleted": moment().toISOString()} ).exec(function(err,update_data){
                 if(err){
                     no_call_service.write_log(table_name,"D_die", err, req.session.id, log_type);
-                    return res.json({error:5101});
+                    return res.json({error:5202});
                 }else{
                     no_call_service.write_log(table_name,"D_ok", params, req.session.id, log_type);
                     return res.json(update_data);                                

@@ -51,6 +51,17 @@ module.exports = {
         collection: "f_linked",
         via: "ds_human_pk"
     }
+  },
+  //unique失效使用
+  beforeCreate: function (values, next) {
+    Ds_human.count({ds_human_pk:values.ds_human_pk}).exec(function countCB(error, found) {
+      if(found==0){
+        next();
+      }else{
+        no_call_service.write_log("Ds_human","C_repeat", values, "human");
+        next( new Error('ID重複') );
+      }
+    });
   }
 };
 
