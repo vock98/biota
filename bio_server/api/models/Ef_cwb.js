@@ -18,11 +18,34 @@ module.exports = {
     記錄時間 ef_h00 ~ 23
   */
   attributes: {
-    ef_updated:{ type: "datetime" },
     ef_sitename:{ type: "string" },
     ef_source:{ type: "string" },
     ef_item:{ type: "string" },
-    ef_date:{ type: "datetime" }
+    ef_date:{ type: "datetime" },
+    ef_00:{ type: "double" , defaultsTo: ''},
+    ef_01:{ type: "double" , defaultsTo: ''},
+    ef_02:{ type: "double" , defaultsTo: ''},
+    ef_03:{ type: "double" , defaultsTo: ''},
+    ef_04:{ type: "double" , defaultsTo: ''},
+    ef_05:{ type: "double" , defaultsTo: ''},
+    ef_06:{ type: "double" , defaultsTo: ''},
+    ef_07:{ type: "double" , defaultsTo: ''},
+    ef_08:{ type: "double" , defaultsTo: ''},
+    ef_09:{ type: "double" , defaultsTo: ''},
+    ef_10:{ type: "double" , defaultsTo: ''},
+    ef_11:{ type: "double" , defaultsTo: ''},
+    ef_12:{ type: "double" , defaultsTo: ''},
+    ef_13:{ type: "double" , defaultsTo: ''},
+    ef_14:{ type: "double" , defaultsTo: ''},
+    ef_15:{ type: "double" , defaultsTo: ''},
+    ef_16:{ type: "double" , defaultsTo: ''},
+    ef_17:{ type: "double" , defaultsTo: ''},
+    ef_18:{ type: "double" , defaultsTo: ''},
+    ef_19:{ type: "double" , defaultsTo: ''},
+    ef_20:{ type: "double" , defaultsTo: ''},
+    ef_21:{ type: "double" , defaultsTo: ''},
+    ef_22:{ type: "double" , defaultsTo: ''},
+    ef_23:{ type: "double" , defaultsTo: ''}
   }
 };
 
