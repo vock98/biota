@@ -70,7 +70,7 @@ module.exports = {
         var cannot_param = ["ds_nfc_tag_id"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
         if(check_cannot){
-            no_call_service.write_log(table_name,"C_error_data", params, req.session.id, log_type);
+            no_call_service.write_log(table_name,"R_error_data", params, req.session.id, log_type);
             return res.json({error:3301});
         }
         

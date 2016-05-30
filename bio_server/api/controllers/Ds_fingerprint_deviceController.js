@@ -70,7 +70,7 @@ module.exports = {
         var cannot_param = ["ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
         if(check_cannot){
-            no_call_service.write_log(table_name,"C_error_data", params, req.session.id, log_type);
+            no_call_service.write_log(table_name,"R_error_data", params, req.session.id, log_type);
             return res.json({error:3101});
         }
         

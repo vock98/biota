@@ -1,3 +1,5 @@
+var moment = require('moment');
+var request = require('request');
 //此處出現的所有共用參數都不需要有callback
 module.exports = {
     //所有輸入值的驗證
@@ -26,17 +28,17 @@ module.exports = {
         if(type=="device"){
             //設備操作紀錄LOG
             Db_device_log.create(cond).exec(function(err,create_data){
-                console.log("log",create_data);
+                console.log("log",create_data.CRUD);
             }) 
         }else if(type=="human"){
             //人員資料LOG
             Db_human_log.create(cond).exec(function(err,create_data){
-                console.log("log",create_data);
+                console.log("log",create_data.CRUD);
             })            
         }else{
-            //資料LOG
+            //資料LOG 主要是天氣資料 太多 不呈現log
             Db_log.create(cond).exec(function(err,create_data){
-                console.log("log",create_data);
+                if(create_data.CRUD!="C_ok") console.log("log",create_data);
             }) 
         }
     },
@@ -62,8 +64,6 @@ module.exports = {
 	convert_time:function( input_params ){
         var new_params = input_params;
         var return_array = [];
-        delete new_params['ef_time'];
-        delete new_params['ef_value'];
         return_array[0] = new_params;
         switch(input_params.ef_time){
             case "00": new_params.ef_h00 = input_params.ef_value; break;
@@ -92,7 +92,50 @@ module.exports = {
             case "23": new_params.ef_h23 = input_params.ef_value; break;           
         }
         return_array[1] = new_params;
+        delete return_array[1]['ef_time'];
+        delete return_array[1]['ef_value'];
+        delete return_array[1]['id'];
         return return_array;
+    },
+    //拆解氣象局資料並寫進資料庫
+    Analy_weather:function( input_params ){
+        var table_name = "Ef_cwb";
+        var log_type = "out";
+        
+        var data_params = input_params.cwbopendata;
+        var result_obj ={};
+            // return data_params.location[0].time[0].obsTime[0];
+        //資料來源
+        if(data_params.dataid == "CWB_A0002"){
+            result_obj.ef_source = "RAIN";
+        }else if(data_params.dataid == "CWB_A0003"){
+            result_obj.ef_source = "NOW";            
+        }
+
+        //拆解各區域資料
+        _.map(data_params.location, function(ldata){
+            //觀測站名稱
+            result_obj.ef_sitename = ldata.locationName[0];
+            //紀錄日期
+            result_obj.ef_date = moment(ldata.time[0].obsTime[0]).format('YYYY-MM-DD');
+            //紀錄時間
+            result_obj.ef_time = moment(ldata.time[0].obsTime[0]).format('HH');
+            
+            //資料名稱
+            //WDSD = 風速、TEMP = 溫度、HUMD = 相對濕度、PRES = 氣壓、H_24R = 日累積雨量            
+            var four_add = ["TEMP","HUMD","PRES","WDSD"]
+            _.each(four_add,function(key){
+                result_obj.ef_item =key;
+                result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: [key]}).elementValue[0].value[0];
+                request.post('http://localhost:1337/api/Ef_cwb/add', {form:result_obj});
+            });
+
+            result_obj.ef_item ="H_24R";        
+            result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: ["24R"]}).elementValue[0].value[0];        
+            request.post('http://localhost:1337/api/Ef_cwb/add', {form:result_obj});
+        });
+ 
+        // return data_params.location[0];
     },
 };
 
