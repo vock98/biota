@@ -62,9 +62,10 @@ module.exports = {
     },
     //轉換ef_time +ef_value ->ef_h00~ef_h23
 	convert_time:function( input_params ){
+        delete input_params['id'];
         var new_params = input_params;
         var return_array = [];
-        return_array[0] = new_params;
+        return_array[0] = _.extend({}, input_params );
         switch(input_params.ef_time){
             case "00": new_params.ef_h00 = input_params.ef_value; break;
             case "01": new_params.ef_h01 = input_params.ef_value; break;
@@ -91,10 +92,11 @@ module.exports = {
             case "22": new_params.ef_h22 = input_params.ef_value; break;
             case "23": new_params.ef_h23 = input_params.ef_value; break;           
         }
-        return_array[1] = new_params;
+        return_array[1] = _.extend({}, new_params );
+        delete return_array[0]['ef_time'];
         delete return_array[1]['ef_time'];
-        delete return_array[1]['ef_value'];
-        delete return_array[1]['id'];
+        delete return_array[0]['ef_value'];
+        delete return_array[1]['ef_value'];        
         return return_array;
     },
     //拆解氣象局資料並寫進資料庫
