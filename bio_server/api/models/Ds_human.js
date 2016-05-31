@@ -24,14 +24,14 @@ module.exports = {
   */
   attributes: {
     ds_human_pk: {
-        type: "int",
+        type: "string",
         primaryKey: true,
         unique: true,
         autoIncrement: true 
     },
     ds_gender:{ 
         type: "string",
-        enum: ['MAN','WOMAN'] 
+        enum: ['male','female'] 
     },
     ds_birthday:{ type: "datetime" },
     ds_bloodtype:{type: "string"},
@@ -39,10 +39,7 @@ module.exports = {
     ds_name:{type: "string"},
     ds_bind_id:{type: "string"},
     ds_is_manager:{type: "string"},
-    ds_deleted:{ 
-        type: "datetime" ,
-        defaultsTo: ''
-    },
+    ds_deleted:{ type: "datetime" }, //沒有值代表還沒刪除
     nfcs:{
         collection: "ds_nfc",
         via: "ds_human_pk"
@@ -52,16 +49,5 @@ module.exports = {
         via: "ds_human_pk"
     }
   },
-  //unique失效使用
-  beforeCreate: function (values, next) {
-    Ds_human.count({ds_human_pk:values.ds_human_pk}).exec(function countCB(error, found) {
-      if(found==0){
-        next();
-      }else{
-        no_call_service.write_log("Ds_human","C_repeat", values, "human");
-        next( new Error('ID重複') );
-      }
-    });
-  }
 };
 

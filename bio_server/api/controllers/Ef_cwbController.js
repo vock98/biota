@@ -33,7 +33,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_cwb/add?ef_sitename=a&ef_source=a2&ef_item=a3&ef_date=20110101&ef_time=00
     */
 	add: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from", "to"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -92,7 +92,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_cwb/search?from=20160101&to=20160105
     */
 	search: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ef_value"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);

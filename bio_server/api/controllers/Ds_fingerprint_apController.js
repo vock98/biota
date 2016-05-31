@@ -33,7 +33,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/add?ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
     */
 	add: function(req, res) {
-        var params = req.params.all();  
+        var params = req.allParams(); delete params["id"];  
         var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
         var check_result = no_call_service.check_data(params, check_array);            
         if(check_result==""){
@@ -43,9 +43,6 @@ module.exports = {
                     no_call_service.write_log(table_name,"C_die", err, req.session.id, log_type);
                     return res.json({error:2002});
                 }else{
-                    console.log(table_name,"C_ok");
-                    console.log(table_name, params);
-                    console.log(table_name, req.session.id);
                     no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
                     return res.json(create_data);                             
                 }           
@@ -64,7 +61,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/search_human?ds_ap_id=1
     */
 	search_human: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["push_token"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -73,13 +70,9 @@ module.exports = {
             return res.json({error:2001});
         }
           
-        var cond = {};
         if(params.ds_ap_id){
-            //有ID優先用ID
-            cond.ds_ap_id = params.ds_ap_id;
-            cond.ds_deleted = ""; //啟用的才可以被查詢
-            if(params.ds_platform_type!=undefined) cond.ds_platform_type = params.ds_platform_type;
-            if(params.ds_device_type!=undefined) cond.ds_device_type = params.ds_device_type;
+            var check_array = ["ds_ap_id","ds_platform_type","ds_device_type"];
+            var cond = no_call_service.complete_not_cond(params, check_array, "ds_deleted");
             
             Ds_fingerprint_ap.findOne(cond).exec(function(err,find_data){
                     if(err){
@@ -99,7 +92,7 @@ module.exports = {
                                 }else{
                                     no_call_service.write_log(table_name,"R1_ok", params, req.session.id, log_type);
                                     find_data.human = _.pluck(flinked_data, "ds_human_pk");
-                                    return res.json(find_data);                                    
+                                    return res.json([find_data]);                                    
                                 }
                             });
                         }                          
@@ -115,13 +108,13 @@ module.exports = {
     },
     /*
         用途 : 查看搜尋內容 (R2)
-        輸入 : ds_ap_id
+        輸入 : ["ds_ap_id"]
         輸出 : 整個DB查到的資料
         不可輸入值 : ["ds_device_type", "ds_platform_type", "push_token"]
         快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/search_by_id?ds_ap_id=1
     */
 	search_by_id: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_device_type", "ds_platform_type", "push_token"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -133,8 +126,8 @@ module.exports = {
         var cond = {};
         if(params.ds_ap_id){
             //有ID優先用ID
-            cond.ds_ap_id = params.ds_ap_id;
-            cond.ds_deleted = ""; //啟用的才可以被查詢
+            var check_array = ["ds_ap_id"];
+            var cond = no_call_service.complete_cond(params, check_array, "ds_deleted");
             Ds_fingerprint_ap.findOne(cond).exec(function(err,find_data){
                     if(err){
                         no_call_service.write_log(table_name,"R2_die", err, req.session.id, log_type);
@@ -160,7 +153,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/update?ds_ap_id=1&ds_platform_type=plattype2&ds_device_type=devicetype2
     */
 	update: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){
@@ -171,7 +164,7 @@ module.exports = {
                     no_call_service.write_log(table_name,"U_die", err, req.session.id, log_type);
                     return res.json({error:4001});
                 }else{
-                    no_call_service.write_log(table_name,"U_ok", params, req.session.id, log_type);
+                    no_call_service.write_log(table_name,"U_ok", cond, req.session.id, log_type);
                     return res.json(update_data);                               
                 }
             })       
@@ -190,7 +183,7 @@ module.exports = {
     */
 	stop: function(req, res) {
         var moment = require('moment');
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["push_token"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);

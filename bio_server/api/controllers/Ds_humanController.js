@@ -34,7 +34,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_human/add?ds_name=ccc
     */
 	add: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_human_pk"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -52,9 +52,6 @@ module.exports = {
                     no_call_service.write_log(table_name,"C_die", err, req.session.id, log_type);
                     return res.json({error:2202});
                 }else{
-                    console.log(table_name,"C_ok");
-                    console.log(table_name, params);
-                    console.log(table_name, req.session.id);
                     no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
                     return res.json(create_data);                             
                 }           
@@ -70,10 +67,10 @@ module.exports = {
         輸入 : 無必填       
         輸出 : 整個DB查到的資料
         不可輸入值: ["ds_human_pk"]
-        快速連結 : http://localhost:1337/api/Ds_human/search
+        快速連結 : http://localhost:1337/api/Ds_human/search?ds_name=ccc
     */
 	search: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_human_pk"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -84,13 +81,13 @@ module.exports = {
 
         var not_check = ["ds_birthday", "ds_gender", "ds_bloodtype", "ds_job", "ds_name", "ds_bind_id"];
         var cond = no_call_service.complete_not_cond(params, not_check, "ds_deleted");
-        Ds_human.findOne(cond).populateAll().exec(function(err,find_data){
+        Ds_human.find(cond).populateAll().exec(function(err,find_data){
             if(err){
                 no_call_service.write_log(table_name,"R_die", err, req.session.id, log_type);
                 return res.json({error:3202});
             }else{
                 //資料直接回傳
-                no_call_service.write_log(table_name,"R_ok", params, req.session.id, log_type);
+                no_call_service.write_log(table_name,"R_ok", cond, req.session.id, log_type);
                 return res.json(find_data);                             
             }           
         })       
@@ -104,7 +101,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_human/search_by_id?ds_human_pk=1
     */
 	search_by_id: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -140,10 +137,10 @@ module.exports = {
         輸入 : ["ds_human_pk"] 
         輸出 : 修改的object結果 or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_human/update?ds_human_pk=1&ds_job=ccc
+        快速連結 : http://localhost:1337/api/Ds_human/update?ds_human_pk=574dbb4836754d98107b5170
     */
 	update: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         var check_array = ["ds_human_pk"];
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){
@@ -167,14 +164,14 @@ module.exports = {
     },
     /*
         用途 : 停止設備
-        輸入 : ["ds_human_pk", "ds_name", "ds_bind_id"]
+        輸入 : ["ds_human_pk", "ds_name"]
         輸出 : 刪除的object結果 or error
         不可輸入值: ["ds_birthday", "ds_gender", "ds_bloodtype", "ds_job"]
-        快速連結 : http://localhost:1337/api/Ds_human/stop?ds_human_pk=1&ds_name=1&ds_bind_id=1
+        快速連結 : http://localhost:1337/api/Ds_human/stop?ds_human_pk=1&ds_name=1
     */
 	stop: function(req, res) {
         var moment = require('moment');
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_birthday", "ds_gender", "ds_bloodtype", "ds_job"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);

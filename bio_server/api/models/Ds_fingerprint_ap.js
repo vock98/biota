@@ -30,10 +30,7 @@ module.exports = {
         type: "string",
         defaultsTo: ''
     },
-    ds_deleted:{ 
-        type: "datetime",
-        defaultsTo: ''
-    }
+    ds_deleted:{ type: "datetime" } //沒有值代表還沒刪除
   },
   //unique失效使用
   beforeCreate: function (values, next) {

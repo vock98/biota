@@ -37,7 +37,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/F_linked/add?ds_name=ccc
     */
 	add: function(req, res) {
-        var params = req.params.all();        
+        var params = req.allParams(); delete params["id"];        
         var check_array = ["ds_human_pk","ds_bind_id", "f_linked_pk", "f_which_one", "pic", "minutiae"];
         var check_result = no_call_service.check_data(params, check_array);
         
@@ -73,9 +73,6 @@ module.exports = {
                                     no_call_service.write_log(table_name,"C_die", err2, req.session.id, log_type);
                                     return res.json({error:2503});
                                 }else{
-                                    console.log(table_name,"C_ok");
-                                    console.log(table_name, params);
-                                    console.log(table_name, req.session.id);
                                     no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
                                     return res.json(create_data);                             
                                 }           
@@ -99,7 +96,7 @@ module.exports = {
     */
 	stop: function(req, res) {
         var moment = require('moment');
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         
         var check_array = ["f_linked_pk"];
         var check_result = no_call_service.check_data(params, check_array);

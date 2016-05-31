@@ -35,10 +35,7 @@ module.exports = {
     ds_addr:{ type: "string" },
     ds_product:{ type: "string" },
     ds_ap_id:{ model: "Ds_fingerprint_ap" },
-    ds_deleted:{ 
-        type: "datetime" ,
-        defaultsTo: ''
-    }
+    ds_deleted:{ type: "datetime" } //沒有值代表還沒刪除
   },
   //unique失效使用
   beforeCreate: function (values, next) {

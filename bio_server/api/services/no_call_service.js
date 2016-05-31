@@ -28,12 +28,12 @@ module.exports = {
         if(type=="device"){
             //設備操作紀錄LOG
             Db_device_log.create(cond).exec(function(err,create_data){
-                console.log("log",create_data.CRUD);
+                console.log("log",create_data);
             }) 
         }else if(type=="human"){
             //人員資料LOG
             Db_human_log.create(cond).exec(function(err,create_data){
-                console.log("log",create_data.CRUD);
+                console.log("log",create_data);
             })            
         }else{
             //資料LOG 主要是天氣資料 太多 不呈現log
@@ -48,7 +48,7 @@ module.exports = {
         _.map(check_array,function(num){
             now_cond[num] = input_params[num];
         })
-        if(other_cond)  now_cond[other_cond] = "";
+        if(other_cond)  now_cond[other_cond] = {"$exists":false};
         return now_cond;
     },
     //快速補出條件(非必填用)
@@ -57,7 +57,7 @@ module.exports = {
         _.map(check_array,function(num){
             if(input_params[num]!=undefined)now_cond[num] = input_params[num];
         })
-        if(other_cond)  now_cond[other_cond] = "";
+        if(other_cond)  now_cond[other_cond] = {"$exists":false};
         return now_cond;
     },
     //轉換ef_time +ef_value ->ef_h00~ef_h23

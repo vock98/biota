@@ -34,7 +34,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_device/add?ds_device_id=1&ds_co_id=co1&ds_ver=ver1&ds_speed=sp1&ds_company=co1&ds_addr=ad1&ds_product=pr1&ds_ap_id=1
     */
 	add: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         var check_array = ["ds_device_id", "ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product", "ds_ap_id"];
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){
@@ -44,9 +44,6 @@ module.exports = {
                     no_call_service.write_log(table_name,"C_die", err, req.session.id, log_type);
                     return res.json({error:2101});
                 }else{
-                    console.log(table_name,"C_ok");
-                    console.log(table_name, params);
-                    console.log(table_name, req.session.id);
                     no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
                     return res.json(create_data);                             
                 }           
@@ -65,7 +62,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_device/search_by_id?ds_ap_id=1&ds_device_id=1
     */
 	search_by_id: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -104,7 +101,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_device/update?ds_device_id=1&ds_co_id=co1&ds_ver=ver1&ds_speed=sp1&ds_company=co1&ds_addr=ad1&ds_product=pr2&ds_ap_id=1
     */
 	update: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         var check_array = ["ds_device_id", "ds_ap_id"];
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){
@@ -135,7 +132,7 @@ module.exports = {
     */
 	stop: function(req, res) {
         var moment = require('moment');
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         var check_array = ["ds_device_id", "ds_ap_id"];
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){

@@ -13,7 +13,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Db_log/find
     */
 	find: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         delete params.id;
         Db_log.find(params).exec(function(err,find_data){
                 if(err){

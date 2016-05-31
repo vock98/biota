@@ -34,7 +34,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_nfc/add?ds_nfc_tag_id=id1&ds_human_pk=1
     */
 	add: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         var check_array = ["ds_nfc_tag_id", "ds_human_pk"];
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){
@@ -44,9 +44,6 @@ module.exports = {
                     no_call_service.write_log(table_name,"C_die", err, req.session.id, log_type);
                     return res.json({error:2301});
                 }else{
-                    console.log(table_name,"C_ok");
-                    console.log(table_name, params);
-                    console.log(table_name, req.session.id);
                     no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
                     return res.json(create_data);                             
                 }           
@@ -65,7 +62,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_nfc/search_by_id?ds_human_pk=1
     */
 	search_by_id: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_nfc_tag_id"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -105,7 +102,7 @@ module.exports = {
     */
 	stop: function(req, res) {
         var moment = require('moment');
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         
         var check_array = ["ds_nfc_tag_id", "ds_human_pk"];
         var check_result = no_call_service.check_data(params, check_array);

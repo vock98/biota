@@ -35,7 +35,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_envir/add?ef_datetime=20160101&ef_desc=good&ef_pic_path=88&ef_temp=15&ef_humd=20
     */    
 	add: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from","to"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -72,7 +72,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_envir/search?from=20160101&to=20160101
     */
 	search: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
 
         params.createdAt = { '>': moment(params.from).startOf('day').toISOString(), '<': moment(params.to).endOf('day').toISOString() };
         delete params['from'];
@@ -99,7 +99,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_envir/update?ef_envir_pk=1&ef_desc=ccc
     */
 	update: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from","to"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
@@ -139,7 +139,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_envir/stop?ef_envir_pk=2
     */
 	stop: function(req, res) {
-        var params = req.params.all();
+        var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from","to"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
