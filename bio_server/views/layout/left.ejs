@@ -1,0 +1,148 @@
+<%
+    function active_or_not( now_relate , input_array ){
+        if(_.indexOf(input_array, now_relate)!="-1") return "class='active'"
+    }
+    var a1 = ["基本資料維護","進出紀錄查詢","AP Client 管理","指紋機設備查詢","設備操作記錄"];
+    var a11 = ["基本資料維護","進出紀錄查詢"];
+    var a111 = ["基本資料維護"];
+    var a112 = ["進出紀錄查詢"];
+    
+    var a12 = ["AP Client 管理","指紋機設備查詢","設備操作記錄"];
+    var a121 = ["AP Client 管理"];
+    var a122 = ["指紋機設備查詢"];
+    var a123 = ["設備操作記錄"];
+%>
+		<!-- Navigation -->
+		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="index.html"><img src="/img/logo_b.png" alt=""></a>
+			</div>
+			<!-- /.navbar-header -->
+
+			<ul class="nav navbar-top-links navbar-right">
+				<li>
+					<a href="#">
+						<span>Hi, Lightman</span>
+						<i class="fa fa-sign-out fa-fw"></i>
+					</a>
+				</li>
+				<!-- /.dropdown -->
+			</ul>
+			<!-- /.navbar-top-links -->
+
+			<div class="navbar-default sidebar" role="navigation">
+				<div class="sidebar-nav navbar-collapse">
+					<ul class="nav" id="side-menu">
+						<li <%-active_or_not(now_url, a1 ) %> >
+							<a href="#"><i class="fa fa-sitemap fa-fw"></i> 基本資料管理<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li <%-active_or_not(now_url, a11 ) %>>
+									<a href="javascript:;">人員資料管理<span class="fa arrow"></span></a>
+									<ul class="nav nav-third-level">
+										<li <%-active_or_not(now_url, a111 ) %>>
+											<a href="A_1_1.html">基本資料維護</a>
+										</li>
+										<li <%-active_or_not(now_url, a112 ) %>>
+											<a href="A_1_2.html">進出紀錄查詢</a>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<a href="#">設備資料管理<span class="fa arrow"></span></a>
+									<ul class="nav nav-third-level">
+										<li>
+											<a href="#">AP Client 管理<span class="fa arrow"></span></a>
+											<ul class="nav nav-fourth-level">
+												<li>
+													<a href="A_2_1_1.html">AP 參數設定</a>
+												</li>
+												<li>
+													<a href="A_2_1_2.html">指紋機設備查詢</a>
+												</li>
+												<li>
+													<a href="#">設備操作記錄</a>
+												</li>
+											</ul>
+											<!-- /.nav-fourth-level -->
+										</li>
+									</ul>
+									<!-- /.nav-second-level -->
+								</li>
+							</ul>
+							<!-- /.nav-second-level -->
+						</li>
+
+						<li>
+							<a href="B.html"><i class="fa fa-bar-chart-o fa-fw"></i> 使用記錄報表<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="#">人員進出報表</a>
+								</li>
+								<li>
+									<a href="#">設備操作記錄報表</a>
+								</li>
+								<li>
+									<a href="#">FRR / FAR 分析報表</a>
+								</li>
+							</ul>
+							<!-- /.nav-second-level -->
+						</li>
+
+						<li>
+							<a href="#"><i class="fa fa-share-alt fa-fw"></i>  開發者應用程式模擬介面<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="#">應用程式接口</a>
+								</li>
+								<li>
+									<a href="#">APNS / GCM 推播模擬</a>
+								</li>
+							</ul>
+							<!-- /.nav-second-level -->
+						</li>
+						
+						<li>
+							<a href="#"><i class="fa fa-download fa-fw"></i>  參考資料載入<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="#">中央氣象局環境資料</a>
+								</li>
+								<li>
+									<a href="#">手動輸入紀錄</a>
+								</li>
+							</ul>
+							<!-- /.nav-second-level -->
+						</li>
+						
+						<li>
+							<a href="#"><i class="fa fa-share-square-o fa-fw"></i>  資料匯出<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="#"> 門禁紀錄</a>
+								</li>
+							</ul>
+							<!-- /.nav-second-level -->
+						</li>
+						
+						<li>
+							<a href="#"><i class="fa fa-calendar fa-fw"></i>  定時排程<span class="fa arrow"></span></a>
+							<ul class="nav nav-second-level">
+								<li>
+									<a href="#"> 門禁紀錄轉置</a>
+								</li>
+							</ul>
+							<!-- /.nav-second-level -->
+						</li>
+
+					</ul>
+				</div>
+				<!-- /.sidebar-collapse -->
+			</div>
+			<!-- /.navbar-static-side -->
+		</nav>

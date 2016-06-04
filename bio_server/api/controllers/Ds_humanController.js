@@ -8,8 +8,8 @@
     var table_name = "Ds_human";
     var log_type = "human";
 module.exports = {
-	/*
-        用途 : 查看內容
+	/*  
+        用途 : 查看內容 
         輸入 : 無
         輸出 : 整個DB
         不可輸入值: 無
@@ -23,10 +23,10 @@ module.exports = {
                 }else{
                     no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
                     return res.json(find_data);                               
-                }
+                } 
         })
     },
-    /*
+    /* 
         用途 : 創建設備
         輸入 : ["ds_name"]
         輸出 : 創建object or error

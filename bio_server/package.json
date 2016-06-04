@@ -39,5 +39,8 @@
     "url": "git://github.com/anonymous node/sails user/bio_server.git"
   },
   "author": "anonymous node/sails user",
-  "license": ""
+  "license": "",
+  "devDependencies": {
+    "grunt-contrib-clean": "^0.6.0"
+  }
 }
