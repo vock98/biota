@@ -47,9 +47,9 @@ callback = function(response) {
 }
 
 module.exports.cron = {
-    //取得中央氣象局的資料 5分鐘跑一次看會不會掛
+    //取得中央氣象局的資料 20分鐘跑一次
     get_cwb: {
-        schedule: '0 */5 * * * *',
+        schedule: '0 */20 * * * *',
         onTick: function() {      
             console.log('取得中央氣象局資料');
             http.request(options2, callback).end();

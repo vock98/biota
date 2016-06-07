@@ -18,12 +18,14 @@ module.exports = {
     環境溫度 ef_temp 
     環境溼度 ef_humd   
   */
+
   attributes: {
     ef_envir_pk: {
         type: "string",
         primaryKey: true,
         unique: true,
-        autoIncrement: true 
+        autoIncrement: true,
+        columnName: 'id'
     },
     ef_datetime:{ type: "datetime" },    
     ef_desc:{ type: "string" },

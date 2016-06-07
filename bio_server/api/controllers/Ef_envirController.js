@@ -32,9 +32,9 @@ module.exports = {
         輸入 : ["ef_datetime","ef_desc","ef_pic_path","ef_temp","ef_humd"]
         輸出 : 創建object or error
         不可輸入值: ["from","to"]
-        快速連結 : http://localhost:1337/api/Ef_envir/add?ef_datetime=20160101&ef_desc=good&ef_pic_path=88&ef_temp=15&ef_humd=20
+        快速連結 : http://localhost:1337/api/Ef_envir/C?ef_datetime=20160101&ef_desc=good&ef_pic_path=88&ef_temp=15&ef_humd=20
     */    
-	add: function(req, res) {
+	C: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from","to"];
@@ -69,17 +69,16 @@ module.exports = {
         輸入 : ["from","to"]       
         輸出 : 整個DB查到的資料
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ef_envir/search?from=20160101&to=20160101
+        快速連結 : http://localhost:1337/api/Ef_envir/R?from=20160101&to=20160101
     */
-	search: function(req, res) {
+	R: function(req, res) {
         var params = req.allParams(); delete params["id"];
 
         params.createdAt = { '>': moment(params.from).startOf('day').toISOString(), '<': moment(params.to).endOf('day').toISOString() };
         delete params['from'];
         delete params['to'];
-        delete params['id'];
         delete params['ef_datetime'];
-        Ef_envir.findOne(params).exec(function(err,find_data){
+        Ef_envir.find(params).exec(function(err,find_data){
             if(err){
                 no_call_service.write_log(table_name,"R_die", err, req.session.id, log_type);
                 return res.json({error:3701});
@@ -96,9 +95,9 @@ module.exports = {
         輸入 : ["ef_envir_pk"] 
         輸出 : 修改的object結果 or error
         不可輸入值: ["from","to"]
-        快速連結 : http://localhost:1337/api/Ef_envir/update?ef_envir_pk=1&ef_desc=ccc
+        快速連結 : http://localhost:1337/api/Ef_envir/U?ef_envir_pk=1&ef_desc=ccc
     */
-	update: function(req, res) {
+	U: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from","to"];
@@ -136,9 +135,9 @@ module.exports = {
         輸入 : ["ef_envir_pk"]
         輸出 : 刪除的object結果 or error
         不可輸入值: ["from","to"]
-        快速連結 : http://localhost:1337/api/Ef_envir/stop?ef_envir_pk=2
+        快速連結 : http://localhost:1337/api/Ef_envir/D?ef_envir_pk=2
     */
-	stop: function(req, res) {
+	D: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from","to"];

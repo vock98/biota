@@ -129,12 +129,12 @@ module.exports = {
             _.each(four_add,function(key){
                 result_obj.ef_item =key;
                 result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: [key]}).elementValue[0].value[0];
-                request.post('http://localhost:1337/api/Ef_cwb/add', {form:result_obj});
+                request.post('http://'+sails.config.myconf.myip+'/api/Ef_cwb/C', {form:result_obj});
             });
 
             result_obj.ef_item ="H_24R";        
             result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: ["24R"]}).elementValue[0].value[0];        
-            request.post('http://localhost:1337/api/Ef_cwb/add', {form:result_obj});
+            request.post('http://'+sails.config.myconf.myip+'/api/Ef_cwb/C', {form:result_obj});
         });
  
         // return data_params.location[0];

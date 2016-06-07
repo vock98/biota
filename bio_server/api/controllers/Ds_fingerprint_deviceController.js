@@ -31,9 +31,9 @@ module.exports = {
         輸入 : ["ds_device_id", "ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product", "ds_ap_id"]
         輸出 : 創建object or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/add?ds_device_id=1&ds_co_id=co1&ds_ver=ver1&ds_speed=sp1&ds_company=co1&ds_addr=ad1&ds_product=pr1&ds_ap_id=1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/C?ds_device_id=1&ds_co_id=co1&ds_ver=ver1&ds_speed=sp1&ds_company=co1&ds_addr=ad1&ds_product=pr1&ds_ap_id=1
     */
-	add: function(req, res) {
+	C: function(req, res) {
         var params = req.allParams(); delete params["id"];
         var check_array = ["ds_device_id", "ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product", "ds_ap_id"];
         var check_result = no_call_service.check_data(params, check_array);
@@ -59,9 +59,9 @@ module.exports = {
         輸入 : ["ds_device_id", "ds_ap_id"]        
         輸出 : 整個DB查到的資料
         不可輸入值: ["ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/search_by_id?ds_ap_id=1&ds_device_id=1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/R?ds_ap_id=1&ds_device_id=1
     */
-	search_by_id: function(req, res) {
+	R: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"];
@@ -98,9 +98,9 @@ module.exports = {
         輸入 : ["ds_device_id", "ds_ap_id"]
         輸出 : 修改的object結果 or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/update?ds_device_id=1&ds_co_id=co1&ds_ver=ver1&ds_speed=sp1&ds_company=co1&ds_addr=ad1&ds_product=pr2&ds_ap_id=1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/U?ds_device_id=1&ds_co_id=co1&ds_ver=ver1&ds_speed=sp1&ds_company=co1&ds_addr=ad1&ds_product=pr2&ds_ap_id=1
     */
-	update: function(req, res) {
+	U: function(req, res) {
         var params = req.allParams(); delete params["id"];
         var check_array = ["ds_device_id", "ds_ap_id"];
         var check_result = no_call_service.check_data(params, check_array);
@@ -128,9 +128,9 @@ module.exports = {
         輸入 : ["ds_device_id", "ds_ap_id"]
         輸出 : 刪除的object結果 or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/stop?ds_ap_id=1&ds_device_id=1&ds_co_id
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_device/D?ds_ap_id=1&ds_device_id=1&ds_co_id
     */
-	stop: function(req, res) {
+	D: function(req, res) {
         var moment = require('moment');
         var params = req.allParams(); delete params["id"];
         var check_array = ["ds_device_id", "ds_ap_id"];

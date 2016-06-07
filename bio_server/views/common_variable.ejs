@@ -1,0 +1,280 @@
+<script>
+//這邊是共用JS
+
+var login_account = '<%= req.session.user.account %>';
+console.log('session',login_account); //每次登錄的提示 除錯用
+
+//為了不使用英文版的datatable 乾脆自己重跑一次 
+function create_datatable( input_id ){
+    $('#'+input_id).DataTable({
+                "aaaa":"xxxxxx",
+                // "scrollX": true,
+                'oLanguage': {
+                    'sProcessing': '處理中...',
+                    'sLengthMenu': '顯示 _MENU_ 項結果',
+                    'sZeroRecords': '沒有匹配結果',
+                    'sInfo': '共 _TOTAL_ 筆資料。',
+                    'sInfoEmpty': '顯示第 0 至 0 項結果，共 0 項',
+                    'sInfoFiltered': '(從 _MAX_ 項結果過濾)',
+                    'sSearch': '搜索: ',
+                    'oPaginate': {
+                                    'sFirst': '首頁',
+                                    'sPrevious': '上頁',
+                                    'sNext': '下頁',
+                                    'sLast': '尾頁'
+                                }
+                }
+    });
+}
+
+//快速補上圖片預覽樣式 (不敢全補，怕有圖片以外的檔案。)
+function put_img_preview( input_tag ){
+    input_tag.on('change',function(){  	
+		FileReader = window.FileReader;
+		var ext = $(this).val().split('.').pop().toLowerCase();
+		var clip = $(this).parent().find("img");
+		
+		if ($.inArray(ext, ['png', 'jpg', 'jpeg']) == -1){
+			$(this).val("");
+			alert('只允許上傳PNG或JPG影像檔');
+			return false;
+		}		
+        
+		if(FileReader){
+			var reader = new FileReader(),						
+			file = this.files[0];
+			
+			if(file.size > 1024*1024){
+				$(this).val("");
+				alert("圖片上傳限制大小為1MB");
+				return false;
+			}		
+			
+			reader.onload = function(e){
+				var _v = e.target.result;
+				clip.attr("src", e.target.result);
+                var now_name = "img_"+input_tag.prop("name");
+                $("input[name="+now_name+"]").remove();
+                $('<input>').prop({ type: 'hidden', class: 'virtual_img',  name: now_name, id: now_name , value: e.target.result }).appendTo('form');
+			};
+			reader.readAsDataURL(file);
+		}else{
+			path = $(this).val();
+			clip.attr("src", path);
+		}
+	})
+}	   
+//快速補上全版樣式驗證
+function check_vailidation( input_obj ){       
+    var form_validation = $('#form_validation');
+	var error2 = $('.alert-danger', form_validation);
+	var success2 = $('.alert-success', form_validation);
+    var setting = {
+		errorElement: 'span', //預設的提示類型
+		errorClass: 'help-block help-block-error', // 預設的提示CLASS
+		focusInvalid: false, // 是否跳到錯誤位置
+        // ignore: "",  // validate all fields including form hidden input
+		rules: {},
+		messages: {},
+		errorPlacement: function (error, element) {
+            //錯誤元素的放置
+			if (element.parent(".input-group").size() > 0) {
+                error.insertAfter(element.parent(".input-group"));
+            } else if (element.attr("data-error-container")) { 
+                error.appendTo(element.attr("data-error-container"));
+            } else if (element.parents('.radio-list').size() > 0) { 
+                error.appendTo(element.parents('.radio-list').attr("data-error-container"));
+            } else if (element.parents('.radio-inline').size() > 0) { 
+                error.appendTo(element.parents('.radio-inline').attr("data-error-container"));
+            } else if (element.parents('.checkbox-list').size() > 0) {
+                error.appendTo(element.parents('.checkbox-list').attr("data-error-container"));
+            } else if (element.parents('.checkbox-inline').size() > 0) { 
+                error.appendTo(element.parents('.checkbox-inline').attr("data-error-container"));
+            } else {
+                error.insertAfter(element); // for other inputs, just perform default behavior
+            }
+		},
+		invalidHandler: function (event, validator) {
+            //錯誤時 送出的情況
+			success2.hide();
+			error2.show();
+			Metronic.scrollTo(error2, -200);
+		},
+		highlight: function (element) { 
+            //元素的錯誤提示效果
+			 $(element).closest('.form-group').addClass('has-error');
+		},
+		unhighlight: function (element) { 
+            //元素的錯誤移除提示效果(只有移除)
+			 $(element).closest('.form-group').removeClass('has-error');
+		},
+		success: function (label) {
+            //元素的正確提示樣式
+            label.closest('.form-group').removeClass('has-error');            
+		},
+		submitHandler: function (form) {
+            //送出事件    
+			success2.show();
+			error2.hide();		
+            //補上 summernote的資料
+            var now_summernote_code = $('#summernote_1').code();
+            $('<input>').prop({ type: 'hidden', name: "content" , value: now_summernote_code }).appendTo('form');
+            form_validation[0].submit();  
+		}
+	};
+    
+    for(var type in input_obj){
+        setting[type] = input_obj[type];
+    }
+    
+	form_validation.validate(setting);	
+}
+
+//取得URL資訊
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
+    
+//回上一頁 很多頁的取消會用到
+function goBack(){
+    window.history.back();
+}
+
+//製作一個方便的同上功能 專門給地址使用
+function like_id( like_id, self_id ){
+    $("#"+self_id).val($("#"+like_id).val());
+    $('select[name='+self_id+'_county]').val($('select[name='+like_id+'_county]').val()).trigger('change');
+    $('select[name='+self_id+'_district]').val($('select[name='+like_id+'_district]').val()).trigger('change');
+
+}
+
+//快速補上已有資料
+function check_default(type , names , default_value){
+    if(type=="radio"){
+        $("input[name="+names+"]").each(function(index,value){
+            if($(this).val()== default_value){
+                $(this).prop("checked", true);
+                $(this).parent("span").prop("class","checked"); //metronic 看 span 的class
+            }
+        });        
+    }else if(type=="input"){
+        $("#"+names).val(default_value);        
+    }else if(type=="checkbox"){
+        $("input[name="+names+"][type=checkbox]").each(function(index,value){ 
+            var arr = default_value.split(",");        
+            if(inArray($("input[name="+names+"][type=checkbox]").eq(index).val(), arr)){
+                $("input[name="+names+"][type=checkbox]").eq(index).prop("checked", 'checked');
+            }
+        });        
+    }else if(type=="select"){
+       $("#"+names).children().each(function(){
+            if ($(this).text()==default_value){
+                $(this).prop("selected", "true");
+            }
+        });
+    }else if(type=="img"){
+       $("#"+names).parent().find("img").prop("src",default_value);
+    }else if(type=="base64img"){
+        if(default_value==''){return false;}        
+        $("#"+names).parent().find("img").prop("src", default_value);
+        var now_name = "img_"+$("#"+names).prop("name");
+        $("input[name="+now_name+"]").remove();
+        $('<input>').prop({ type: 'hidden', class: 'virtual_img',  name: now_name, id: now_name , value: default_value }).appendTo('form');
+    }else if(type=="create_hidden"){
+       $("form").prepend("<input type='hidden' name='"+names+"' value='"+default_value+"'>")
+    }else if(type=="area"){
+       var address = default_value[0];
+       var county = default_value[1];
+       var district = default_value[2];
+       
+       $("#"+names).val(address);
+       $('#'+names+'_select').twzipcode('set',{
+        'county': county,
+        'district': district
+       });
+    }else if(type=="placeholder"){      
+       $("#"+names).prop("placeholder",default_value);
+    }        
+}
+
+//判斷是否只有一個TABLE 下載EXCEL檔案
+function download_excel(file_name, tag_name){
+    if(!tag_name){
+       var tag_name = $("table:eq(0)").prop("id");
+    }
+        
+    $("#"+tag_name+" td,#"+tag_name+" th").css('border', '#ddd solid 0.05em');
+    $("#"+tag_name+" th").css('background-color','#f2f2f2');
+
+    $("#"+tag_name+"").table2excel({
+        exclude: ".excludeThisClass",
+        filename: file_name
+    });
+    
+    $("#"+tag_name+" td,#"+tag_name+" th").css('border', '#ddd solid 1px');
+}
+
+//快速補上已有資料2 arlen修改
+function check_default2(type , names , default_value){
+    if(type=="radio"){
+        $("input[name="+names+"]").each(function(index,value){
+            if($(this).val()== default_value){
+                $(this).prop("checked", true);
+                $(this).parent("span").prop("class","checked"); //metronic 看 span 的class
+            }
+        });        
+    }else if(type=="input"){
+        $("input[name="+names+"]").val(default_value);        
+    }else if(type=="checkbox"){
+		var $tag =  $("."+names);
+		$tag.each(function(index,value){	
+            var arr = default_value.split(",");			
+            if(arr.indexOf($(this).val()) != -1){
+                $(this).trigger("click");
+            }
+        });
+    }else if(type=="select"){
+       //正常Select
+       var now_text;
+       $("#"+names).children().each(function(){	   
+            if ($(this).val()==default_value){
+                now_text = $(this).text();
+                $(this).prop("selected", "true");				
+            }
+        });
+        //autocomplete select
+        $("#"+names).parent("div").find(".filter-option").html(now_text);
+    }else if(type=="img"){
+       $("#"+names).parent().find("img").prop("src",default_value);
+    }else if(type=="base64img"){
+        $("#"+names).parent().find("img").prop("src", default_value);
+        var now_name = "img_"+$("#"+names).prop("name");
+        $("input[name="+now_name+"]").remove();
+        $('<input>').prop({ type: 'hidden', class: 'virtual_img',  name: now_name, id: now_name , value: default_value }).appendTo('form');
+    }else if(type=="create_hidden"){
+       $("form").prepend("<input type='hidden' name='"+names+"' value='"+default_value+"'>")
+    }     
+}
+
+$().ready(function(){
+    $('#summernote_1').summernote();
+    $(".note-insert.btn-group").find("button").not(":eq(3)").hide(); //不知道為什麼圖片是三號 但是這是測試結果    
+})
+
+//替換modal內容成error massege
+function modal_errMsg(id,e){	
+	var errMsg = '<span style="color:#a94442">'+e+'</span>';
+	$(id+" .modal-body").html(errMsg);	
+	$(id+" .modal-footer").hide();	
+} 
+
+</script>

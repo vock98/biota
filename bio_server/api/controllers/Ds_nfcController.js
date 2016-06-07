@@ -31,9 +31,9 @@ module.exports = {
         輸入 : ["ds_nfc_tag_id", "ds_human_pk"]
         輸出 : 創建object or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_nfc/add?ds_nfc_tag_id=id1&ds_human_pk=1
+        快速連結 : http://localhost:1337/api/Ds_nfc/C?ds_nfc_tag_id=id1&ds_human_pk=1
     */
-	add: function(req, res) {
+	C: function(req, res) {
         var params = req.allParams(); delete params["id"];
         var check_array = ["ds_nfc_tag_id", "ds_human_pk"];
         var check_result = no_call_service.check_data(params, check_array);
@@ -59,9 +59,9 @@ module.exports = {
         輸入 : ["ds_human_pk"]        
         輸出 : DB查到的NFC個人資料
         不可輸入值: ["ds_nfc_tag_id"]
-        快速連結 : http://localhost:1337/api/Ds_nfc/search_by_id?ds_human_pk=1
+        快速連結 : http://localhost:1337/api/Ds_nfc/R?ds_human_pk=1
     */
-	search_by_id: function(req, res) {
+	R: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_nfc_tag_id"];
@@ -98,9 +98,9 @@ module.exports = {
         輸入 : ["ds_nfc_tag_id", "ds_human_pk"]
         輸出 : 刪除的object結果 or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_nfc/stop?ds_nfc_tag_id=id1&ds_human_pk=1
+        快速連結 : http://localhost:1337/api/Ds_nfc/D?ds_nfc_tag_id=id1&ds_human_pk=1
     */
-	stop: function(req, res) {
+	D: function(req, res) {
         var moment = require('moment');
         var params = req.allParams(); delete params["id"];
         
@@ -108,15 +108,15 @@ module.exports = {
         var check_result = no_call_service.check_data(params, check_array);
         if(check_result==""){
             //參數不缺少
-            var cond = no_call_service.complete_cond(params, check_array, "ds_deleted");
+            var cond = no_call_service.complete_cond(params, check_array);
             
-            Ds_nfc.update( cond ,{"ds_deleted": moment().toISOString()} ).exec(function(err,update_data){
+            Ds_nfc.destroy( cond ).exec(function(err){
                 if(err){
                     no_call_service.write_log(table_name,"D_die", err, req.session.id, log_type);
                     return res.json({error:5301});
                 }else{
                     no_call_service.write_log(table_name,"D_ok", params, req.session.id, log_type);
-                    return res.json(update_data);                                
+                    return res.send("D_ok");                               
                 }
             })       
         }else{

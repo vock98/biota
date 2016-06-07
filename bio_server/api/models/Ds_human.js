@@ -27,7 +27,8 @@ module.exports = {
         type: "string",
         primaryKey: true,
         unique: true,
-        autoIncrement: true 
+        autoIncrement: true,        
+        columnName: 'id'
     },
     ds_gender:{ 
         type: "string",

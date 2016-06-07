@@ -30,9 +30,9 @@ module.exports = {
         輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
         輸出 : 創建object or error
         不可輸入值 : 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/add?ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/C?ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
     */
-	add: function(req, res) {
+	C: function(req, res) {
         var params = req.allParams(); delete params["id"];  
         var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
         var check_result = no_call_service.check_data(params, check_array);            
@@ -58,15 +58,15 @@ module.exports = {
         輸入 : ds_ap_id or ["ds_platform_type", "ds_device_type"]
         輸出 : 整個DB查到的資料(會呈現Human資料給使用者看)
         不可輸入值 : ["push_token"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/search_human?ds_ap_id=1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/R1?ds_ap_id=1
     */
-	search_human: function(req, res) {
+	R1: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["push_token"];
         var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
         if(check_cannot){
-            no_call_service.write_log(table_name,"R_error_data", params, req.session.id, log_type);
+            no_call_service.write_log(table_name,"R1_error_data", params, req.session.id, log_type);
             return res.json({error:2001});
         }
           
@@ -111,9 +111,9 @@ module.exports = {
         輸入 : ["ds_ap_id"]
         輸出 : 整個DB查到的資料
         不可輸入值 : ["ds_device_type", "ds_platform_type", "push_token"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/search_by_id?ds_ap_id=1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/R2?ds_ap_id=1
     */
-	search_by_id: function(req, res) {
+	R2: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ds_device_type", "ds_platform_type", "push_token"];
@@ -150,9 +150,9 @@ module.exports = {
         輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
         輸出 : 修改的object結果 or error
         不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/update?ds_ap_id=1&ds_platform_type=plattype2&ds_device_type=devicetype2
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/U?ds_ap_id=1&ds_platform_type=plattype2&ds_device_type=devicetype2
     */
-	update: function(req, res) {
+	U: function(req, res) {
         var params = req.allParams(); delete params["id"];
         var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
         var check_result = no_call_service.check_data(params, check_array);
@@ -179,9 +179,9 @@ module.exports = {
         輸入 : ["ds_ap_id"]
         輸出 : 刪除的object結果 or error
         不可輸入值 : ["push_token"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/stop?ds_ap_id=1
+        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/D?ds_ap_id=1
     */
-	stop: function(req, res) {
+	D: function(req, res) {
         var moment = require('moment');
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下

@@ -30,9 +30,9 @@ module.exports = {
         輸入 : ["ef_sitename","ef_source", "ef_item", "ef_date", "ef_time","ef_value"]        
         輸出 : 創建object or 更新object or error
         不可輸入值: ["from", "to"]
-        快速連結 : http://localhost:1337/api/Ef_cwb/add?ef_sitename=a&ef_source=a2&ef_item=a3&ef_date=20110101&ef_time=00
+        快速連結 : http://localhost:1337/api/Ef_cwb/C?ef_sitename=a&ef_source=a2&ef_item=a3&ef_date=20110101&ef_time=00
     */
-	add: function(req, res) {
+	C: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["from", "to"];
@@ -89,9 +89,9 @@ module.exports = {
         輸入 : ["from", "to"]
         輸出 : 整個DB查到的資料
         不可輸入值 : ["ef_value"]
-        快速連結 : http://localhost:1337/api/Ef_cwb/search?from=20160101&to=20160105
+        快速連結 : http://localhost:1337/api/Ef_cwb/R?from=20160101&to=20160105
     */
-	search: function(req, res) {
+	R: function(req, res) {
         var params = req.allParams(); delete params["id"];
         //有不可填寫的參數即擋下
         var cannot_param = ["ef_value"];

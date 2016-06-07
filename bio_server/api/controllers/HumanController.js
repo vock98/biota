@@ -33,9 +33,7 @@ module.exports = {
                 console.log(123,find_data);
                 
                 var return_obj = {};
-                return_obj.link_to_add = "/human/add/";
-                return_obj.link_to_edit = "/human/edit/";
-                return_obj.link_to_stop = "/human/stop/";
+                return_obj.link_to_list = "/human/list/";
                 return_obj.now_url = "基本資料維護";
                 return_obj.find_data = find_data;
                 return res.view( false , return_obj );                               
