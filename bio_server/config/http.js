@@ -8,30 +8,61 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.http.html
  */
-
+var moment =require("moment");
 module.exports.http = {
     
     locals: {
         //ejs共用function
         filters: {
+            //轉換時間為現在日期
+            trans_html_day: function(ctime) { 
+                if(ctime){
+                    return moment(ctime).format("YYYY-MM-DD");   
+                }else{
+                    return "";
+                }
+            },
             //轉換時間為現在時間
             trans_html_daytime: function(ctime) { 
-                return moment(ctime).format("YYYY-MM-DD HH:mm:ss");   
+                if(ctime){
+                    return moment(ctime).format("YYYY-MM-DD HH:mm:ss");   
+                }else{
+                    return "";
+                }
             },
             //轉換生日為年紀
-            birthday_to_age: function(input_date) { 
-                return moment().diff(moment(input_date), 'years')+"歲";          
+            birthday_to_age: function(input_date) {
+                if(input_date){
+                    return moment().diff(moment(input_date), 'years')+"歲";          
+                }else{
+                    return "";
+                }
+            },
+            //未填寫資料 改成尚未填寫
+            show_data: function(input_data) {
+                if(input_data){
+                    return input_data
+                }else{
+                    return "";
+                }
+            },
+            //避免錯誤使用的 check_obj
+            check_obj:function( object_body, b1, b2, b3, b4, b5 ){
+                if(typeof object_body != 'object') return "";
+                if(b1 == undefined){return "";}else if(object_body[b1]==undefined){return ""}
+                if(b2 == undefined){return object_body[b1];}else if(object_body[b1][b2]==undefined){return ""}
+                if(b3 == undefined){return object_body[b1][b2];}else if(object_body[b1][b2][b3]==undefined){return ""}
+                if(b4 == undefined){return object_body[b1][b2][b3];}else if(object_body[b1][b2][b3][b4]==undefined){return ""}
+                if(b5 == undefined){return object_body[b1][b2][b3][b4];}else if(object_body[b1][b2][b3][b4][b5]==undefined){return ""}
+                return object_body[b1][b2][b3][b4][b5];
             },
 //快速產生HTML列表 系列
 /*
     已製作有
         create_input
-        create_password
-        create_img
-        create_date_time
         create_date
         create_select
-        create_area
+        create_hidden
 */
             //創建普通input
             //<%-: {is_require:true, is_readonly:true, input_ch:"文字抬頭", id_name:"input_id"}|create_input %>
@@ -52,7 +83,7 @@ module.exports.http = {
                     return final_str;       
             },
             //創建日期input
-            //<%-: {is_require:true, is_readonly:true, input_ch:"文字抬頭", id_name:"input_id"}|create_date %>
+            //<%-: {is_require:true, is_readonly:true, is_deafult:true, input_ch:"文字抬頭", id_name:"input_id"}|create_date %>
             create_date: function( input_obj ) { 
                 if(input_obj.is_readonly){
                     var read_setting = "readonly disabled"; 
@@ -99,6 +130,12 @@ module.exports.http = {
                         }
                     final_str += "</div>";
               return final_str;      
+            },
+            //創建隱藏input
+            //<%-: { id_name:"input_id", id_value:"id_value"}|create_hidden %>
+            create_hidden: function( input_obj ) { 
+                var final_str  = "<input type='hidden' id='"+input_obj.id_name+"' name='"+input_obj.id_name+"' value='"+input_obj.id_value+"'>";                
+                return final_str;       
             },
         }
     },

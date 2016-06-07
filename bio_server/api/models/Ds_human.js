@@ -34,8 +34,11 @@ module.exports = {
         type: "string",
         enum: ['male','female'] 
     },
-    ds_birthday:{ type: "datetime" },
-    ds_bloodtype:{type: "string"},
+    ds_birthday:{ type: "date" },
+    ds_bloodtype:{
+        type: "string",
+        enum: ['A','B','O','AB','RH'] 
+        },
     ds_job:{type: "string"},
     ds_name:{type: "string"},
     ds_bind_id:{type: "string"},

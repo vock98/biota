@@ -38,7 +38,8 @@ module.exports.routes = {
         //基本資料維護
             '/human/list': { controller:'human',action:'human_list',locals:{layout:"layout/human",active:"human"} },
             '/human/add' : { controller:'human',action:'human_add' ,locals:{layout:"layout/human",active:"human"} },
-            '/human/edit': { controller:'human',action:'human_edit',locals:{active:"human"} },
+            '/human/edit/:ds_human_pk': { controller:'human',action:'human_edit',locals:{layout:"layout/human",active:"human"} },
+            '/human/delete/:ds_human_pk/:ds_name': { controller:'human',action:'human_delete' },
         //進出紀錄查詢
             '/human/inout': { controller:'human',action:'human_inout',locals:{active:"human"} },
 /*    

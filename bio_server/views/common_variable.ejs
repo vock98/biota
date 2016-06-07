@@ -1,21 +1,44 @@
 <script>
 //這邊是共用JS
 
-var login_account = '<%= req.session.user.account %>';
-console.log('session',login_account); //每次登錄的提示 除錯用
-
 //為了不使用英文版的datatable 乾脆自己重跑一次 
 function create_datatable( input_id ){
-    $('#'+input_id).DataTable({
-                "aaaa":"xxxxxx",
+    $('#'+input_id).DataTable({                
                 // "scrollX": true,
                 'oLanguage': {
                     'sProcessing': '處理中...',
                     'sLengthMenu': '顯示 _MENU_ 項結果',
                     'sZeroRecords': '沒有匹配結果',
-                    'sInfo': '共 _TOTAL_ 筆資料。',
+                    'sInfo': '(資料庫共有 _TOTAL_ 筆資料。)',
                     'sInfoEmpty': '顯示第 0 至 0 項結果，共 0 項',
-                    'sInfoFiltered': '(從 _MAX_ 項結果過濾)',
+                    'sInfoFiltered': '顯示第 0 至 0 項結果，共 0 項',
+                    'sSearch': '搜索: ',
+                    'oPaginate': {
+                                    'sFirst': '首頁',
+                                    'sPrevious': '上頁',
+                                    'sNext': '下頁',
+                                    'sLast': '尾頁'
+                                }
+                }
+    });
+}
+
+//ajax版本的datatable
+function create_ajaxtable( input_id , ajaxurl, column_array ){
+    $('#'+input_id).DataTable({
+    "bDestroy": true,
+    "bProcessing": true,
+    "bServerSide": true,
+    "sAjaxSource": ajaxurl,
+    "aoColumns": column_array,
+    "bPaginate": true,        
+                'oLanguage': {
+                    'sProcessing': '處理中...',
+                    'sLengthMenu': '顯示 _MENU_ 項結果',
+                    'sZeroRecords': '沒有匹配結果',
+                    'sInfo': "顯示第 _START_ 至 _END_ 結果，共 _MAX_ 項",
+                    'sInfoEmpty': '顯示第 0 至 0 項結果，共 0 項',
+                    'sInfoFiltered': '(此條件共 _TOTAL_ 項)',
                     'sSearch': '搜索: ',
                     'oPaginate': {
                                     'sFirst': '首頁',
@@ -98,7 +121,6 @@ function check_vailidation( input_obj ){
             //錯誤時 送出的情況
 			success2.hide();
 			error2.show();
-			Metronic.scrollTo(error2, -200);
 		},
 		highlight: function (element) { 
             //元素的錯誤提示效果
@@ -115,10 +137,7 @@ function check_vailidation( input_obj ){
 		submitHandler: function (form) {
             //送出事件    
 			success2.show();
-			error2.hide();		
-            //補上 summernote的資料
-            var now_summernote_code = $('#summernote_1').code();
-            $('<input>').prop({ type: 'hidden', name: "content" , value: now_summernote_code }).appendTo('form');
+			error2.hide();
             form_validation[0].submit();  
 		}
 	};
@@ -126,7 +145,6 @@ function check_vailidation( input_obj ){
     for(var type in input_obj){
         setting[type] = input_obj[type];
     }
-    
 	form_validation.validate(setting);	
 }
 
@@ -177,7 +195,7 @@ function check_default(type , names , default_value){
         });        
     }else if(type=="select"){
        $("#"+names).children().each(function(){
-            if ($(this).text()==default_value){
+            if ($(this).val()==default_value){
                 $(this).prop("selected", "true");
             }
         });
@@ -265,16 +283,12 @@ function check_default2(type , names , default_value){
     }     
 }
 
-$().ready(function(){
-    $('#summernote_1').summernote();
-    $(".note-insert.btn-group").find("button").not(":eq(3)").hide(); //不知道為什麼圖片是三號 但是這是測試結果    
-})
-
-//替換modal內容成error massege
-function modal_errMsg(id,e){	
-	var errMsg = '<span style="color:#a94442">'+e+'</span>';
-	$(id+" .modal-body").html(errMsg);	
-	$(id+" .modal-footer").hide();	
-} 
-
+//delete按下去的提示警告
+function delete_click(){
+    if(confirm("是否確定要刪除")){
+        return true;        
+    }else{
+        return false;        
+    }
+}
 </script>

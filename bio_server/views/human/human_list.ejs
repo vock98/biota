@@ -39,28 +39,9 @@
 										<th>顯示名稱</th>
 										<th>他方系統代號</th>
 										<th>管理者註記</th>
-										<th>刪除註記</th>
 										<th>編輯</th>
 									</tr>
 								</thead>
-								<tbody>
-                                <%%>
-									<tr>
-										<td>ds_human_pk</td>
-										<td>ds_birthday</td>
-										<td>ds_gender</td>
-										<td>ds_bloodtype</td>
-										<td>ds_job</td>
-										<td>ds_name</td>
-										<td>ds_bind_id</td>
-										<td>ds_is_manager</td>
-										<td>ds_deleted</td>
-										<td>
-											<a href="<%=link_to_edit%>1">修改</a>
-											<a href="<%=link_to_stop%>1">刪除</a>
-										</td>
-									</tr>									
-								</tbody>
 							</table>
 						</div>
 						<!-- /.table-responsive -->					
@@ -74,3 +55,19 @@
 	</div>
 	<!-- /#page-wrapper -->
 </div>
+	<script>
+	$(document).ready(function() {
+        var column_array = [
+            { "mData": "ds_human_pk" },
+            { "mData": "ds_birthday" },
+            { "mData": "ds_gender" },
+            { "mData": "ds_bloodtype" },
+            { "mData": "ds_job" },
+            { "mData": "ds_name" },
+            { "mData": "ds_bind_id" },
+            { "mData": "ds_is_manager" },
+            { "mData": "final_modify" }
+        ];
+        create_ajaxtable('dataTables-example', '/api/ds_human/viewall', column_array);
+	});
+	</script>

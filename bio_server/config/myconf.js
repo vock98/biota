@@ -10,9 +10,9 @@ module.exports.myconf = {
     select_blood :[
         { text: "A", value: "A",},
         { text: "B", value: "B",},
-        { text: "C", value: "C",},
         { text: "O", value: "O",},
-        { text: "AB", value: "AB",}
+        { text: "AB", value: "AB",},
+        { text: "RH", value: "RH",}
     ],
 };
 
