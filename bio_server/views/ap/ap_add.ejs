@@ -1,0 +1,67 @@
+<%
+    var big_title = "AP資料管理";
+    var title_bar = "新增AP資料";
+    var submit_but = "確認";
+%>
+	<div id="wrapper">
+        <%- partial("../layout/left") %> 
+		<div id="page-wrapper">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header"><%=big_title%></h1>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<%=title_bar%>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-6">
+									<form role="form" id="form_validation" action="<%=link_to_submit%>">       
+
+<%-: {is_require:true, is_readonly:false,    input_ch:"設備唯一碼", id_name:"ds_ap_id"}|create_input %>
+<%-: {is_require:true, is_autocomplete:false, input_ch:"設備型態", id_name:"ds_device_type", input_data:sails.config.myconf.select_device, input_extra:null}|create_select %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"平台型態", id_name:"ds_platform_type"}|create_input %>
+<%-: {is_require:false, is_readonly:false,    input_ch:"推播唯一碼", id_name:"ds_push_token"}|create_input %>
+<%-: {id_name:"submit_to_link", id_value: link_to_list } |create_hidden %>
+
+										<a href="<%=link_to_list%>" class="btn btn-default">取消</a>
+										<button type="submit" class="btn btn-primary"><%=submit_but%></button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<!-- /#page-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+    
+<script>
+
+$().ready(function(){    
+    //補上驗證
+    var input_validation = {
+        // 驗證規則
+        rules: {
+			ds_ap_id: {required: true},
+			ds_device_type: {required: true},
+			ds_platform_type: {required: true},
+		}
+    }
+    check_vailidation( input_validation );
+    
+});	
+</script>
+    

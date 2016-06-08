@@ -2,15 +2,18 @@
     function active_or_not( now_relate , input_array ){
         if(_.indexOf(input_array, now_relate)!="-1") return "class='active'"
     }
-    var a1 = ["基本資料維護","進出紀錄查詢","AP Client 管理","指紋機設備查詢","設備操作記錄"];
+    var a1 = ["基本資料維護","進出紀錄查詢","AP Client 管理","指紋機設備查詢","設備操作記錄","AP參數設定","指紋機設備查詢","設備操作記錄"];
+
     var a11 = ["基本資料維護","進出紀錄查詢"];
     var a111 = ["基本資料維護"];
     var a112 = ["進出紀錄查詢"];
     
-    var a12 = ["AP Client 管理","指紋機設備查詢","設備操作記錄"];
-    var a121 = ["AP Client 管理"];
-    var a122 = ["指紋機設備查詢"];
-    var a123 = ["設備操作記錄"];
+    var a12 = ["AP參數設定","指紋機設備查詢","設備操作記錄"];
+    var a121 = ["AP參數設定","指紋機設備查詢","設備操作記錄"];
+    var a1211 = ["AP參數設定"];
+    var a1212 = ["指紋機設備查詢"];
+    var a1213 = ["設備操作記錄"];
+    
 %>
 		<!-- Navigation -->
 		<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
@@ -21,7 +24,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html"><img src="/img/logo_b.png" alt=""></a>
+				<a class="navbar-brand" href="/human/list"><img src="/img/logo_b.png" alt=""></a>
 			</div>
 			<!-- /.navbar-header -->
 
@@ -46,27 +49,27 @@
 									<a href="javascript:;">人員資料管理<span class="fa arrow"></span></a>
 									<ul class="nav nav-third-level">
 										<li <%-active_or_not(now_url, a111 ) %>>
-											<a href="A_1_1.html">基本資料維護</a>
+											<a href="/human/list">基本資料維護</a>
 										</li>
 										<li <%-active_or_not(now_url, a112 ) %>>
-											<a href="A_1_2.html">進出紀錄查詢</a>
+											<a href="/human/inout">進出紀錄查詢</a>
 										</li>
 									</ul>
 								</li>
-								<li>
+								<li  <%-active_or_not(now_url, a12 ) %> >
 									<a href="#">設備資料管理<span class="fa arrow"></span></a>
 									<ul class="nav nav-third-level">
-										<li>
+										<li <%-active_or_not(now_url, a121 ) %> >
 											<a href="#">AP Client 管理<span class="fa arrow"></span></a>
 											<ul class="nav nav-fourth-level">
-												<li>
-													<a href="A_2_1_1.html">AP 參數設定</a>
+												<li <%-active_or_not(now_url, a1211 ) %>>
+													<a href="/ap/list">AP 參數設定</a>
 												</li>
-												<li>
-													<a href="A_2_1_2.html">指紋機設備查詢</a>
+												<li <%-active_or_not(now_url, a1212 ) %>>
+													<a href="/device/list">指紋機設備查詢</a>
 												</li>
-												<li>
-													<a href="#">設備操作記錄</a>
+												<li <%-active_or_not(now_url, a1213 ) %>>
+													<a href="/log/device_list">設備操作記錄</a>
 												</li>
 											</ul>
 											<!-- /.nav-fourth-level -->

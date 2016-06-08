@@ -14,6 +14,14 @@ module.exports.myconf = {
         { text: "AB", value: "AB",},
         { text: "RH", value: "RH",}
     ],
+    select_device :[
+        { text: "ios", value: "ios",},
+        { text: "android", value: "android",},
+        { text: "windows", value: "windows",},
+        { text: "mac", value: "mac",},
+        { text: "linux", value: "linux",},
+        { text: "其他", value: "other",},
+    ],
 };
 
 var moment = require('moment');

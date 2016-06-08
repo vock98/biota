@@ -36,25 +36,26 @@ module.exports.routes = {
   //基本資料管理
     //人員資料管理
         //基本資料維護
-            '/human/list': { controller:'human',action:'human_list',locals:{layout:"layout/human",active:"human"} },
-            '/human/add' : { controller:'human',action:'human_add' ,locals:{layout:"layout/human",active:"human"} },
-            '/human/edit/:ds_human_pk': { controller:'human',action:'human_edit',locals:{layout:"layout/human",active:"human"} },
+            '/human/list': { controller:'human',action:'human_list',locals:{layout:"layout/normal",active:"human"} },
+            '/human/add' : { controller:'human',action:'human_add' ,locals:{layout:"layout/normal",active:"human"} },
+            '/human/edit/:ds_human_pk': { controller:'human',action:'human_edit',locals:{layout:"layout/normal",active:"human"} },
             '/human/delete/:ds_human_pk/:ds_name': { controller:'human',action:'human_delete' },
         //進出紀錄查詢
-            '/human/inout': { controller:'human',action:'human_inout',locals:{active:"human"} },
-/*    
+            '/human/inout': { controller:'human',action:'human_inout',locals:{layout:"layout/normal",active:"human"} },
     //設備資料管理
         //AP client管理
             //AP參數設定
-            '/ap/list': { controller:'ap',action:'ap_list',locals:{active:"ap"} },
-            '/ap/add' : { controller:'ap',action:'ap_add' ,locals:{active:"ap"} },
-            '/ap/edit': { controller:'ap',action:'ap_edit',locals:{active:"ap"} },        
+            '/ap/list': { controller:'ap',action:'ap_list',locals:{layout:"layout/normal", active:"ap"} },
+            '/ap/add' : { controller:'ap',action:'ap_add' ,locals:{layout:"layout/normal", active:"ap"} },
+            '/ap/edit/:ds_ap_id': { controller:'ap',action:'ap_edit',locals:{layout:"layout/normal", active:"ap"} },        
+            '/ap/delete/:ds_ap_id/:ds_device_type/:ds_platform_type': { controller:'ap',action:'ap_delete' },
             //指紋機設備查詢
-            '/device/list': { controller:'device',action:'device_list',locals:{active:"device"} },
-            '/device/add' : { controller:'device',action:'device_add' ,locals:{active:"device"} },
-            '/device/edit': { controller:'device',action:'device_edit',locals:{active:"device"} },
+            '/device/list': { controller:'device',action:'device_list',locals:{layout:"layout/normal", active:"device"} },
+            '/device/add' : { controller:'device',action:'device_add' ,locals:{layout:"layout/normal", active:"device"} },
+            '/device/edit': { controller:'device',action:'device_edit',locals:{layout:"layout/normal", active:"device"} },
             //設備操作紀錄
-            '/Db_device_log/list': { controller:'Db_device_log',action:'Db_device_log_list',locals:{active:"Db_device_log"} },
+            '/Db_device_log/list': { controller:'Db_device_log',action:'Db_device_log_list',locals:{layout:"layout/normal", active:"Db_device_log"} },
+/*    
   //使用紀錄報表
     //人員進出報表
     '/table/human': { controller:'table',action:'table_human',locals:{active:"table"} },
