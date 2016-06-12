@@ -104,8 +104,33 @@ module.exports.http = {
                         }
               return final_str;        
             },
+            //創建日期時間input
+            //<%-: {is_require:true, is_readonly:true, is_deafult:true, input_ch:"文字抬頭", id_name:"input_id"}|create_datetime %>
+            create_datetime: function( input_obj ) { 
+                var final_str = "<label for='"+input_obj.id_name+"' class='control-label'>"+input_obj.input_ch;
+                        if(input_obj.is_require){
+                            final_str += "<span class='required'>*</span>";            
+                        }
+                    final_str += "</label>";
+                    final_str += "<div class='input-group date' id='"+input_obj.id_name+"_div' data-date-format='yyyy-mm-dd HH:ii' data-link-field='"+input_obj.id_name+"'>";
+                    final_str += '<input class="form-control" size="16" type="text" value="" readonly>';
+                    final_str += '<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>';
+                    final_str += '<input type="hidden" id="'+input_obj.id_name+'" name="'+input_obj.id_name+'" value="" /><br/>';
+                    final_str += "</div>";
+                    var date_time_cond = {
+                        weekStart: 1,
+                        todayBtn:  1,
+                        autoclose: 1,
+                        todayHighlight: 1,
+                        startView: 2,
+                        forceParse: 0,
+                        showMeridian: 1
+                    }
+                    final_str += "<script>$('#"+input_obj.id_name+"_div').datetimepicker("+JSON.stringify(date_time_cond)+");</script>";                              
+              return final_str;        
+            },
             //創建下拉選單
-            //<%-: {is_require:true, is_autocomplete:true, input_ch:"文字抬頭", id_name:"input_id", input_data:[{text:"aaa",value:"bbb"}], input_extra:null}|create_select %>
+            //<%-: {is_require:true, is_readonly:true, is_autocomplete:true, input_ch:"文字抬頭", id_name:"input_id", input_data:[{text:"aaa",value:"bbb"}], input_extra:null}|create_select %>
             create_select: function( input_obj ) { 
                 var final_str  = "<div class='form-group'>";
                     final_str += "<label class='control-label'>"+input_obj.input_ch;

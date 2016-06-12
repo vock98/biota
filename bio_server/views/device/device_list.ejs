@@ -1,3 +1,7 @@
+<%
+    var big_title = "指紋機設備設定";
+    var bar_title = "指紋機資料維護";
+%>
 <div id="wrapper">
 
 <%- partial("../layout/left") %> 
@@ -5,7 +9,7 @@
 	<div id="page-wrapper">
 		<div class="row">
 			<div class="col-lg-12">
-				<h1 class="page-header">人員資料管理</h1>
+				<h1 class="page-header"><%=big_title%></h1>
 			</div>
 			<!-- /.col-lg-12 -->
 		</div>
@@ -15,7 +19,7 @@
 
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						基本資料維護
+						<%=bar_title%>
 					</div>
 					<!-- /.panel-heading -->
 					<div class="panel-body">
@@ -31,14 +35,15 @@
 							<table class="table table-striped table-bordered table-hover" id="dataTables-example" width="100%">
 								<thead>
 									<tr>
-										<th>使用者主鍵</th>
-										<th>生日</th>
-										<th>性別</th>
-										<th>血型</th>
-										<th>工作</th>
-										<th>顯示名稱</th>
-										<th>他方系統代號</th>
-										<th>管理者註記</th>
+										<th>連結裝置PK</th>
+										<th>產品識別碼</th>
+										<th>廠商識別碼</th>
+										<th>版本</th>
+										<th>速度</th>
+										<th>製造商</th>
+										<th>位置識別碼</th>
+										<th>產品名稱</th>
+										<th>資料更新時間</th>
 										<th>編輯</th>
 									</tr>
 								</thead>
@@ -58,16 +63,17 @@
 	<script>
 	$(document).ready(function() {
         var column_array = [
-            { "mData": "ds_human_pk" },
-            { "mData": "ds_birthday" },
-            { "mData": "ds_gender" },
-            { "mData": "ds_bloodtype" },
-            { "mData": "ds_job" },
-            { "mData": "ds_name" },
-            { "mData": "ds_bind_id" },
-            { "mData": "ds_is_manager" },
+            { "mData": "ds_ap_id" },
+            { "mData": "ds_device_id" },
+            { "mData": "ds_co_id" },
+            { "mData": "ds_ver" },
+            { "mData": "ds_speed" },
+            { "mData": "ds_company" },
+            { "mData": "ds_addr" },
+            { "mData": "ds_product" },
+            { "mData": "updatedAt" },
             { "mData": "final_modify" }
         ];
-        create_ajaxtable('dataTables-example', '/api/ds_human/viewall', column_array);
+        create_ajaxtable('dataTables-example', '/api/ds_fingerprint_device/viewall', column_array);
 	});
 	</script>

@@ -1,0 +1,103 @@
+<%
+    var big_title = "中央氣象局資料";
+    var bar_title = "氣象局記錄";
+%>
+<div id="wrapper">
+
+<%- partial("../layout/left") %> 
+
+	<div id="page-wrapper">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="page-header"><%=big_title%></h1>
+			</div>
+			<!-- /.col-lg-12 -->
+		</div>
+		<!-- /.row -->
+		<div class="row">
+			<div class="col-lg-12">
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<%=bar_title%>
+					</div>
+					<!-- /.panel-heading -->
+					<div class="panel-body">
+						<div class="dataTable_wrapper">
+							<table class="table table-striped table-bordered table-hover" id="dataTables-example" width="100%">
+								<thead>
+									<tr>
+										<th>觀測站名稱</th>
+										<th>類別</th>
+										<th>記錄日期</th>
+										<th>00</th>
+										<th>01</th>
+										<th>02</th>
+										<th>03</th>
+										<th>04</th>
+										<th>05</th>
+										<th>06</th>
+										<th>07</th>
+										<th>08</th>
+										<th>09</th>
+                                        <th>10</th>
+										<th>11</th>
+										<th>12</th>
+										<th>13</th>
+										<th>14</th>
+										<th>15</th>
+										<th>16</th>
+										<th>17</th>
+										<th>18</th>
+										<th>19</th>
+										<th>21</th>
+										<th>22</th>
+										<th>23</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<!-- /.table-responsive -->					
+					</div>
+					<!-- /.panel-body -->
+				</div>
+				<!-- /.panel -->
+			</div>
+			<!-- /.col-lg-12 -->
+		</div>		
+	</div>
+	<!-- /#page-wrapper -->
+</div>
+	<script>
+	$(document).ready(function() {
+        var column_array = [
+            { "mData": "ef_sitename" },
+            { "mData": "ef_item"   },
+            { "mData": "ef_date"     },
+            { "mData": "ef_h00"      },
+            { "mData": "ef_h01"      },
+            { "mData": "ef_h02"      },
+            { "mData": "ef_h03"      },
+            { "mData": "ef_h04"      },
+            { "mData": "ef_h05"      },
+            { "mData": "ef_h06"      },
+            { "mData": "ef_h07"      },
+            { "mData": "ef_h08"      },
+            { "mData": "ef_h09"      },
+            { "mData": "ef_h10"      },
+            { "mData": "ef_h11"      },
+            { "mData": "ef_h12"      },
+            { "mData": "ef_h13"      },
+            { "mData": "ef_h14"      },
+            { "mData": "ef_h15"      },
+            { "mData": "ef_h16"      },
+            { "mData": "ef_h17"      },
+            { "mData": "ef_h18"      },
+            { "mData": "ef_h19"      },
+            { "mData": "ef_h21"      },
+            { "mData": "ef_h22"      },
+            { "mData": "ef_h23"      }
+        ];
+        create_ajaxtable('dataTables-example', '/api/ef_cwb/viewall', column_array);
+	});
+	</script>

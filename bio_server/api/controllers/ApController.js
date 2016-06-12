@@ -46,12 +46,6 @@ module.exports = {
         var destroy_url = "/api/Ds_fingerprint_ap/D?ds_ap_id="+params.ds_ap_id+"&ds_device_type="+params.ds_device_type+"&ds_platform_type="+params.ds_platform_type+"&submit_to_link=/ap/list/";
         return res.redirect( destroy_url );
 	},
-    //進出頁面 http://localhost:1337/ap/inout
-    ap_inout:function(req,res){
-        var return_obj = {};
-        return_obj.now_url = "進出紀錄查詢";
-        return res.view( false , return_obj );		
-	},
 };
 
 

@@ -1,6 +1,6 @@
 var moment = require('moment');
 var request = require('request');
-//此處出現的所有共用參數都不需要有callback
+//此處出現的都不是co必用的
 module.exports = {
     //所有輸入值的驗證
 	check_data:function(input_obj, check_array){
@@ -124,7 +124,7 @@ module.exports = {
             result_obj.ef_time = moment(ldata.time[0].obsTime[0]).format('HH');
             
             //資料名稱
-            //WDSD = 風速、TEMP = 溫度、HUMD = 相對濕度、PRES = 氣壓、H_24R = 日累積雨量            
+            //WDSD = 風速 TEMP = 溫度 HUMD = 相對濕度 PRES = 氣壓 H_24R = 日累積雨量            
             var four_add = ["TEMP","HUMD","PRES","WDSD"]
             _.each(four_add,function(key){
                 result_obj.ef_item =key;
@@ -139,5 +139,16 @@ module.exports = {
  
         // return data_params.location[0];
     },
+    change_type_to_ch:function(input_type){
+        var return_str = "";
+        switch(input_type){
+            case "WDSD": return_str = "風速"; break;
+            case "TEMP": return_str = "溫度"; break;
+            case "HUMD": return_str = "相對濕度"; break;
+            case "PRES": return_str = "氣壓"; break;
+            case "H_24R": return_str = "日累積雨量"; break;
+        }
+        return return_str;
+    }
 };
 

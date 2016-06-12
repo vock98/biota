@@ -184,6 +184,8 @@ function check_default(type , names , default_value){
                 $(this).parent("span").prop("class","checked"); //metronic 看 span 的class
             }
         });        
+    }else if(type=="datetime"){      
+        $("#"+names+"_div").datetimepicker('update', default_value);        
     }else if(type=="input"){
         $("#"+names).val(default_value);        
     }else if(type=="checkbox"){

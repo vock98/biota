@@ -32,7 +32,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': { view: 'homepage' },
+  // '/': { view: 'homepage' },
+  //預設首頁導向基本資料維護
+  '/': { controller:'human',action:'human_list',locals:{layout:"layout/normal",active:"human"} },
   //基本資料管理
     //人員資料管理
         //基本資料維護
@@ -52,35 +54,39 @@ module.exports.routes = {
             //指紋機設備查詢
             '/device/list': { controller:'device',action:'device_list',locals:{layout:"layout/normal", active:"device"} },
             '/device/add' : { controller:'device',action:'device_add' ,locals:{layout:"layout/normal", active:"device"} },
-            '/device/edit': { controller:'device',action:'device_edit',locals:{layout:"layout/normal", active:"device"} },
+            '/device/edit/:ds_ap_id/:ds_device_id': { controller:'device',action:'device_edit',locals:{layout:"layout/normal", active:"device"} },
+            '/device/delete/:ds_ap_id/:ds_device_id': { controller:'device',action:'device_delete',locals:{layout:"layout/normal", active:"device"} },
             //設備操作紀錄
-            '/Db_device_log/list': { controller:'Db_device_log',action:'Db_device_log_list',locals:{layout:"layout/normal", active:"Db_device_log"} },
+            '/log/device_list': { controller:'log',action:'device_list',locals:{layout:"layout/normal", active:"Db_device_log"} },
 /*    
   //使用紀錄報表
     //人員進出報表
-    '/table/human': { controller:'table',action:'table_human',locals:{active:"table"} },
+    '/table/human': { controller:'table',action:'table_human',locals:{layout:"layout/normal",active:"table"} },
     //設備操作紀錄報表
-    '/table/device': { controller:'table',action:'table_device',locals:{active:"table"} },
+    '/table/device': { controller:'table',action:'table_device',locals:{layout:"layout/normal",active:"table"} },
     //FRR/FAR分析報表
-    '/table/frr': { controller:'table',action:'table_frr',locals:{active:"table"} },
+    '/table/frr': { controller:'table',action:'table_frr',locals:{layout:"layout/normal",active:"table"} },
   //開發者應用程式模擬介面
     //應用程式接口
-    '/simulator/pro': { controller:'Simulator',action:'Simulator_pro',locals:{active:"Simulator"} },
+    '/simulator/pro': { controller:'Simulator',action:'Simulator_pro',locals:{layout:"layout/normal",active:"Simulator"} },
     //APNS/GCM推播模擬
-    '/simulator/gcm': { controller:'Simulator',action:'Simulator_gcm',locals:{active:"Simulator"} },
+    '/simulator/gcm': { controller:'Simulator',action:'Simulator_gcm',locals:{layout:"layout/normal",active:"Simulator"} },
+*/    
   //參考資料載入
     //中央氣象局環境資料
-    '/ef_cwb/list': { controller:'ef_cwb',action:'ef_cwb_list',locals:{active:"ef_cwb"} },
+    '/ef_cwb/list': { controller:'ef_cwb',action:'list',locals:{layout:"layout/normal",active:"ef_cwb"}  },
     //手動輸入紀錄
-    '/ef_envir/list': { controller:'ef_envir',action:'ef_envir_list',locals:{active:"ef_envir"} },
-    '/ef_envir/add' : { controller:'ef_envir',action:'ef_envir_add' ,locals:{active:"ef_envir"} },
-    '/ef_envir/edit': { controller:'ef_envir',action:'ef_envir_edit',locals:{active:"ef_envir"} }, 
+    '/envir/list': { controller:'envir',action:'list',locals:{layout:"layout/normal",active:"envir"}  },
+    '/envir/add' : { controller:'envir',action:'add' ,locals:{layout:"layout/normal",active:"envir"} },
+    '/envir/edit/:ef_envir_pk': { controller:'envir',action:'edit',locals:{layout:"layout/normal",active:"envir"} }, 
+    '/envir/delete/:ef_envir_pk': { controller:'envir',action:'delete',locals:{layout:"layout/normal", active:"envir"} },
+/*    
   //資料匯出
     //門禁紀錄
-    '/export/access': { controller:'export',action:'export_access',locals:{active:"export"} },
+    '/export/access': { controller:'export',action:'export_access',locals:{layout:"layout/normal",active:"export"} },
   //定時排程
     //門禁記錄轉置
-    '/cron/transrecord': { controller:'cron',action:'cron_transrecord',locals:{active:"cron"} },
+    '/cron/transrecord': { controller:'cron',action:'cron_transrecord',locals:{layout:"layout/normal",active:"cron"} },
 */
     
   /***************************************************************************

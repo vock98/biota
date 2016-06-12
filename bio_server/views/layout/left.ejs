@@ -2,17 +2,22 @@
     function active_or_not( now_relate , input_array ){
         if(_.indexOf(input_array, now_relate)!="-1") return "class='active'"
     }
-    var a1 = ["基本資料維護","進出紀錄查詢","AP Client 管理","指紋機設備查詢","設備操作記錄","AP參數設定","指紋機設備查詢","設備操作記錄"];
+    var a1 = ["基本資料維護","進出紀錄查詢","AP Client 管理","指紋機設備設定","設備操作記錄","AP參數設定"];
 
     var a11 = ["基本資料維護","進出紀錄查詢"];
     var a111 = ["基本資料維護"];
     var a112 = ["進出紀錄查詢"];
     
-    var a12 = ["AP參數設定","指紋機設備查詢","設備操作記錄"];
-    var a121 = ["AP參數設定","指紋機設備查詢","設備操作記錄"];
+    var a12 = ["AP參數設定","指紋機設備設定","設備操作記錄"];
+    var a121 = ["AP參數設定","指紋機設備設定","設備操作記錄"];
     var a1211 = ["AP參數設定"];
-    var a1212 = ["指紋機設備查詢"];
+    var a1212 = ["指紋機設備設定"];
     var a1213 = ["設備操作記錄"];
+    
+    var d1 = ["中央氣象局環境資料","手動輸入記錄"];
+    
+    var d11 = ["中央氣象局環境資料"];
+    var d12 = ["手動輸入記錄"];
     
 %>
 		<!-- Navigation -->
@@ -66,7 +71,7 @@
 													<a href="/ap/list">AP 參數設定</a>
 												</li>
 												<li <%-active_or_not(now_url, a1212 ) %>>
-													<a href="/device/list">指紋機設備查詢</a>
+													<a href="/device/list">指紋機設備設定</a>
 												</li>
 												<li <%-active_or_not(now_url, a1213 ) %>>
 													<a href="/log/device_list">設備操作記錄</a>
@@ -110,14 +115,14 @@
 							<!-- /.nav-second-level -->
 						</li>
 						
-						<li>
+						<li  <%-active_or_not(now_url, d1 ) %> >
 							<a href="#"><i class="fa fa-download fa-fw"></i>  參考資料載入<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
-								<li>
-									<a href="#">中央氣象局環境資料</a>
+								<li <%-active_or_not(now_url, d11 ) %>>
+									<a href="/ef_cwb/list">中央氣象局環境資料</a>
 								</li>
-								<li>
-									<a href="#">手動輸入紀錄</a>
+								<li <%-active_or_not(now_url, d12 ) %>>
+									<a href="/envir/list">手動輸入紀錄</a>
 								</li>
 							</ul>
 							<!-- /.nav-second-level -->

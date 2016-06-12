@@ -126,4 +126,105 @@ module.exports = {
             return res.send(check_result);            
         }
     },
+    list: function(req, res) {
+        var return_obj = {};
+        return_obj.now_url = "中央氣象局環境資料";
+        return res.view( false , return_obj );    
+    },
+    /*
+        ajax撈取全部資料專用
+    */
+    viewAll: function(req, res) {
+        //----定義所有欄位
+        var cols_array = [
+            "ef_sitename",
+            "ef_item"  ,
+            "ef_date"    ,
+            "ef_h00"     ,
+            "ef_h01"     ,
+            "ef_h02"     ,
+            "ef_h03"     ,
+            "ef_h04"     ,
+            "ef_h05"     ,
+            "ef_h06"     ,
+            "ef_h07"     ,
+            "ef_h08"     ,
+            "ef_h09"     ,
+            "ef_h10"     ,
+            "ef_h11"     ,
+            "ef_h12"     ,
+            "ef_h13"     ,
+            "ef_h14"     ,
+            "ef_h15"     ,
+            "ef_h16"     ,
+            "ef_h17"     ,
+            "ef_h18"     ,
+            "ef_h19"     ,
+            "ef_h21"     ,
+            "ef_h22"     ,
+            "ef_h23"     
+        ];
+        
+        //產生右上角用的搜尋條件
+        var search_or_cond = _.map(cols_array,function(cols){
+                var return_obj ={};
+                return_obj[cols] = {'contains': req.query.sSearch};
+                return return_obj; 
+            });
+            
+        //搜尋用的waterline    
+        var options = {
+            where: { 
+                ds_deleted: {"$exists":false},
+                or: search_or_cond,            
+            }, 
+            sort: cols_array[req.query.iSortCol_0] +' '+ req.query.sSortDir_0,
+        };
+
+        async.auto({
+            find_iTotalRecords: function (callback, results) {      
+                Ef_cwb.count({ ds_deleted: {"$exists":false} } ).exec(function(err, result){
+                    callback(null, result);  
+                });	            
+            },
+            find_iTotalDisplayRecords: function (callback, results) {      
+                Ef_cwb.count(options).exec(function(err, result){
+                    callback(null, result);  
+                });	            
+            },
+            find_data:["find_iTotalRecords","find_iTotalDisplayRecords", function (callback, results) {      
+                var options2 = options;
+                options2.skip = req.query.iDisplayStart;
+                options2.limit = req.query.iDisplayLength;
+                
+                Ef_cwb.find(options2).exec(function(err, fdata){
+                    if(err){
+                        res.send(500, { error: 'DB error' });
+                    } else {
+                        //製作 前端產生結果
+                        var retuser = [];
+                        fdata.forEach(function(one_data){
+                            var push_obj ={};
+                            _.each(cols_array,function(cols){
+                                push_obj[cols] = one_data[cols]||"";
+                            });
+                            //----需要特殊處理的另外寫
+                            // if(one_data.ef_item){
+                                // push_obj.ef_item  = no_call_service.change_type_to_ch(one_data.ef_item);
+                            // }
+                            retuser.push( push_obj );
+                        });
+                        
+                        var json = {
+                            aaData: retuser,
+                            iTotalRecords: results.find_iTotalRecords,
+                            iTotalDisplayRecords: results.find_iTotalDisplayRecords
+                        };
+                        res.contentType('application/json');
+                        res.json(json);
+                    }
+                });	            
+            }]
+        })//async end
+    },
 };
