@@ -112,7 +112,7 @@ module.exports.http = {
                             final_str += "<span class='required'>*</span>";            
                         }
                     final_str += "</label>";
-                    final_str += "<div class='input-group date' id='"+input_obj.id_name+"_div' data-date-format='yyyy-mm-dd HH:ii' data-link-field='"+input_obj.id_name+"'>";
+                    final_str += "<div class='input-group date' id='"+input_obj.id_name+"_div' data-date-format='yyyy-mm-dd hh:ii' data-link-field='"+input_obj.id_name+"'>";
                     final_str += '<input class="form-control" size="16" type="text" value="" readonly>';
                     final_str += '<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span><span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>';
                     final_str += '<input type="hidden" id="'+input_obj.id_name+'" name="'+input_obj.id_name+'" value="" /><br/>';
@@ -124,7 +124,7 @@ module.exports.http = {
                         todayHighlight: 1,
                         startView: 2,
                         forceParse: 0,
-                        showMeridian: 1
+                        showMeridian: 0
                     }
                     final_str += "<script>$('#"+input_obj.id_name+"_div').datetimepicker("+JSON.stringify(date_time_cond)+");</script>";                              
               return final_str;        
@@ -162,6 +162,28 @@ module.exports.http = {
                 var final_str  = "<input type='hidden' id='"+input_obj.id_name+"' name='"+input_obj.id_name+"' value='"+input_obj.id_value+"'>";                
                 return final_str;       
             },
+            //simulator專用 
+            create_input_simulator: function( input_class, input_array ){
+                var final_str = "";
+                final_str +='<div class="'+input_class+' input_div" style="display:none">';                
+                    for(var key in input_array){
+                        if(key%4==0){
+                            final_str +='<div class="row form-group">';
+                            final_str +='<div class="row col-lg-11">';
+                        }
+                            final_str +='<div class="col-lg-3">';
+                            final_str +='<input class="form-control '+input_array[key]+' all_input" type="text" placeholder="'+input_array[key]+'">';
+                            final_str +='</div>';
+                        
+                        if(key%4==3 ||key==(input_array.length-1)){
+                            final_str +='</div>';
+                            final_str +='<div class="row col-lg-1"></div>';                
+                            final_str +='</div>';
+                        }                            
+                    }                     
+                final_str +='</div>';
+                return final_str;
+            }
         }
     },
   /****************************************************************************

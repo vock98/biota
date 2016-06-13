@@ -16,7 +16,7 @@ module.exports = {
     廠商識別碼 ds_co_id 
     版本 ds_ver 
     速度 ds_speed 
-    製造商 ds_co 
+    製造商 ds_company 
     位置識別碼 ds_addr 
     產品名稱 ds_product 
     連結裝置PK ds_ap_id 

@@ -14,8 +14,11 @@
     var a1212 = ["指紋機設備設定"];
     var a1213 = ["設備操作記錄"];
     
-    var d1 = ["中央氣象局環境資料","手動輸入記錄"];
+    var C1 = ["應用程式接口","APNS/GCM推播模擬"];    
+    var C11 = ["應用程式接口"];
+    var C12 = ["APNS/GCM推播模擬"];
     
+    var d1 = ["中央氣象局環境資料","手動輸入記錄"];    
     var d11 = ["中央氣象局環境資料"];
     var d12 = ["手動輸入記錄"];
     
@@ -102,13 +105,13 @@
 							<!-- /.nav-second-level -->
 						</li>
 
-						<li>
+						<li <%-active_or_not(now_url, C1 ) %>>
 							<a href="#"><i class="fa fa-share-alt fa-fw"></i>  開發者應用程式模擬介面<span class="fa arrow"></span></a>
 							<ul class="nav nav-second-level">
-								<li>
-									<a href="#">應用程式接口</a>
+								<li <%-active_or_not(now_url, C11 ) %>>
+									<a href="/simulator/pro">應用程式接口</a>
 								</li>
-								<li>
+								<li <%-active_or_not(now_url, C12 ) %>>
 									<a href="#">APNS / GCM 推播模擬</a>
 								</li>
 							</ul>

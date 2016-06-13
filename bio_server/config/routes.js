@@ -66,12 +66,12 @@ module.exports.routes = {
     '/table/device': { controller:'table',action:'table_device',locals:{layout:"layout/normal",active:"table"} },
     //FRR/FAR分析報表
     '/table/frr': { controller:'table',action:'table_frr',locals:{layout:"layout/normal",active:"table"} },
+*/    
   //開發者應用程式模擬介面
     //應用程式接口
-    '/simulator/pro': { controller:'Simulator',action:'Simulator_pro',locals:{layout:"layout/normal",active:"Simulator"} },
+    '/simulator/pro': { controller:'Simulator',action:'pro',locals:{layout:"layout/normal",active:"Simulator"} },
     //APNS/GCM推播模擬
-    '/simulator/gcm': { controller:'Simulator',action:'Simulator_gcm',locals:{layout:"layout/normal",active:"Simulator"} },
-*/    
+    // '/simulator/gcm': { controller:'Simulator',action:'gcm',locals:{layout:"layout/normal",active:"Simulator"} },
   //參考資料載入
     //中央氣象局環境資料
     '/ef_cwb/list': { controller:'ef_cwb',action:'list',locals:{layout:"layout/normal",active:"ef_cwb"}  },
