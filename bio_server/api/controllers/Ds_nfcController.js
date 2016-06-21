@@ -4,10 +4,42 @@
  * @description :: Server-side logic for managing ds_nfcs
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+    var co = require('co');
+    var moment = require("moment");
     var table_name = "Ds_nfc";
     var log_type = "human";
 module.exports = {
+    /*
+        all網址 : http://localhost:1337/api/ds_nfc/find
+        C網址   : http://localhost:1337/api/ds_nfc?type=C&id=11&nfc=cc
+        R網址   : http://localhost:1337/api/ds_nfc?type=R&id=11
+        D網址   : http://localhost:1337/api/ds_nfc?type=D&id=11&nfc=cc
+    */
+	redirect: function(req, res) {
+        co(function* () {                                                    
+            var params = req.allParams();
+            var who =  req.session.id;
+            var return_obj = "";
+            switch(params.type){
+                case "C" : return_obj = yield nfc_service.create( params ,who); break;
+                case "R" : return_obj = yield nfc_service.search( params ,who ); break;
+                // case "R1": return_obj = yield nfc_service.search1( params ,who); break;
+                // case "R2": return_obj = yield nfc_service.search2( params ,who); break;
+                // case "U" : return_obj = yield nfc_service.update( params ,who); break;
+                case "D" : return_obj = yield nfc_service.destroy( params ,who); break;
+                default: return_obj = no_call_service.add_biota_result( {} , false , "type 不正確" , ["type 不正確"] );
+            }
+            var submit_to_link = req.param("submit_to_link");
+            if(return_obj.result.success && submit_to_link ){ //如果有網址代表要直接轉頁
+                return res.redirect( submit_to_link );
+            }else{                                                    
+                return res.json( return_obj );
+            }
+        }).catch(function(err){
+            console.log(table_name+"_second_routes_error",err);
+            return res.send( table_name+"_second_routes_error");
+        });
+    },
 	/*
         用途 : 查看內容
         輸入 : 無
@@ -25,106 +57,7 @@ module.exports = {
                     return res.json(find_data);                               
                 }
         })
-    },
-    /*
-        用途 : 創建設備
-        輸入 : ["ds_nfc_tag_id", "ds_human_pk"]
-        輸出 : 創建object or error
-        不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_nfc/C?ds_nfc_tag_id=id1&ds_human_pk=1
-    */
-	C: function(req, res) {
-        var params = req.allParams(); delete params["id"];
-        var check_array = ["ds_nfc_tag_id", "ds_human_pk"];
-        var check_result = no_call_service.check_data(params, check_array);
-        if(check_result==""){
-            //參數不缺少
-            Ds_nfc.create(params).exec(function(err,create_data){
-                if(err){
-                    no_call_service.write_log(table_name,"C_die", err, req.session.id, log_type);
-                    return res.json({error:2301});
-                }else{
-                    no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
-                    return res.json(create_data);                             
-                }           
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"C_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },
-    /*
-        用途 : 查看搜尋內容
-        輸入 : ["ds_human_pk"]        
-        輸出 : DB查到的NFC個人資料
-        不可輸入值: ["ds_nfc_tag_id"]
-        快速連結 : http://localhost:1337/api/Ds_nfc/R?ds_human_pk=1
-    */
-	R: function(req, res) {
-        var params = req.allParams(); delete params["id"];
-        //有不可填寫的參數即擋下
-        var cannot_param = ["ds_nfc_tag_id"];
-        var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
-        if(check_cannot){
-            no_call_service.write_log(table_name,"R_error_data", params, req.session.id, log_type);
-            return res.json({error:3301});
-        }
-        
-        var check_array = ["ds_human_pk"];
-        var check_result = no_call_service.check_data(params, check_array);
-        if(check_result==""){
-            //參數不缺少
-            var cond = no_call_service.complete_cond(params, check_array, "ds_deleted");
-            
-            Ds_nfc.findOne(cond).exec(function(err,find_data){
-                if(err){
-                    no_call_service.write_log(table_name,"R_die", err, req.session.id, log_type);
-                    return res.json({error:3302});
-                }else{
-                    //資料直接回傳
-                    no_call_service.write_log(table_name,"R_ok", params, req.session.id, log_type);
-                    return res.json(find_data);                             
-                }           
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"R_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },     
-    /*
-        用途 : 停止設備
-        輸入 : ["ds_nfc_tag_id", "ds_human_pk"]
-        輸出 : 刪除的object結果 or error
-        不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_nfc/D?ds_nfc_tag_id=id1&ds_human_pk=1
-    */
-	D: function(req, res) {
-        var moment = require('moment');
-        var params = req.allParams(); delete params["id"];
-        
-        var check_array = ["ds_nfc_tag_id", "ds_human_pk"];
-        var check_result = no_call_service.check_data(params, check_array);
-        if(check_result==""){
-            //參數不缺少
-            var cond = no_call_service.complete_cond(params, check_array);
-            
-            Ds_nfc.destroy( cond ).exec(function(err){
-                if(err){
-                    no_call_service.write_log(table_name,"D_die", err, req.session.id, log_type);
-                    return res.json({error:5301});
-                }else{
-                    no_call_service.write_log(table_name,"D_ok", params, req.session.id, log_type);
-                    return res.send("D_ok");                               
-                }
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"D_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },
+    },    
 };
 
 

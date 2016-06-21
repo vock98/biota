@@ -8,7 +8,40 @@
     var table_name = "Ef_envir";
     var log_type = "out2";
     var moment = require('moment');
+    var co = require('co');
 module.exports = {
+    /*
+        all網址 : http://localhost:1337/api/Ef_envir/find
+        C網址   : http://localhost:1337/api/Ef_envir?type=C&datetime=2016-06-20T09:36:47.166Z&desc=aa&temp=50&humd=20
+        R網址   : http://localhost:1337/api/Ef_envir?type=R&from=20160618&to=20160621
+        U網址   : http://localhost:1337/api/Ef_envir?type=U&envir_pk=5767ccf592278110174624fe&ef_desc=dd
+        D網址   : http://localhost:1337/api/Ef_envir?type=D&envir_pk=5767ccf592278110174624fe
+    */
+	redirect: function(req, res) {
+        co(function* () {                                                    
+            var params = req.allParams();
+            var who =  req.session.id;
+            var return_obj = "";
+            switch(params.type){
+                case "C" : return_obj = yield envir_service.create( params ,who); break;
+                case "R" : return_obj = yield envir_service.search( params ,who ); break;
+                // case "R1": return_obj = yield envir_service.search1( params ,who); break;
+                // case "R2": return_obj = yield envir_service.search2( params ,who); break;
+                case "U" : return_obj = yield envir_service.update( params ,who); break;
+                case "D" : return_obj = yield envir_service.destroy( params ,who); break;
+                default: return_obj = no_call_service.add_biota_result( {} , false , "type 不正確" , ["type 不正確"] );
+            }
+            var submit_to_link = req.param("submit_to_link");
+            if(return_obj.result.success && submit_to_link ){ //如果有網址代表要直接轉頁
+                return res.redirect( submit_to_link );
+            }else{                                                    
+                return res.json( return_obj );
+            }
+        }).catch(function(err){
+            console.log(table_name+"_second_routes_error",err);
+            return res.send( table_name+"_second_routes_error");
+        });
+    },
 	/*
         用途 : 查看內容
         輸入 : 無

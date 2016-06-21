@@ -26,31 +26,31 @@
 							<div class="row" id="api_item">
 								<div class="col-lg-12">
                                 
-<%-:"Ap_C",["ds_ap_id","ds_device_type","ds_platform_type","ds_push_token"]|create_input_simulator%>
-<%-:"Ap_R1",["ds_ap_id","ds_device_type","ds_platform_type"]|create_input_simulator%>
-<%-:"Ap_R2",["ds_ap_id"]|create_input_simulator%>
-<%-:"Ap_U",["ds_ap_id","ds_device_type","ds_platform_type"]|create_input_simulator%>
-<%-:"Ap_D",["ds_ap_id","ds_device_type","ds_platform_type"]|create_input_simulator%>
+<%-:"Ap_C",["id","device_type","platform_type","push_token"]|create_input_simulator%>
+<%-:"Ap_R1",["id","device_type","platform_type"]|create_input_simulator%>
+<%-:"Ap_R2",["id"]|create_input_simulator%>
+<%-:"Ap_U",["id","device_type","platform_type"]|create_input_simulator%>
+<%-:"Ap_D",["id","device_type","platform_type"]|create_input_simulator%>
 
-<%-:"Device_C",["ds_ap_id", "ds_device_id", "ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"]|create_input_simulator%>
-<%-:"Device_R",["ds_ap_id", "ds_device_id"]|create_input_simulator%>
-<%-:"Device_U",["ds_ap_id", "ds_device_id", "ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"]|create_input_simulator%>
-<%-:"Device_D",["ds_ap_id", "ds_device_id", "ds_co_id", "ds_ver", "ds_speed", "ds_company", "ds_addr", "ds_product"]|create_input_simulator%>
+<%-:"Device_C",["id", "device_id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
+<%-:"Device_R",["id", "device_id"]|create_input_simulator%>
+<%-:"Device_U",["id", "device_id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
+<%-:"Device_D",["id", "device_id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
 
-<%-:"Human_C",["ds_birthday","ds_gender","ds_bloodtype", "ds_job","ds_name","ds_bind_id" ]|create_input_simulator%>
-<%-:"Human_R1",["ds_birthday","ds_gender","ds_bloodtype", "ds_job","ds_name","ds_bind_id" ]|create_input_simulator%>
-<%-:"Human_R2",["ds_human_pk" ]|create_input_simulator%>
-<%-:"Human_U",["ds_human_pk","ds_birthday","ds_gender","ds_bloodtype", "ds_job","ds_name","ds_bind_id" ]|create_input_simulator%>
-<%-:"Human_D",["ds_human_pk", "ds_name","ds_bind_id" ]|create_input_simulator%>
+<%-:"Human_C",["birthday","gender","bloodtype", "job","name","bind_id" ]|create_input_simulator%>
+<%-:"Human_R1",["birthday","gender","bloodtype", "job","name","bind_id" ]|create_input_simulator%>
+<%-:"Human_R2",["id" ]|create_input_simulator%>
+<%-:"Human_U",["id","birthday","gender","bloodtype", "job","name","bind_id" ]|create_input_simulator%>
+<%-:"Human_D",["id", "name","bind_id" ]|create_input_simulator%>
 
-<%-:"Nfc_C",["ds_nfc_tag_id","ds_human_pk"]|create_input_simulator%>
-<%-:"Nfc_R",["ds_nfc_tag_id"]|create_input_simulator%>
-<%-:"Nfc_D",["ds_nfc_tag_id","ds_human_pk"]|create_input_simulator%>
+<%-:"Nfc_C",["id","nfc"]|create_input_simulator%>
+<%-:"Nfc_R",["id"]|create_input_simulator%>
+<%-:"Nfc_D",["id","nfc"]|create_input_simulator%>
 
-<%-:"Envir_C",["ef_envir_pk","ef_datetime","ef_desc","ef_pic_path","ef_temp","ef_humd"]|create_input_simulator%>
-<%-:"Envir_R",["from","to","ef_envir_pk","ef_datetime","ef_desc","ef_pic_path","ef_temp","ef_humd"]|create_input_simulator%>
-<%-:"Envir_U",["ef_envir_pk","ef_datetime","ef_desc","ef_pic_path","ef_temp","ef_humd"]|create_input_simulator%>
-<%-:"Envir_D",["ef_envir_pk","ef_datetime","ef_desc","ef_pic_path","ef_temp","ef_humd"]|create_input_simulator%>
+<%-:"Envir_C",[             "envir_pk","datetime","desc","pic_path","temp","humd"]|create_input_simulator%>
+<%-:"Envir_R",["from","to", "envir_pk","datetime","desc","pic_path","temp","humd"]|create_input_simulator%>
+<%-:"Envir_U",[             "envir_pk","datetime","desc","pic_path","temp","humd"]|create_input_simulator%>
+<%-:"Envir_D",[             "envir_pk","datetime","desc","pic_path","temp","humd"]|create_input_simulator%>
                                     
 									<a href="javascript:;" class="btn btn-default" id="btn-cancel">取消</a>
 									<button type="submit" id="btn_submit" class="btn btn-primary">送出</button>
@@ -82,7 +82,7 @@ $("#btn-cancel").on("click",function(){
 });
 
 $("#btn_submit").on("click",function(){
-    if($("#choose_API").val()==""){alert("請先選擇要測試的API")}
+    if($("#choose_API").val()==""){alert("請先選擇要測試的API")};
     var send_url = $(location).attr('origin')+$("#choose_API").val();    
     $("input", "form").remove(); //先清空資訊
     $("form").attr( "action",send_url ); //更改action位置
@@ -92,6 +92,7 @@ $("#btn_submit").on("click",function(){
         var real_class = $(this).attr("class").replace("form-control ", "").replace(" all_input", "");
         check_default("create_hidden", real_class, $(this).val()); //增加預設值
     });
+    check_default("create_hidden", "type", $("#choose_API :selected").text().split('_')[1]); //設定type
     $("form").submit(); //送出新頁面
 });
 

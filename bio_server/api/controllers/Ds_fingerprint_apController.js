@@ -4,11 +4,46 @@
  * @description :: Server-side logic for managing ds_fingerprint_aps
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+    var co = require('co');
     var moment = require("moment");
     var table_name = "Ds_fingerprint_ap";
     var log_type = "device";
+    
 module.exports = {
-	/*
+    /*
+        all網址 : http://localhost:1337/api/Ds_fingerprint_ap/find
+        C網址   : http://localhost:1337/api/Ds_fingerprint_ap?type=C&ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
+        R1網址  : http://localhost:1337/api/Ds_fingerprint_ap?type=R1&id=1
+        R2網址  : http://localhost:1337/api/Ds_fingerprint_ap?type=R2&id=1
+        U網址   : http://localhost:1337/api/Ds_fingerprint_ap?type=U&id=1&device_type=kk&platform_type=js
+        D網址   : http://localhost:1337/api/Ds_fingerprint_ap?type=D&id=1&device_type=kk&platform_type=js
+    */
+	redirect: function(req, res) {
+        co(function* () {                                                    
+            var params = req.allParams();
+            var who =  req.session.id;
+            var return_obj = "";
+            switch(params.type){
+                case "C" : return_obj = yield ap_service.create( params ,who); break;
+                // case "R" : return_obj = yield ap_service.search( params ); break;
+                case "R1": return_obj = yield ap_service.search1( params ,who); break;
+                case "R2": return_obj = yield ap_service.search2( params ,who); break;
+                case "U" : return_obj = yield ap_service.update( params ,who); break;
+                case "D" : return_obj = yield ap_service.destroy( params ,who); break;
+                default: return_obj = no_call_service.add_biota_result( {} , false , "type 不正確" , ["type 不正確"] );
+            }
+            var submit_to_link = req.param("submit_to_link");
+            if(return_obj.result.success && submit_to_link ){ //如果有網址代表要直接轉頁
+                return res.redirect( submit_to_link );
+            }else{                                                    
+                return res.json( return_obj );
+            }
+        }).catch(function(err){
+            console.log(table_name+"_second_routes_error",err);
+            return res.send( table_name+"_second_routes_error");
+        });
+    },
+    /*
         用途 : 查看內容
         輸入 : 無
         輸出 : 整個DB
@@ -16,216 +51,9 @@ module.exports = {
     */
 	find: function(req, res) {
         Ds_fingerprint_ap.find().exec(function(err,find_data){
-                if(err){
-                    no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
-                    return res.json({error:1001});
-                }else{
-                    no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
-                    return res.json(find_data);                               
-                }
+            return res.json(find_data);                               
         })
-    },
-    /*
-        用途 : 創建設備
-        輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
-        輸出 : 創建object or error
-        不可輸入值 : 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/C?ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
-    */
-	C: function(req, res) {
-        var params = req.allParams(); delete params["id"];  
-        var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
-        var check_result = no_call_service.check_data(params, check_array);            
-        if(check_result==""){
-            //參數不缺少
-            Ds_fingerprint_ap.create(params).exec(function(err,create_data){
-                if(err){
-                    no_call_service.write_log(table_name,"C_die", err, req.session.id, log_type);
-                    return res.json({error:2002});
-                }else{
-                    no_call_service.write_log(table_name,"C_ok", params, req.session.id, log_type);
-                    if(params.submit_to_link){
-                        //如果有網址代表要直接轉頁
-                        return res.redirect( params.submit_to_link );
-                    }else{
-                        return res.json(create_data);                                                     
-                    }
-                }           
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"C_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },
-    /*
-        用途 : 查看搜尋內容 (R1)
-        輸入 : ds_ap_id or ["ds_platform_type", "ds_device_type"]
-        輸出 : 整個DB查到的資料(會呈現Human資料給使用者看)
-        不可輸入值 : ["push_token"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/R1?ds_ap_id=1
-    */
-	R1: function(req, res) {
-        var params = req.allParams(); delete params["id"];
-        //有不可填寫的參數即擋下
-        var cannot_param = ["push_token"];
-        var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
-        if(check_cannot){
-            no_call_service.write_log(table_name,"R1_error_data", params, req.session.id, log_type);
-            return res.json({error:2001});
-        }
-          
-        if(params.ds_ap_id){
-            var check_array = ["ds_ap_id","ds_platform_type","ds_device_type"];
-            var cond = no_call_service.complete_not_cond(params, check_array, "ds_deleted");
-            
-            Ds_fingerprint_ap.findOne(cond).exec(function(err,find_data){
-                    if(err){
-                        no_call_service.write_log(table_name,"R1_die", err, req.session.id, log_type);
-                        return res.json({error:3001});
-                    }else{                        
-                        //撈取符合的使用者資料
-                        if( _.isEmpty(find_data) ){
-                            //查無資料直接回傳
-                            no_call_service.write_log(table_name,"R1_no_data", params, req.session.id, log_type);
-                            return res.json(find_data);    
-                        }else{
-                            F_linked.find({ds_ap_id: cond.ds_ap_id}).exec(function(err,flinked_data){
-                                if(err){
-                                    no_call_service.write_log(table_name,"R1_Flink_die", err, req.session.id, log_type);
-                                    return res.json({error:3002});
-                                }else{
-                                    no_call_service.write_log(table_name,"R1_ok", params, req.session.id, log_type);
-                                    find_data.human = _.pluck(flinked_data, "ds_human_pk");
-                                    return res.json([find_data]);                                    
-                                }
-                            });
-                        }                          
-                    }          
-            })
-        }else{
-            //其餘一律error
-            var error_msg = "error AP001";
-            console.log("error_msg_R1",error_msg);
-            no_call_service.write_log(table_name,"R1_err", params, req.session.id, log_type);
-            return res.send(error_msg);
-        }
-    },
-    /*
-        用途 : 查看搜尋內容 (R2)
-        輸入 : ["ds_ap_id"]
-        輸出 : 整個DB查到的資料
-        不可輸入值 : ["ds_device_type", "ds_platform_type", "push_token"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/R2?ds_ap_id=1
-    */
-	R2: function(req, res) {
-        var params = req.allParams(); delete params["id"];
-        //有不可填寫的參數即擋下
-        var cannot_param = ["ds_device_type", "ds_platform_type", "push_token"];
-        var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
-        if(check_cannot){
-            no_call_service.write_log(table_name,"R_error_data", params, req.session.id, log_type);
-            return res.json({error:3003});
-        }
-        
-        var cond = {};
-        if(params.ds_ap_id){
-            //有ID優先用ID
-            var check_array = ["ds_ap_id"];
-            var cond = no_call_service.complete_cond(params, check_array, "ds_deleted");
-            Ds_fingerprint_ap.findOne(cond).exec(function(err,find_data){
-                    if(err){
-                        no_call_service.write_log(table_name,"R2_die", err, req.session.id, log_type);
-                        return res.json({error:3004});
-                    }else{
-                        no_call_service.write_log(table_name,"R2_ok", params, req.session.id, log_type);
-                        return res.json(find_data);                              
-                    }          
-            })
-        }else{
-            //其餘一律error
-            var error_msg = "error AP002";
-            console.log("error_msg_R2",error_msg);
-            no_call_service.write_log(table_name,"R2_err", params, req.session.id, log_type);
-            return res.send(error_msg);
-        }
     },    
-    /*
-        用途 : 修改設備
-        輸入 : ["ds_ap_id", "ds_platform_type", "ds_device_type"]
-        輸出 : 修改的object結果 or error
-        不可輸入值: 無
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/U?ds_ap_id=1&ds_platform_type=plattype2&ds_device_type=devicetype2
-    */
-	U: function(req, res) {
-        var params = req.allParams(); delete params["id"];
-        var check_array = ["ds_ap_id", "ds_platform_type", "ds_device_type"];
-        var check_result = no_call_service.check_data(params, check_array);
-        if(check_result==""){
-            //參數不缺少
-            var cond = no_call_service.complete_cond(params, ["ds_ap_id"], "ds_deleted");
-            Ds_fingerprint_ap.update( cond, params ).exec(function(err,update_data){
-                if(err){
-                    no_call_service.write_log(table_name,"U_die", err, req.session.id, log_type);
-                    return res.json({error:4001});
-                }else{
-                    no_call_service.write_log(table_name,"U_ok", cond, req.session.id, log_type);
-                    if(params.submit_to_link){
-                        //如果有網址代表要直接轉頁
-                        return res.redirect( params.submit_to_link );
-                    }else{
-                        return res.json(update_data);                                                     
-                    }
-                }
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"U_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },
-    /*
-        用途 : 停止設備
-        輸入 : ["ds_ap_id"]
-        輸出 : 刪除的object結果 or error
-        不可輸入值 : ["push_token"]
-        快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/D?ds_ap_id=1
-    */
-	D: function(req, res) {
-        var params = req.allParams(); delete params["id"];
-        //有不可填寫的參數即擋下
-        var cannot_param = ["push_token"];
-        var check_cannot = no_call_service.check_ignore_data(params, cannot_param);
-        if(check_cannot){
-            no_call_service.write_log(table_name,"D_error_data", params, req.session.id, log_type);
-            return res.json({error:5001});
-        }
-        
-        var check_array = ["ds_ap_id"];
-        var check_result = no_call_service.check_data(params, check_array);
-        if(check_result==""){
-            //參數不缺少
-            var cond = no_call_service.complete_cond(params, check_array, "ds_deleted");
-            Ds_fingerprint_ap.update( cond ,{"ds_deleted": moment().toISOString()} ).exec(function(err,update_data){
-                if(err){
-                    no_call_service.write_log(table_name,"D_die", err, req.session.id, log_type);
-                    return res.json({error:5002});
-                }else{
-                    no_call_service.write_log(table_name,"D_ok", params, req.session.id, log_type);
-                    if(params.submit_to_link){
-                        //如果有網址代表要直接轉頁
-                        return res.redirect( params.submit_to_link );
-                    }else{
-                        return res.json(update_data);                                                     
-                    }
-                }
-            })       
-        }else{
-            //參數缺少 直接回應內容
-            no_call_service.write_log(table_name,"D_less", params, req.session.id, log_type);
-            return res.send(check_result);            
-        }
-    },
     /*
         ajax撈取全部資料專用
     */

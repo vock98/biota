@@ -1,7 +1,7 @@
 var moment = require('moment');
-//���B�X�{�����Oco�n�Ϊ�
+//此處出現的都是co要用的
 module.exports = {
-    //���XAP��ƪ�id�ѤU�Կ���
+    //撈出AP資料的id供下拉選單用
 	find_ap_id:function(){
         return new Promise(function(resolve, reject){
             Ds_fingerprint_ap.find({ds_deleted:{"$exists":false}}).exec(function(err,find_data){
@@ -14,7 +14,7 @@ module.exports = {
             })   
         });
     },
-    //���XAP��ƪ�DB
+    //撈出AP資料的DB
 	find_ap_data:function(){
         return new Promise(function(resolve, reject){
             Ds_fingerprint_ap.find().exec(function(err,find_data){
@@ -23,7 +23,7 @@ module.exports = {
             })   
         });
     },
-    //���Xdevice��ƪ��@��
+    //撈出device資料的一筆
 	find_device_data:function(ap_id, device_id){
         return new Promise(function(resolve, reject){
             var cond ={};
@@ -33,6 +33,66 @@ module.exports = {
                 if(err) reject(new Error("device error :"+err));
                 resolve(find_data);
             })	
+        });
+    },
+    //檢查必填及不可填欄位
+	check_fill_nfill:function(input_params, fill_array, nfill_array){
+        return new Promise(function(resolve, reject){
+            var return_array =[];
+            _.map(fill_array, function(num){
+                if( !input_params[num] ) return_array.push( "缺少參數:"+num );
+            });
+            _.map(nfill_array, function(num2){
+                if( input_params[num2] ) return_array.push( "不可填寫參數:"+num2 );
+            });
+                
+            if(return_array.length==0){
+                resolve("ok");
+            }else{
+                resolve( no_call_service.add_biota_result( {} , false , return_array.join(" , ") , return_array ) );               
+            }
+        });
+    },
+    //變換參數為查詢或者新增條件
+    /*
+        change_rule_obj = { 
+            "改變前1": "改變後1", 
+            "改變前2": "改變後2", 
+        } ,
+        cond_array = ["改變後1","改變後2" ]
+    */
+	check_change_cond:function(input_params, change_rule_obj, cond_array){
+        return new Promise(function(resolve, reject){
+            var return_obj1 = input_params; //params
+            var return_obj2 ={}; //cond
+            delete input_params["type"];//拔除用來當作條件用的
+            delete input_params["submit_to_link"];//拔除用來當作條件用的
+            _.map(change_rule_obj, function(num,key){
+                if(input_params[ key ]){
+                    return_obj1[ num ] = input_params[ key ];
+                    delete input_params[key];                    
+                }
+            });
+            
+            _.map(cond_array, function(num2){
+                return_obj2[ num2 ] = return_obj1[ num2 ];
+            });
+            resolve( [return_obj1, return_obj2] );
+        });
+    },
+    //變換參數回使用者輸入模式
+	back_change_cond:function(input_params, change_rule_obj){
+        return new Promise(function(resolve, reject){
+            var return_obj1 = input_params; //params
+
+            _.map(change_rule_obj, function(num,key){
+                if(input_params[ num ]){
+                    return_obj1[ key ] = input_params[ num ];
+                    delete input_params[num];                    
+                }
+            });
+            
+            resolve( return_obj1 );
         });
     },
 };

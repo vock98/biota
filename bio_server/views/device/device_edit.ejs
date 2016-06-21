@@ -26,14 +26,15 @@
 								<div class="col-lg-6">
 									<form role="form" id="form_validation" action="<%=link_to_submit%>">       
 
-<%-: {is_require:true, is_readonly:true,    input_ch:"AP設備唯一碼", id_name:"ds_ap_id"}|create_input %>
-<%-: {is_require:true, is_readonly:true,    input_ch:"產品識別碼",   id_name:"ds_device_id"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"產品名稱",    id_name:"ds_product"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"廠商識別碼",  id_name:"ds_co_id"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"製造商",      id_name:"ds_company"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"位置識別碼",  id_name:"ds_addr"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"速度",        id_name:"ds_speed"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"版本",        id_name:"ds_ver"}|create_input %>
+<%-: {is_require:true, is_readonly:true,     input_ch:"AP設備唯一碼", id_name:"id", input_data:ap_option, input_extra:null}|create_select %>
+<%-: {is_require:true, is_readonly:true,     input_ch:"產品識別碼",    id_name:"device_id"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"廠商識別碼",    id_name:"co_id"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"版本",          id_name:"ver"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"速度",          id_name:"speed"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"製造商",        id_name:"company"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"產品名稱",      id_name:"product"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"位置識別碼",    id_name:"addr"}|create_input %>
+<%-: {id_name:"type", id_value: "U" } |create_hidden %>
 <%-: {id_name:"submit_to_link", id_value: link_to_list } |create_hidden %>
 
 										<a href="<%=link_to_list%>" class="btn btn-default">取消</a>
@@ -56,27 +57,27 @@
 
 $().ready(function(){    
     //補上相關欄位
-    check_default('input'        ,'ds_ap_id'     ,'<%-: find_data, "ds_ap_id"   | check_obj %>');
-    check_default('input'        ,'ds_device_id'   ,'<%-: find_data, "ds_device_id" | check_obj %>');
-    check_default('input'        ,'ds_product'      ,'<%-: find_data, "ds_product" | check_obj %>');
-    check_default('input'        ,'ds_co_id'      ,'<%-: find_data, "ds_co_id" | check_obj %>');
-    check_default('input'        ,'ds_company'      ,'<%-: find_data, "ds_company" | check_obj %>');
-    check_default('input'        ,'ds_addr'      ,'<%-: find_data, "ds_addr" | check_obj %>');
-    check_default('input'        ,'ds_speed'      ,'<%-: find_data, "ds_speed" | check_obj %>');
-    check_default('input'        ,'ds_ver'      ,'<%-: find_data, "ds_ver" | check_obj %>');
+    check_default('input'        ,'ap_id'       ,'<%-: find_data, "ds_ap_id"   | check_obj %>');
+    check_default('input'        ,'device_id'   ,'<%-: find_data, "ds_device_id" | check_obj %>');
+    check_default('input'        ,'co_id'       ,'<%-: find_data, "ds_co_id" | check_obj %>');
+    check_default('input'        ,'ver'         ,'<%-: find_data, "ds_ver" | check_obj %>');
+    check_default('input'        ,'speed'       ,'<%-: find_data, "ds_speed" | check_obj %>');
+    check_default('input'        ,'company'     ,'<%-: find_data, "ds_co" | check_obj %>');
+    check_default('input'        ,'addr'        ,'<%-: find_data, "ds_addr" | check_obj %>');
+    check_default('input'        ,'product'     ,'<%-: find_data, "ds_product" | check_obj %>');
 
     //補上驗證
     var input_validation = {
         // 驗證規則
         rules: {
-			ds_ap_id: {required: true},
-			ds_device_id: {required: true},
-			ds_product: {required: true},
-			ds_co_id: {required: true},
-			ds_co: {required: true},
-			ds_addr: {required: true},
-			ds_speed: {required: true},
-			ds_ver: {required: true},
+			ap_id     : {required: true},
+			device_id : {required: true},
+			co_id     : {required: true},
+			ver       : {required: true},
+			speed     : {required: true},
+			company   : {required: true},
+			addr      : {required: true},
+			product   : {required: true},
 		}
     }
     check_vailidation( input_validation );

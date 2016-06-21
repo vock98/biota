@@ -19,6 +19,13 @@ module.exports = {
     刪除註記 ds_deleted
   */
   attributes: {
+    ds_uuid: {
+        type: "string",
+        primaryKey: true,
+        unique: true,
+        autoIncrement: true,        
+        columnName: 'id'
+    },
     ds_ap_id: {
         type: "string",
         primaryKey: true,

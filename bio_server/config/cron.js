@@ -47,8 +47,25 @@ callback = function(response) {
 }
 
 module.exports.cron = {
-    //取得中央氣象局的資料 20分鐘跑一次
+    // 取得中央氣象局的雨量資料 15分鐘跑一次
     get_cwb: {
+        // schedule: '*/15 * * * * *',
+        schedule: '0 */15 * * * *',
+        onTick: function() {      
+            console.log('取得中央氣象局資料');
+            http.request(options, callback).end();
+        },
+        start: true, // Start task immediately
+        timeZone: "Asia/Taipei"
+
+        // onComplete: function() {
+        // console.log('跑完了');
+        // },
+        // context: undefined // Custom context for onTick callback
+    },
+    // 取得中央氣象局的天氣資料 20分鐘跑一次
+    get_cwb: {
+        // schedule: '*/20 * * * * *',
         schedule: '0 */20 * * * *',
         onTick: function() {      
             console.log('取得中央氣象局資料');
@@ -56,9 +73,10 @@ module.exports.cron = {
         },
         start: true, // Start task immediately
         timeZone: "Asia/Taipei"
+
         // onComplete: function() {
         // console.log('跑完了');
         // },
         // context: undefined // Custom context for onTick callback
-    }
+    },
 };

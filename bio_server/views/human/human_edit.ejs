@@ -25,14 +25,15 @@
 								<div class="col-lg-6">
 									<form role="form" id="form_validation" action="<%=link_to_submit%>">
                                     
-<%-: {is_require:false, is_readonly:false,    input_ch:"生日", id_name:"ds_birthday"}|create_date %>
-<%-: {is_require:false, is_autocomplete:true, input_ch:"性別", id_name:"ds_gender", input_data:sails.config.myconf.select_sex, input_extra:null}|create_select %>
-<%-: {is_require:false, is_autocomplete:true, input_ch:"血型", id_name:"ds_bloodtype", input_data:sails.config.myconf.select_blood, input_extra:null}|create_select %>
-<%-: {is_require:false, is_readonly:false,    input_ch:"工作", id_name:"ds_job"}|create_input %>
-<%-: {is_require:true,  is_readonly:false,    input_ch:"顯示名稱", id_name:"ds_name"}|create_input %>
-<%-: {is_require:false, is_readonly:false,    input_ch:"他方系統代號", id_name:"ds_bind_id"}|create_input %>
-<%-: {is_require:false, is_readonly:false,    input_ch:"管理者註記", id_name:"ds_is_manager"}|create_input %>
+<%-: {is_require:false, is_readonly:false,    input_ch:"生日", id_name:"birthday"}|create_date %>
+<%-: {is_require:false, is_autocomplete:true, input_ch:"性別", id_name:"gender", input_data:sails.config.myconf.select_sex, input_extra:null}|create_select %>
+<%-: {is_require:false, is_autocomplete:true, input_ch:"血型", id_name:"bloodtype", input_data:sails.config.myconf.select_blood, input_extra:null}|create_select %>
+<%-: {is_require:false, is_readonly:false,    input_ch:"工作", id_name:"job"}|create_input %>
+<%-: {is_require:true,  is_readonly:false,    input_ch:"顯示名稱", id_name:"name"}|create_input %>
+<%-: {is_require:false, is_readonly:false,    input_ch:"他方系統代號", id_name:"bind_id"}|create_input %>
+<%-: {is_require:false, is_readonly:false,    input_ch:"管理者註記", id_name:"is_manager"}|create_input %>
 <%-: {id_name:"submit_to_link", id_value: link_to_list } |create_hidden %>
+<%-: {id_name:"type", id_value: "U" } |create_hidden %>
 
 										<a href="<%=link_to_list%>" class="btn btn-default">取消</a>
 										<button type="submit" class="btn btn-primary"><%=submit_but%></button>
@@ -53,19 +54,19 @@
 <script>
 $().ready(function(){    
     //補上相關欄位
-    check_default('create_hidden','ds_human_pk'     ,'<%-: find_data, "ds_human_pk" | check_obj %>');
-    check_default('input'        ,'ds_birthday'     ,'<%-: find_data, "ds_birthday" | check_obj %>');
-    check_default('select'       ,'ds_gender'       ,'<%-: find_data, "ds_gender"   | check_obj %>');
-    check_default('select'       ,'ds_bloodtype'    ,'<%-: find_data, "ds_bloodtype"   | check_obj %>');
-    check_default('input'        ,'ds_job'          ,'<%-: find_data, "ds_job" | check_obj %>');
-    check_default('input'        ,'ds_name'         ,'<%-: find_data, "ds_name" | check_obj %>');
-    check_default('input'        ,'ds_bind_id'      ,'<%-: find_data, "ds_bind_id" | check_obj %>');
-    check_default('input'        ,'ds_is_manager'   ,'<%-: find_data, "ds_is_manager" | check_obj %>');
+    check_default('create_hidden','id'           ,'<%-: find_data, "ds_human_pk" | check_obj %>');
+    check_default('input'        ,'birthday'     ,'<%-: find_data, "ds_birthday" | check_obj %>');
+    check_default('select'       ,'gender'       ,'<%-: find_data, "ds_gender"   | check_obj %>');
+    check_default('select'       ,'bloodtype'    ,'<%-: find_data, "ds_bloodtype"   | check_obj %>');
+    check_default('input'        ,'job'          ,'<%-: find_data, "ds_job" | check_obj %>');
+    check_default('input'        ,'name'         ,'<%-: find_data, "ds_name" | check_obj %>');
+    check_default('input'        ,'bind_id'      ,'<%-: find_data, "ds_bind_id" | check_obj %>');
+    check_default('input'        ,'is_manager'   ,'<%-: find_data, "ds_is_manager" | check_obj %>');
     //補上驗證
     var input_validation = {
         // 驗證規則
         rules: {
-			ds_name: {required: true},
+			name: {required: true},
 		}
     }
     check_vailidation( input_validation );

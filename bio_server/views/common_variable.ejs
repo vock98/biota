@@ -196,8 +196,10 @@ function check_default(type , names , default_value){
             }
         });        
     }else if(type=="select"){
-       $("#"+names).children().each(function(){
+        var x=0;
+        $("#"+names).children().each(function(){
             if ($(this).val()==default_value){
+                x++;
                 $(this).prop("selected", "true");
             }
         });

@@ -25,11 +25,12 @@
 							<div class="row">
 								<div class="col-lg-6">
 									<form role="form" id="form_validation" action="<%=link_to_submit%>">       
-<%-: {is_require:true, is_readonly:false,    input_ch:"記錄時間",      id_name:"ef_datetime"}|create_datetime %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"環境描述",      id_name:"ef_desc"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"環境溫度",      id_name:"ef_temp"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"環境濕度",      id_name:"ef_humd"}|create_input %>
-<%-: {is_require:true, is_readonly:false,    input_ch:"環境照片上傳",  id_name:"ef_pic_path"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"記錄時間",      id_name:"datetime"}|create_datetime %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"環境描述",      id_name:"desc"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"環境溫度",      id_name:"temp"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"環境濕度",      id_name:"humd"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"環境照片上傳",  id_name:"pic_path"}|create_input %>
+<%-: {id_name:"type", id_value: "U" } |create_hidden %>
 <%-: {id_name:"submit_to_link", id_value: link_to_list } |create_hidden %>
 
 										<a href="<%=link_to_list%>" class="btn btn-default">取消</a>
@@ -52,28 +53,28 @@
 
 $().ready(function(){    
     //補上相關欄位
-    check_default('create_hidden','ef_envir_pk'    ,'<%-: find_data,  "ef_envir_pk"   | check_obj %>');
-    check_default('datetime'     ,'ef_datetime'     ,'<%-: find_data, "ef_datetime"   | check_obj %>');
-    check_default('input'        ,'ef_desc'         ,'<%-: find_data, "ef_desc" | check_obj %>');
-    check_default('input'        ,'ef_temp'         ,'<%-: find_data, "ef_temp" | check_obj %>');
-    check_default('input'        ,'ef_humd'         ,'<%-: find_data, "ef_humd" | check_obj %>');
-    check_default('input'        ,'ef_pic_path'     ,'<%-: find_data, "ef_pic_path" | check_obj %>');
+    check_default('create_hidden','envir_pk'     ,'<%-: find_data, "ef_envir_pk"   | check_obj %>');
+    check_default('datetime'     ,'datetime'     ,'<%-: find_data, "ef_datetime"   | check_obj %>');
+    check_default('input'        ,'desc'         ,'<%-: find_data, "ef_desc" | check_obj %>');
+    check_default('input'        ,'temp'         ,'<%-: find_data, "ef_temp" | check_obj %>');
+    check_default('input'        ,'humd'         ,'<%-: find_data, "ef_humd" | check_obj %>');
+    check_default('input'        ,'pic_path'     ,'<%-: find_data, "ef_pic_path" | check_obj %>');
 
     //補上驗證
     var input_validation = {
         // 驗證規則
         rules: {
-			ef_datetime: {required: true},
-			ef_desc: {required: true},
-			ef_temp: {
+			datetime: {required: true},
+			desc: {required: true},
+			temp: {
                 required: true,
                 number: true
             },
-			ef_humd: {
+			humd: {
                 required: true,
                 number: true
             },
-			ef_pic_path: {required: true},
+			pic_path: {required: true},
 		}
     }
     check_vailidation( input_validation );

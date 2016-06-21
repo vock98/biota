@@ -49,13 +49,13 @@ module.exports.routes = {
             //AP參數設定
             '/ap/list': { controller:'ap',action:'ap_list',locals:{layout:"layout/normal", active:"ap"} },
             '/ap/add' : { controller:'ap',action:'ap_add' ,locals:{layout:"layout/normal", active:"ap"} },
-            '/ap/edit/:ds_ap_id': { controller:'ap',action:'ap_edit',locals:{layout:"layout/normal", active:"ap"} },        
-            '/ap/delete/:ds_ap_id/:ds_device_type/:ds_platform_type': { controller:'ap',action:'ap_delete' },
+            '/ap/edit/:id': { controller:'ap',action:'ap_edit',locals:{layout:"layout/normal", active:"ap"} },        
+            '/ap/delete/:id/:device_type/:platform_type': { controller:'ap',action:'ap_delete' },
             //指紋機設備查詢
             '/device/list': { controller:'device',action:'device_list',locals:{layout:"layout/normal", active:"device"} },
             '/device/add' : { controller:'device',action:'device_add' ,locals:{layout:"layout/normal", active:"device"} },
-            '/device/edit/:ds_ap_id/:ds_device_id': { controller:'device',action:'device_edit',locals:{layout:"layout/normal", active:"device"} },
-            '/device/delete/:ds_ap_id/:ds_device_id': { controller:'device',action:'device_delete',locals:{layout:"layout/normal", active:"device"} },
+            '/device/edit/:id/:device_id': { controller:'device',action:'device_edit',locals:{layout:"layout/normal", active:"device"} },
+            '/device/delete/:id/:device_id': { controller:'device',action:'device_delete',locals:{layout:"layout/normal", active:"device"} },
             //設備操作紀錄
             '/log/device_list': { controller:'log',action:'device_list',locals:{layout:"layout/normal", active:"Db_device_log"} },
 /*    
@@ -78,12 +78,12 @@ module.exports.routes = {
     //手動輸入紀錄
     '/envir/list': { controller:'envir',action:'list',locals:{layout:"layout/normal",active:"envir"}  },
     '/envir/add' : { controller:'envir',action:'add' ,locals:{layout:"layout/normal",active:"envir"} },
-    '/envir/edit/:ef_envir_pk': { controller:'envir',action:'edit',locals:{layout:"layout/normal",active:"envir"} }, 
-    '/envir/delete/:ef_envir_pk': { controller:'envir',action:'delete',locals:{layout:"layout/normal", active:"envir"} },
-/*    
+    '/envir/edit/:envir_pk': { controller:'envir',action:'edit',locals:{layout:"layout/normal",active:"envir"} }, 
+    '/envir/delete/:envir_pk': { controller:'envir',action:'delete',locals:{layout:"layout/normal", active:"envir"} },
   //資料匯出
     //門禁紀錄
-    '/export/access': { controller:'export',action:'export_access',locals:{layout:"layout/normal",active:"export"} },
+    '/export/access': { controller:'export',action:'access',locals:{layout:"layout/normal",active:"export"} },
+/*    
   //定時排程
     //門禁記錄轉置
     '/cron/transrecord': { controller:'cron',action:'cron_transrecord',locals:{layout:"layout/normal",active:"cron"} },
@@ -98,5 +98,12 @@ module.exports.routes = {
   * for configuration options and examples.                                  *
   *                                                                          *
   ***************************************************************************/
-
+  //特製功能區
+   '/api/Ds_fingerprint_ap': { controller:'Ds_fingerprint_ap',action:'redirect'},
+   '/api/Ds_fingerprint_device': { controller:'Ds_fingerprint_device',action:'redirect'},
+   '/api/Ds_human': { controller:'Ds_human',action:'redirect'},
+   '/api/Ds_nfc': { controller:'Ds_nfc',action:'redirect'},
+   '/api/Ef_cwb': { controller:'Ef_cwb',action:'redirect'},
+   '/api/Ef_envir': { controller:'Ef_envir',action:'redirect'}
+  
 };

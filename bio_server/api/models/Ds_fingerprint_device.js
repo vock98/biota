@@ -16,7 +16,7 @@ module.exports = {
     廠商識別碼 ds_co_id 
     版本 ds_ver 
     速度 ds_speed 
-    製造商 ds_company 
+    製造商 ds_co 
     位置識別碼 ds_addr 
     產品名稱 ds_product 
     連結裝置PK ds_ap_id 
@@ -31,7 +31,7 @@ module.exports = {
     ds_co_id:{ type: "string" },
     ds_ver:{ type: "string" },
     ds_speed:{ type: "string" },
-    ds_company:{ type: "string" },
+    ds_co:{ type: "string" },
     ds_addr:{ type: "string" },
     ds_product:{ type: "string" },
     ds_ap_id:{ model: "Ds_fingerprint_ap" },
@@ -39,7 +39,7 @@ module.exports = {
   },
   //unique失效使用
   beforeCreate: function (values, next) {
-    Ds_fingerprint_device.count({ds_device_id:values.ds_device_id}).exec(function countCB(error, found) {
+    Ds_fingerprint_device.count({ ds_device_id: values.ds_device_id }).exec(function countCB(error, found) {
       if(found==0){
         next();
       }else{
