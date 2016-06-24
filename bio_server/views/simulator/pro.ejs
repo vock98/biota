@@ -90,7 +90,9 @@ $("#btn_submit").on("click",function(){
     var now_div = $("."+$("#choose_API :selected").text());   
     $("input", now_div).each(function(){
         var real_class = $(this).attr("class").replace("form-control ", "").replace(" all_input", "");
-        check_default("create_hidden", real_class, $(this).val()); //增加預設值
+        if($(this).val()!=""){
+            check_default("create_hidden", real_class, $(this).val()); //增加預設值            
+        }
     });
     check_default("create_hidden", "type", $("#choose_API :selected").text().split('_')[1]); //設定type
     $("form").submit(); //送出新頁面

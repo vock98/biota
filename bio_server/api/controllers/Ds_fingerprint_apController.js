@@ -23,7 +23,7 @@ module.exports = {
             var params = req.allParams();
             var who =  req.session.id;
             var return_obj = "";
-            switch(params.type){
+            switch(params.type){ 
                 case "C" : return_obj = yield ap_service.create( params ,who); break;
                 // case "R" : return_obj = yield ap_service.search( params ); break;
                 case "R1": return_obj = yield ap_service.search1( params ,who); break;

@@ -4,7 +4,7 @@ var request = require('request');
 module.exports = {
     //biota要得回傳方式
 	add_biota_result:function(input_obj, input_success, input_message, input_resp){
-        var return_obj =input_obj;
+        var return_obj ={};
         var result_obj = {
             success : input_success,
             message : input_message
@@ -12,6 +12,7 @@ module.exports = {
         var result_client = {
             resp : input_resp
         }
+        return_obj.data = input_obj;
         return_obj.result = result_obj;
         return_obj.client = result_client;
         return return_obj;
@@ -80,55 +81,6 @@ module.exports = {
         delete return_array[0]['type'];
         delete return_array[1]['type'];          
         return return_array;
-    },
-    //拆解氣象局資料並寫進資料庫
-    Analy_weather:function( input_params ){
-        var table_name = "Ef_cwb";
-        var log_type = "out";
-        
-        var data_params = input_params.cwbopendata;
-
-        var result_obj ={};
-            // return data_params.location[0].time[0].obsTime[0];
-
-
-        //拆解各區域資料
-        _.map(data_params.location, function(ldata){
-            //觀測站名稱
-            result_obj.ef_sitename = ldata.locationName[0];
-            //紀錄日期
-            result_obj.ef_date = moment(ldata.time[0].obsTime[0]).format('YYYY-MM-DD');
-            //紀錄時間
-            result_obj.ef_time = moment(ldata.time[0].obsTime[0]).format('HH');
-            //使用寫入
-            result_obj.type = "C";
-            
-            //資料來源
-            if(data_params.dataid == "CWB_A0002"){
-                //資料名稱 MIN_10 = 十分鐘內雨量
-                result_obj.ef_source = "RAIN";
-                result_obj.ef_item ="MIN_10";        
-                result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: ["MIN_10"]}).elementValue[0].value[0];        
-                request.post('http://'+sails.config.myconf.myip+'/api/Ef_cwb', {form:result_obj});
-            }else if(data_params.dataid == "CWB_A0003"){
-                result_obj.ef_source = "NOW";            
-                //資料名稱
-                //WDSD = 風速 TEMP = 溫度 HUMD = 相對濕度 PRES = 氣壓 H_24R = 日累積雨量            
-                var four_add = ["TEMP","HUMD","PRES","WDSD"]
-                _.each(four_add,function(key){
-                    result_obj.ef_item =key;
-                    result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: [key]}).elementValue[0].value[0];
-                    request.post('http://'+sails.config.myconf.myip+'/api/Ef_cwb', {form:result_obj});
-                });
-
-                result_obj.ef_item ="H_24R";        
-                result_obj.ef_value =_.findWhere(ldata.weatherElement, {elementName: ["24R"]}).elementValue[0].value[0];        
-                request.post('http://'+sails.config.myconf.myip+'/api/Ef_cwb', {form:result_obj});
-            }
-            
-        });
- 
-        // return data_params.location[0];
     },
     change_type_to_ch:function(input_type){
         var return_str = "";
