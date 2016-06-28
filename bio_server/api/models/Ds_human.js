@@ -44,15 +44,6 @@ module.exports = {
     ds_bind_id:{type: "string"},
     ds_is_manager:{type: "string"},
     ds_deleted:{ type: "datetime" }, //沒有值代表還沒刪除
-    nfc:{
-        collection: "ds_nfc",
-        columnName: 'id',
-        via: "ds_human_pk"
-    },
-    f_linked:{
-        collection: "f_linked",
-        via: "ds_human_pk"
-    }
   },
 };
 

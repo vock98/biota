@@ -50,7 +50,7 @@ module.exports = {
                             }else{
                                 no_call_service.write_log(table_name,"R1_ok", search_cond, who, log_type);
                                 find_data[0].human = _.pluck(flinked_data, "ds_human_pk");
-                                var return_data = no_call_service.add_biota_result(find_data[0], true, "", "");
+                                var return_data = no_call_service.add_biota_result(find_data, true, "", "");
                                 resolve(return_data);                                   
                             }
                         });

@@ -26,6 +26,9 @@ function create_datatable( input_id ){
 //ajax版本的datatable
 function create_ajaxtable( input_id , ajaxurl, column_array ){
     $('#'+input_id).DataTable({
+    "bLengthChange":true,
+    "iDisplayLength": 100,    
+    "aLengthMenu": [100],    
     "bDestroy": true,
     "bProcessing": true,
     "bServerSide": true,

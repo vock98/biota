@@ -24,8 +24,7 @@ module.exports = {
   attributes: {
     f_linked_pk: {
         primaryKey: true,
-        unique: true,
-        autoIncrement: true 
+        unique: true
     },
     f_which_one:{ 
         type: "string",
@@ -36,7 +35,19 @@ module.exports = {
     ds_device_id:{ model: "ds_fingerprint_device" },
     ds_ap_id:{ model: "ds_fingerprint_ap" },
     f_dat_path:{ type: "string" },
-    f_pic_path:{ type: "string" } 
+    f_pic_path:{ type: "string" },
+    f_minutiae:{ type: "string" },
+  },
+  //unique失效使用
+  beforeCreate: function (values, next) {
+    F_linked.count({f_linked_pk:values.f_linked_pk}).exec(function countCB(error, found) {
+      if(found==0){
+        next();
+      }else{
+        no_call_service.write_log("F_linked_pk","C_repeat", values, "device");
+        next( new Error('f_linked_pk ID重複') );
+      }
+    });
   }
 };
 

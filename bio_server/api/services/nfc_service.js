@@ -40,8 +40,15 @@ module.exports = {
                         var return_data = no_call_service.add_biota_result({}, true, "查無資料", "查無資料");
                         resolve(return_data);       
                     }else{
-                        no_call_service.write_log(table_name,"R_ok", search_cond, who, log_type);                        
-                        var return_data = no_call_service.add_biota_result(find_data[0], true, "", "");
+                        no_call_service.write_log(table_name,"R_ok", search_cond, who, log_type);
+                        //特殊要求 改變吐出格式
+                        var special_arrayobj = _.map(find_data, function( one_obj ) {
+                            return {id:one_obj.ds_nfc_tag_id}
+                        });
+                        var final_obj = {
+                            nfc : special_arrayobj
+                        }
+                        var return_data = no_call_service.add_biota_result(final_obj, true, "", "");
                         resolve(return_data);                                   
                     }                        
                 }           
@@ -104,8 +111,8 @@ module.exports = {
                     var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
                     r_array[0].ds_deleted = {"$exists":false}; //補上刪除不可被查
                     var final_data = yield nfc_service.find_R_db( r_array[0], who );
-                    var back_data =  yield call_service.back_change_cond(final_data, change_obj);
-                    resolve( back_data );
+                    // var back_data =  yield call_service.back_change_cond(final_data, change_obj);
+                    resolve( final_data );
                 }else{
                     //輸入條件有誤 直接回傳錯誤JSON
                     resolve( check_fill_nfill );

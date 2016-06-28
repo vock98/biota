@@ -68,14 +68,16 @@ module.exports = {
             delete input_params["type"];//拔除用來當作條件用的
             delete input_params["submit_to_link"];//拔除用來當作條件用的
             _.map(change_rule_obj, function(num,key){
-                if(input_params[ key ]){
+                if(input_params[ key ]!= undefined){
                     return_obj1[ num ] = input_params[ key ];
                     delete input_params[key];                    
                 }
             });
             
             _.map(cond_array, function(num2){
-                return_obj2[ num2 ] = return_obj1[ num2 ];
+                if(return_obj1[ num2 ] != undefined){
+                    return_obj2[ num2 ] = return_obj1[ num2 ];                
+                }
             });
             resolve( [return_obj1, return_obj2] );
         });
@@ -83,14 +85,21 @@ module.exports = {
     //變換參數回使用者輸入模式
 	back_change_cond:function(input_params, change_rule_obj){
         return new Promise(function(resolve, reject){
-            var return_obj1 = input_params; //params
-
-            _.map(change_rule_obj, function(num,key){
-                if(input_params[ num ]){
-                    return_obj1[ key ] = input_params[ num ];
-                    delete input_params[num];                    
+            var return_obj1 = input_params; //params                
+            if( Array.isArray(input_params["data"]) ){
+                //array的換法
+                for(var i = 0; i < input_params["data"].length; i++){
+                     _.map(change_rule_obj, function(num,key){
+                            return_obj1["data"][i][ key ] = input_params["data"][i][ num ];
+                            delete input_params["data"][i][num];                    
+                    });                      
                 }
-            });
+            }else{
+                _.map(change_rule_obj, function(num,key){
+                        return_obj1["data"][ key ] = input_params["data"][ num ];
+                        delete input_params["data"][num];                    
+                });                
+            }
             
             resolve( return_obj1 );
         });
