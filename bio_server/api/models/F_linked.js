@@ -44,7 +44,6 @@ module.exports = {
       if(found==0){
         next();
       }else{
-        no_call_service.write_log("F_linked_pk","C_repeat", values, "device");
         next( new Error('f_linked_pk ID重複') );
       }
     });

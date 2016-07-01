@@ -63,14 +63,35 @@ module.exports = {
     */
 	check_change_cond:function(input_params, change_rule_obj, cond_array){
         return new Promise(function(resolve, reject){
-            var return_obj1 = input_params; //params
+            //製作非refernce的obj
+            function goclone(source) {
+                if (Object.prototype.toString.call(source) === '[object Array]') {
+                    var clone = [];
+                    for (var i=0; i<source.length; i++) {
+                        clone[i] = goclone(source[i]);
+                    }
+                    return clone;
+                } else if (typeof(source)=="object") {
+                    var clone = {};
+                    for (var prop in source) {
+                        if (source.hasOwnProperty(prop)) {
+                            clone[prop] = goclone(source[prop]);
+                        }
+                    }
+                    return clone;
+                } else {
+                    return source;
+                }
+            }
+            
+            var return_obj1 = goclone(input_params); //params
             var return_obj2 ={}; //cond
-            delete input_params["type"];//拔除用來當作條件用的
-            delete input_params["submit_to_link"];//拔除用來當作條件用的
+            delete return_obj1["type"];//拔除用來當作條件用的
+            delete return_obj1["submit_to_link"];//拔除用來當作條件用的
             _.map(change_rule_obj, function(num,key){
-                if(input_params[ key ]!= undefined){
-                    return_obj1[ num ] = input_params[ key ];
-                    delete input_params[key];                    
+                if(return_obj1[ key ]!= undefined){
+                    return_obj1[ num ] = return_obj1[ key ];
+                    delete return_obj1[key];                    
                 }
             });
             

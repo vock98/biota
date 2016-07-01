@@ -47,12 +47,12 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ef_cwb/find
     */
 	find: function(req, res) {
-        Ef_cwb.find().exec(function(err,find_data){
+        Ef_cwb.find().sort("updatedAt desc").exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
                     return res.json({error:1601});
                 }else{
-                    no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
                     return res.json(find_data);                               
                 }
         })

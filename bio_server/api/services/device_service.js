@@ -15,15 +15,15 @@ var change_obj = {
 //此處出現的都是co要用的
 module.exports = {
     //寫資料 通常只須改DB_NAME
-    write_db: function( create_cond, who ){
+    write_db: function( create_cond, who ,input_params ){
         return new Promise(function(resolve, reject){
             Ds_fingerprint_device.create(create_cond).exec(function(err,create_data){
                 if(err){
-                    no_call_service.write_log(table_name,"C_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"C_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);
                 }else{
-                    no_call_service.write_log(table_name,"C_ok", create_cond, who, log_type);
+                    no_call_service.write_log(table_name,"C_ok", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result({}, true, "", "");
                     resolve(return_data);                                                     
                 }           
@@ -31,21 +31,21 @@ module.exports = {
         });
     },
     //查詢資料 通常只須改DB_NAME
-    find_R_db: function( search_cond, who ){
+    find_R_db: function( search_cond, who, input_params ){
         return new Promise(function(resolve, reject){
             Ds_fingerprint_device.findOne( search_cond ).exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"R_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);
                 }else{
                     if( _.isEmpty(find_data) ){
                         //查無資料
-                        no_call_service.write_log(table_name,"R_no_data", search_cond, who, log_type);
+                        no_call_service.write_log(table_name,"R_no_data", input_params, who, log_type);
                         var return_data = no_call_service.add_biota_result({}, true, "查無資料", "查無資料");
                         resolve(return_data);       
                     }else{
-                        no_call_service.write_log(table_name,"R_ok", search_cond, who, log_type);
+                        no_call_service.write_log(table_name,"R_ok", input_params, who, log_type);
                         var return_data = no_call_service.add_biota_result(find_data, true, "", "");
                         resolve(return_data);                        
                     }
@@ -54,22 +54,22 @@ module.exports = {
         });
     },
     //修改資料 通常只須改DB_NAME
-    update_db: function( search_cond, update_cond, who ){
+    update_db: function( search_cond, update_cond, who, input_params ){
         return new Promise(function(resolve, reject){
             Ds_fingerprint_device.update( search_cond, update_cond ).exec(function(err,update_data){
                 if(err){
-                    no_call_service.write_log(table_name,"U_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"U_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);
                 }else{
                     //撈取符合的使用者資料
                     if( _.isEmpty(update_data) ){
                         //查無資料
-                        no_call_service.write_log(table_name,"U_no_data", search_cond, who, log_type);
+                        no_call_service.write_log(table_name,"U_no_data", input_params, who, log_type);
                         var return_data = no_call_service.add_biota_result({}, true, "查無資料", "查無資料");
                         resolve(return_data);       
                     }else{
-                        no_call_service.write_log(table_name,"U_ok", search_cond, who, log_type);
+                        no_call_service.write_log(table_name,"U_ok", input_params, who, log_type);
                         var return_data = no_call_service.add_biota_result({}, true, "", "");
                         resolve(return_data);                        
                     }
@@ -78,15 +78,15 @@ module.exports = {
         });
     },
     //刪除資料 通常只須改DB_NAME
-    destroy_db: function( delete_cond, who ){
+    destroy_db: function( delete_cond, who ,input_params){
         return new Promise(function(resolve, reject){
             Ds_fingerprint_device.update( delete_cond ,{"ds_deleted": moment().toISOString()} ).exec(function(err,update_data){
                 if(err){
-                    no_call_service.write_log(table_name,"D_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"D_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);
                 }else{
-                    no_call_service.write_log(table_name,"D_ok", delete_cond, who, log_type);
+                    no_call_service.write_log(table_name,"D_ok", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result(update_data, true, "", "");
                     resolve(return_data);
                 }
@@ -106,7 +106,7 @@ module.exports = {
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
                     var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
-                    var final_data = yield device_service.write_db( r_array[0], who );
+                    var final_data = yield device_service.write_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
                 }else{
@@ -132,7 +132,7 @@ module.exports = {
                     //輸入條件正確 修正資料ID內容
                     var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
                     r_array[0].ds_deleted = {"$exists":false}; //補上刪除不可被查
-                    var final_data = yield device_service.find_R_db( r_array[0], who );
+                    var final_data = yield device_service.find_R_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
                 }else{
@@ -158,7 +158,7 @@ module.exports = {
                     //輸入條件正確 修正資料ID內容
                     var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
                     r_array[1].ds_deleted = {"$exists":false}; //補上刪除不可被查
-                    var final_data = yield device_service.update_db( r_array[1], r_array[0], who );
+                    var final_data = yield device_service.update_db( r_array[1], r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
                 }else{
@@ -183,7 +183,7 @@ module.exports = {
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
                     var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
-                    var final_data = yield device_service.destroy_db( r_array[0], who );
+                    var final_data = yield device_service.destroy_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
                 }else{

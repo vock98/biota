@@ -298,4 +298,13 @@ function delete_click(){
         return false;        
     }
 }
+
+//彈跳視窗
+function bubble_click(title, content){
+    BootstrapDialog.show({
+        size: 'size-wide',
+        title: title,
+        message: content
+    });
+}
 </script>

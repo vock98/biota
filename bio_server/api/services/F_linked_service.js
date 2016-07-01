@@ -9,18 +9,18 @@ var change_obj = {
     "minutiae" : "f_minutiae",
 }
     var table_name = "F_linked";
-    var log_type = "device";
+    var log_type = "human";
 //此處出現的都是co要用的
 module.exports = {
     //寫資料 通常只須改DB_NAME
-    write_db: function( create_cond, who ){
+    write_db: function( create_cond, who ,input_params ){
         return new Promise(function(resolve, reject){
             F_linked.create(create_cond).exec(function(err,create_data){
                 if(err){
-                    no_call_service.write_log(table_name,"C_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"C_die", input_params, who, log_type);
                     reject( err );
                 }else{
-                    no_call_service.write_log(table_name,"C_ok", create_cond, who, log_type);
+                    no_call_service.write_log(table_name,"C_ok", input_params, who, log_type);
                     //回傳human資訊 方便取用human R1
                     Ds_human.findOne({ds_human_pk:create_cond.ds_human_pk}).exec(function(err, human_Data){
                         if(err){                            
@@ -34,27 +34,25 @@ module.exports = {
         });
     },
     //刪除資料 通常只須改DB_NAME
-    destroy_db: function( delete_cond, who ){
+    destroy_db: function( delete_cond, who ,input_params){
         return new Promise(function(resolve, reject){
             F_linked.destroy( delete_cond ).exec(function(err){
                 if(err){
-                    no_call_service.write_log(table_name,"D_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"D_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);
                 }else{
-                    no_call_service.write_log(table_name,"D_ok", delete_cond, who, log_type);
+                    no_call_service.write_log(table_name,"D_ok", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, true, "", "");
                     resolve(return_data);
                 }
             }) 
         });
     },
-     //寫資料 通常只須改DB_NAME
+     //檢查是否有人
     check_human: function( input_cond, who ){
         return new Promise(function(resolve, reject){
             Ds_human.find(input_cond).exec(function(err, human_Data){
-            console.log(11,input_cond);
-            console.log(22,human_Data);
                 if(err){                            
                     resolve( "error" );                     
                 }else{
@@ -80,7 +78,7 @@ module.exports = {
                     //0是 flink內容 1是human內容
                     var human_count = yield F_linked_service.check_human( r_array[1], who );
                     if(human_count ==1){                        
-                        var final_data = yield F_linked_service.write_db( r_array[0], who );
+                        var final_data = yield F_linked_service.write_db( r_array[0], who, input_params );
                         //為了要呈現R1配合human R1需求條件
                         var R1_obj ={
                             ds_birthday : final_data.ds_birthday,
@@ -124,7 +122,7 @@ module.exports = {
                     //0是 flink內容 1是human內容
                     var human_count = yield F_linked_service.check_human( r_array[1], who );
                     if(human_count ==1){
-                        var final_data = yield F_linked_service.destroy_db( r_array[0], who );
+                        var final_data = yield F_linked_service.destroy_db( r_array[0], who, input_params );
                         var back_data =  yield call_service.back_change_cond(final_data, change_obj);                        
                     }else{
                         //沒有人或者超過人都是人員資料錯誤

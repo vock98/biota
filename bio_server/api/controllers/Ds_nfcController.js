@@ -48,12 +48,12 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_nfc/find
     */
 	find: function(req, res) {
-        Ds_nfc.find().exec(function(err,find_data){
+        Ds_nfc.find().sort("updatedAt desc").sort("updatedAt desc").exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
                     return res.json({error:1301});
                 }else{
-                    no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
                     return res.json(find_data);                               
                 }
         })

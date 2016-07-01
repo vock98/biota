@@ -11,11 +11,11 @@ var change_obj = {
 //此處出現的都是co要用的
 module.exports = {
     //寫資料 通常只須改DB_NAME
-    write_db: function( create_cond, who ){
+    write_db: function( create_cond, who ,input_params ){
         return new Promise(function(resolve, reject){
             Ef_cwb.findOne(create_cond[0]).exec(function(err, cwb_Data){                
                 if(err){
-                    no_call_service.write_log(table_name,"C_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"C_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);                    
                 }else{
@@ -23,11 +23,11 @@ module.exports = {
                         //表示沒有抓到值 要新增一筆
                         Ef_cwb.create(create_cond[1]).exec(function(err2, add_data){
                             if(err2){                            
-                                no_call_service.write_log(table_name,"C_die", err2, who, log_type);
+                                no_call_service.write_log(table_name,"C_die", input_params, who, log_type);
                                 var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                                 resolve(return_data);                
                             }else{
-                                no_call_service.write_log(table_name,"C_ok", create_cond, who, log_type);
+                                no_call_service.write_log(table_name,"C_ok", input_params, who, log_type);
                                 var return_data = no_call_service.add_biota_result({}, true, "", "");
                                 resolve(return_data);   
                             }
@@ -36,11 +36,11 @@ module.exports = {
                         //表示有抓到值 要更新資料
                         Ef_cwb.update(create_cond[0],create_cond[1]).exec(function(err3, up_data){
                             if(err3){                            
-                                no_call_service.write_log(table_name,"C_die", err3, who, log_type);
+                                no_call_service.write_log(table_name,"C_die", input_params, who, log_type);
                                 var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                                 resolve(return_data);                
                             }else{
-                                no_call_service.write_log(table_name,"C_ok", create_cond, who, log_type);
+                                no_call_service.write_log(table_name,"C_ok", input_params, who, log_type);
                                 var return_data = no_call_service.add_biota_result({}, true, "", "");
                                 resolve(return_data);   
                             }
@@ -51,22 +51,22 @@ module.exports = {
         });
     },
     //查詢資料 通常只須改DB_NAME
-    find_R_db: function( search_cond, who ){
+    find_R_db: function( search_cond, who, input_params ){
         return new Promise(function(resolve, reject){
             Ef_cwb.find( search_cond ).exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_die", err, who, log_type);
+                    no_call_service.write_log(table_name,"R_die", input_params, who, log_type);
                     var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                     resolve(return_data);
                 }else{
                     //撈取符合的使用者資料
                     if( _.isEmpty(find_data) ){
                         //查無資料
-                        no_call_service.write_log(table_name,"R_no_data", search_cond, who, log_type);
+                        no_call_service.write_log(table_name,"R_no_data", input_params, who, log_type);
                         var return_data = no_call_service.add_biota_result({}, true, "查無資料", "查無資料");
                         resolve(return_data);       
                     }else{
-                        no_call_service.write_log(table_name,"R_ok", search_cond, who, log_type);                        
+                        no_call_service.write_log(table_name,"R_ok", input_params, who, log_type);                        
                         var return_data = no_call_service.add_biota_result(find_data[0], true, "", "");
                         resolve(return_data);                                   
                     }                        

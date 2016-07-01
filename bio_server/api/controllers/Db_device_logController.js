@@ -15,7 +15,6 @@ module.exports = {
 	find: function(req, res) {
         var params = req.allParams(); delete params["id"];
         delete params.id;
-        Db_device_log.find(params).exec(function(err,find_data){
                 if(err){
                     return res.json({error:1001});
                 }else{
@@ -81,7 +80,12 @@ module.exports = {
                             });
                             //----需要特殊處理的另外寫
                             if(one_data.updatedAt){
-                                push_obj.updatedAt  = moment(one_data.updatedAt).format("YYYY-MM-DD HH:mm:ss");
+                                push_obj.updatedAt  = moment(one_data.updatedAt).format("YYYY-MM-DD HH:mm:ss");  
+                                    var stringi = JSON.stringify(one_data.input_cond);                           
+                                push_obj.input_cond  = `
+                                <div style='display:none' class='o_content'>${stringi}</div>
+                                <button onclick="bubble_click('操作情形', $(this).prev('.o_content').html() )">詳細內容按我</button>
+                                `;
                             }
                             retuser.push( push_obj );
                         });

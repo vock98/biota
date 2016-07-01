@@ -12,7 +12,7 @@
 module.exports = {
     /*
         all網址 : http://localhost:1337/api/Ds_fingerprint_ap/find
-        C網址   : http://localhost:1337/api/Ds_fingerprint_ap?type=C&ds_ap_id=1&ds_platform_type=plattype1&ds_device_type=devicetype1
+        C網址   : http://localhost:1337/api/Ds_fingerprint_ap?type=C&id=1&platform_type=plattype1&device_type=devicetype1
         R1網址  : http://localhost:1337/api/Ds_fingerprint_ap?type=R1&id=1
         R2網址  : http://localhost:1337/api/Ds_fingerprint_ap?type=R2&id=1
         U網址   : http://localhost:1337/api/Ds_fingerprint_ap?type=U&id=1&device_type=kk&platform_type=js
@@ -50,7 +50,7 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_ap/find
     */
 	find: function(req, res) {
-        Ds_fingerprint_ap.find().exec(function(err,find_data){
+        Ds_fingerprint_ap.find().sort("updatedAt desc").exec(function(err,find_data){
             return res.json(find_data);                               
         })
     },    

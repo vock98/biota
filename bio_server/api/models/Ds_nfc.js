@@ -31,7 +31,6 @@ module.exports = {
       if(found==0){
         next();
       }else{
-        no_call_service.write_log("Ds_nfc","C_repeat", values, "human");
         next( new Error('ID重複') );
       }
     });

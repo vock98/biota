@@ -11,11 +11,11 @@
     
 module.exports = {
     /*
-        all網址 : http://localhost:1337/api/Ds_fingerprint_device/find
-        C網址   : http://localhost:1337/api/Ds_fingerprint_device?type=C&id=1&device_id=d2&co_id=c&ver=v&speed=11&company=ccc&addr=ad&product=ccp
-        R網址   : http://localhost:1337/api/Ds_fingerprint_device?type=R&id=1&device_id=d2
-        U網址   : http://localhost:1337/api/Ds_fingerprint_device?type=U&id=1&device_id=d2
-        D網址   : http://localhost:1337/api/Ds_fingerprint_device?type=D&id=1&device_id=d2
+        all網址 : http://localhost:1337/api/Ds_fingerprint_device/find                    
+        C網址   : http://localhost:1337/api/Ds_fingerprint_device?type=C&id=1&device_id=d2s&co_id=c&ver=v&speed=11&company=ccc&addr=ad&product=ccp
+        R網址   : http://localhost:1337/api/Ds_fingerprint_device?type=R&id=1&device_id=d2s
+        U網址   : http://localhost:1337/api/Ds_fingerprint_device?type=U&id=1&device_id=d2s
+        D網址   : http://localhost:1337/api/Ds_fingerprint_device?type=D&id=1&device_id=d2s
     */
 	redirect: function(req, res) {
         co(function* () {                                                    
@@ -50,12 +50,12 @@ module.exports = {
         快速連結 : http://localhost:1337/api/Ds_fingerprint_device/find
     */
 	find: function(req, res) {
-        Ds_fingerprint_device.find().exec(function(err,find_data){
+        Ds_fingerprint_device.find().sort("updatedAt desc").exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
                     return res.json({error:1101});
                 }else{
-                    no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
                     return res.json(find_data);                               
                 }
         })

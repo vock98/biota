@@ -15,7 +15,6 @@ module.exports = {
 	find: function(req, res) {
         var params = req.allParams(); delete params["id"];
         delete params.id;
-        Db_human_log.find(params).exec(function(err,find_data){
                 if(err){
                     return res.json({error:1001});
                 }else{

@@ -49,13 +49,13 @@ module.exports = {
         不可輸入值: 無
         快速連結 : http://localhost:1337/api/Ds_human/find
     */
-	find: function(req, res) {
-        Ds_human.find().exec(function(err,find_data){
+	find: function(req, res){   
+        Ds_human.find().sort("updatedAt desc").exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
                     return res.json({error:1201});
                 }else{
-                    no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
                     return res.json(find_data);                               
                 } 
         })

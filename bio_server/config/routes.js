@@ -105,6 +105,5 @@ module.exports.routes = {
    '/api/Ds_nfc': { controller:'Ds_nfc',action:'redirect'},
    '/api/Ef_cwb': { controller:'Ef_cwb',action:'redirect'},
    '/api/Ef_envir': { controller:'Ef_envir',action:'redirect'},
-   '/api/F_linked': { controller:'F_linked',action:'redirect'},
-  
+   '/api/F_linked': { controller:'F_linked',action:'redirect'},  
 };

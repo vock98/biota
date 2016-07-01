@@ -47,12 +47,12 @@ module.exports = {
         快速連結 : http://localhost:1337/api/F_linked/find
     */
 	find: function(req, res) {
-        F_linked.find().exec(function(err,find_data){
+        F_linked.find().sort("updatedAt desc").exec(function(err,find_data){
                 if(err){
-                    no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all_die", err, req.session.id, log_type);
                     return res.json({error:1501});
                 }else{
-                    no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
+                    // no_call_service.write_log(table_name,"R_all", "",req.session.id, log_type);
                     return res.json(find_data);                               
                 }
         })
