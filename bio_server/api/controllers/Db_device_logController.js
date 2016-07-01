@@ -15,6 +15,7 @@ module.exports = {
 	find: function(req, res) {
         var params = req.allParams(); delete params["id"];
         delete params.id;
+        Db_device_log.find(params).sort("updatedAt desc").limit("1000").exec(function(err,find_data){
                 if(err){
                     return res.json({error:1001});
                 }else{
