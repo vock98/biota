@@ -1,0 +1,67 @@
+<%
+    var big_title = "公告及提醒事項";
+    var title_bar = "新增事項";
+    var submit_but = "確認";
+%>
+	<div id="wrapper">
+        <%- partial("../layout/left") %> 
+		<div id="page-wrapper">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header"><%=big_title%></h1>
+				</div>
+				<!-- /.col-lg-12 -->
+			</div>
+			<!-- /.row -->
+
+			<!-- /.row -->
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<%=title_bar%>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-6">
+									<form role="form" id="form_validation" action="<%=link_to_submit%>">       
+<%-: {is_require:true, is_readonly:false,    input_ch:"主旨",     id_name:"subject"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"發佈者",   id_name:"tricker"}|create_input %>
+<%-: {is_require:true, is_readonly:false,    input_ch:"時間",     id_name:"time"}|create_datetime %>
+<%-: {is_require:true, is_autocomplete:false, input_ch:"類型",    id_name:"style", input_data:sails.config.myconf.select_arstyle, input_extra:null}|create_select %>
+<%-: {id_name:"type", id_value: "C" } |create_hidden %>
+<%-: {id_name:"submit_to_link", id_value: link_to_list } |create_hidden %>
+										<a href="<%=link_to_list%>" class="btn btn-default">取消</a>
+										<button type="submit" class="btn btn-primary"><%=submit_but%></button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<!-- /#page-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+    
+<script>
+
+$().ready(function(){    
+    //補上驗證
+    var input_validation = {
+        // 驗證規則
+        rules: {
+			subject: {required: true},
+			tricker: {required: true},
+			time: {required: true},
+			style: {required: true},
+		}
+    }
+    check_vailidation( input_validation );
+    
+});	
+</script>
+    

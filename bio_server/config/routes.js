@@ -88,6 +88,13 @@ module.exports.routes = {
     //門禁記錄轉置
     '/cron/transrecord': { controller:'cron',action:'cron_transrecord',locals:{layout:"layout/normal",active:"cron"} },
 */
+
+  //公告 / 提醒事項
+    //公告 / 提醒事項維護
+    '/info/list': { controller:'info',action:'list',locals:{layout:"layout/normal",active:"info"} },
+    '/info/add': { controller:'info',action:'add',locals:{layout:"layout/normal",active:"info"} },
+    '/info/edit/:subject_pk': { controller:'info',action:'edit',locals:{layout:"layout/normal",active:"info"} },
+    '/info/delete/:subject_pk': { controller:'info',action:'delete',locals:{layout:"layout/normal",active:"info"} },
     
   /***************************************************************************
   *                                                                          *
@@ -106,4 +113,5 @@ module.exports.routes = {
    '/api/Ef_cwb': { controller:'Ef_cwb',action:'redirect'},
    '/api/Ef_envir': { controller:'Ef_envir',action:'redirect'},
    '/api/F_linked': { controller:'F_linked',action:'redirect'},  
+   '/api/Info_list': { controller:'Info_list',action:'redirect'},  
 };

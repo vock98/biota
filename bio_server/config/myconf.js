@@ -3,6 +3,10 @@ module.exports.myconf = {
     // myip : "52.192.93.236:1337",
     myip : "localhost:1337",
     //製作下拉選項用的資料
+    select_arstyle :[
+        { text: "公告", value: "announcement",},
+        { text: "提醒", value: "reminder",},
+    ],
     select_sex :[
         { text: "男", value: "male",},
         { text: "女", value: "female",},
