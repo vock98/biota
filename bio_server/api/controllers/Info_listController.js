@@ -11,11 +11,10 @@
 module.exports = {
 	/*                                      
         all網址 : http://localhost:1337/api/Info_list/find
-        C網址   : http://localhost:1337/api/Info_list?type=C&name=kk
-        R1網址  : http://localhost:1337/api/Info_list?type=R1&name=kk
-        R2網址  : http://localhost:1337/api/Info_list?type=R2&id=576418303ec3e73425109da6
-        U網址   : http://localhost:1337/api/Info_list?type=U&id=576418303ec3e73425109da6&job=ks
-        D網址   : http://localhost:1337/api/Info_list?type=D&id=576418303ec3e73425109da6&name=kk
+        C網址   : http://localhost:1337/api/Info_list?type=C&subject=a&tricker=aa&time=2016-07-06T09:49:00.000Z&style=announcement
+        R網址   : http://localhost:1337/api/Info_list?type=R&subject_pk=577e812f3d548bc82e048b72
+        U網址   : http://localhost:1337/api/Info_list?type=U&subject_pk=577e812f3d548bc82e048b72&subject=a2
+        D網址   : http://localhost:1337/api/Info_list?type=D&subject_pk=577e812f3d548bc82e048b72
     */
 	redirect: function(req, res) {
         co(function* () {                                                    
@@ -24,9 +23,9 @@ module.exports = {
             var return_obj = "";
             switch(params.type){
                 case "C" : return_obj = yield Info_list_service.create( params ,who); break;
-                // case "R" : return_obj = yield Info_list_service.search( params ); break;
-                case "R1": return_obj = yield Info_list_service.search1( params ,who); break;
-                case "R2": return_obj = yield Info_list_service.search2( params ,who); break;
+                case "R" : return_obj = yield Info_list_service.search( params ,who); break;
+                // case "R1": return_obj = yield Info_list_service.search1( params ,who); break;
+                // case "R2": return_obj = yield Info_list_service.search2( params ,who); break;
                 case "U" : return_obj = yield Info_list_service.update( params ,who); break;
                 case "D" : return_obj = yield Info_list_service.destroy( params ,who); break;
                 default: return_obj = no_call_service.add_biota_result( {} , false , "type 不正確" , ["type 不正確"] );

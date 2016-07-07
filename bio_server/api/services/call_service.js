@@ -1,6 +1,24 @@
 var moment = require('moment');
 //此處出現的都是co要用的
 module.exports = {
+    //撈出f_linked資料的(單一)
+	find_flinked:function(input_cond){
+        return new Promise(function(resolve, reject){
+            F_linked.findOne( input_cond ).exec(function(err,find_data){
+                if(err) reject(new Error("f_linked error :"+err));
+                resolve(find_data);
+            })   
+        });
+    },
+    //撈出human資料的(單一)
+	find_human:function(input_cond){
+        return new Promise(function(resolve, reject){
+            Ds_human.findOne( input_cond ).exec(function(err,find_data){
+                if(err) reject(new Error("Ds_human error :"+err));
+                resolve(find_data);
+            })   
+        });
+    },
     //撈出AP資料的id供下拉選單用
 	find_ap_id:function(){
         return new Promise(function(resolve, reject){

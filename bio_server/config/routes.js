@@ -114,4 +114,6 @@ module.exports.routes = {
    '/api/Ef_envir': { controller:'Ef_envir',action:'redirect'},
    '/api/F_linked': { controller:'F_linked',action:'redirect'},  
    '/api/Info_list': { controller:'Info_list',action:'redirect'},  
+   '/api/Comparison_server': { controller:'Comparison_server',action:'redirect'},  
+   '/api/Comparison_client': { controller:'Comparison_client',action:'redirect'},  
 };
