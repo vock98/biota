@@ -23,8 +23,11 @@ module.exports = {
   */
   attributes: {
     f_linked_pk: {
+        type: "string",
         primaryKey: true,
-        unique: true
+        unique: true,
+        autoIncrement: true,        
+        columnName: 'id'
     },
     f_which_one:{ 
         type: "string",
@@ -37,16 +40,6 @@ module.exports = {
     f_dat_path:{ type: "string" },
     f_pic_path:{ type: "string" },
     f_minutiae:{ type: "string" },
-  },
-  //unique失效使用
-  beforeCreate: function (values, next) {
-    F_linked.count({f_linked_pk:values.f_linked_pk}).exec(function countCB(error, found) {
-      if(found==0){
-        next();
-      }else{
-        next( new Error('f_linked_pk ID重複') );
-      }
-    });
   }
 };
 

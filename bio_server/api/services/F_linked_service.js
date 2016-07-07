@@ -66,8 +66,8 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var return_obj  = "";
-                var fill_array  = ["id","bind_id","f_id","which","pic","minutiae"]; //必填欄位<輸入值>
-                var nfill_array = []; //不可填欄位<輸入值>
+                var fill_array  = ["id","bind_id","which","pic","minutiae"]; //必填欄位<輸入值>
+                var nfill_array = ["f_id"]; //不可填欄位<輸入值>
                 var cond_array = ["ds_human_pk","ds_bind_id"];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
                 
