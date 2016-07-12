@@ -48,6 +48,23 @@ module.exports.myconf = {
         { text: "Nfc_R",  value: "/api/Ds_nfc",},
         { text: "Nfc_D",  value: "/api/Ds_nfc", },
         
+        { text: "F_C",  value: "/api/F_linked", },
+        { text: "F_D",  value: "/api/F_linked", },
+        
+        { text: "Fserver_Ri",  value: "/api/Comparison_server", },
+        { text: "Fserver_Rv",  value: "/api/Comparison_server", },
+        
+        { text: "Fclient_Ri",  value: "/api/Comparison_client", },
+        { text: "Fclient_Rv",  value: "/api/Comparison_client", },
+        
+        { text: "Info_C",  value: "/api/Info_list", },
+        { text: "Info_R",  value: "/api/Info_list", },
+        { text: "Info_U",  value: "/api/Info_list", },
+        { text: "Info_D",  value: "/api/Info_list", },
+        
+        { text: "Cwb_C",  value: "/api/Ef_cwb", },
+        { text: "Cwb_R",  value: "/api/Ef_cwb", },
+        
         { text: "Envir_C",  value: "/api/Ef_envir", },
         { text: "Envir_R",  value: "/api/Ef_envir", },
         { text: "Envir_U",  value: "/api/Ef_envir", },

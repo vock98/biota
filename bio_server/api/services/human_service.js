@@ -184,7 +184,7 @@ module.exports = {
                             f: flinked_data,
                         }
                         back_data.push(r_obj);
-                    }                    
+                    }                
                     var return_data = no_call_service.add_biota_result(back_data, true, "", "");
                     resolve( return_data );
                 }else{

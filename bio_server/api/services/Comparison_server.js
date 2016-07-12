@@ -15,13 +15,19 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var f_result = yield call_service.find_flinked(search_cond); //查有沒有指紋
-                if(!f_result){resolve({human:[]});} //查無此人的回應
+                if(!f_result){
+                    no_call_service.write_log(table_name,"Ri_no_data", input_params, who, log_type);
+                    resolve({human:[]});
+                } //查無此人的回應
                 
                 var search_human_cond = {
                     ds_human_pk : f_result.ds_human_pk
                 };
                 var human_result = yield call_service.find_human(search_human_cond); //找人員資料
-                if(!human_result){resolve({human:[]});} //查無此人的回應
+                if(!human_result){
+                    no_call_service.write_log(table_name,"Ri_no_data2", input_params, who, log_type);
+                    resolve({human:[]});
+                } //查無此人的回應
                 
                 var final_obj={
                     human:[{
@@ -68,6 +74,7 @@ module.exports = {
                 }
             }).catch(function(err){
                 console.log(table_name+"_third_routes_error_r1",err);
+                no_call_service.write_log(table_name,"Ri_err", input_params, who, log_type);
                 var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                 resolve(return_data);
             });   
@@ -77,43 +84,28 @@ module.exports = {
     find_Rv_db: function( search_cond, who, input_params ){
         return new Promise(function(resolve, reject){
             co(function* () {
-                //製作非refernce的obj
-                function goclone(source) {
-                    if (Object.prototype.toString.call(source) === '[object Array]') {
-                        var clone = [];
-                        for (var i=0; i<source.length; i++) {
-                            clone[i] = goclone(source[i]);
-                        }
-                        return clone;
-                    } else if (typeof(source)=="object") {
-                        var clone = {};
-                        for (var prop in source) {
-                            if (source.hasOwnProperty(prop)) {
-                                clone[prop] = goclone(source[prop]);
-                            }
-                        }
-                        return clone;
-                    } else {
-                        return source;
-                    }
-                }
-                
-                
-                var human_search_cond = goclone(search_cond);
+                var human_search_cond = yield call_service.goclone(search_cond);
                 delete human_search_cond["f_minutiae"];
                 delete human_search_cond["f_pic_path"];
                 
-                var f_search_cond = goclone(search_cond);
+                var f_search_cond = yield call_service.goclone(search_cond);
                 delete f_search_cond["ds_human_pk"];
                 delete f_search_cond["ds_bind_id"];
                 delete f_search_cond["ds_nfc_tag_id"];
                 var f_result = yield call_service.find_flinked(f_search_cond); //查有沒有指紋
-                if(!f_result){resolve({human:[]});} //查無此人的回應
+                if(!f_result){
+                    no_call_service.write_log(table_name,"Rv_no_data", input_params, who, log_type);
+                    resolve({human:[]});
+                } //查無此人的回應
                 if(f_result.ds_human_pk != human_search_cond.ds_human_pk){
+                    no_call_service.write_log(table_name,"Rv_no_data2", input_params, who, log_type);
                     resolve({human:[]}); //人員ID不同的情況
                 }
                 var human_result = yield call_service.find_human(human_search_cond); //找人員資料
-                if(!human_result){resolve({human:[]});} //查無此人的回應
+                if(!human_result){
+                    no_call_service.write_log(table_name,"Rv_no_data3", input_params, who, log_type);
+                    resolve({human:[]});
+                } //查無此人的回應
                 var final_obj={
                     human:[{
                         id  : human_result.ds_human_pk,
@@ -160,6 +152,7 @@ module.exports = {
                 }
             }).catch(function(err){
                 console.log(table_name+"_third_routes_error_r1",err);
+                no_call_service.write_log(table_name,"Rv_err", input_params, who, log_type);
                 var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
                 resolve(return_data);
             });   

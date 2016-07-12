@@ -26,16 +26,16 @@
 							<div class="row" id="api_item">
 								<div class="col-lg-12">
                                 
-<%-:"Ap_C",["id","device_type","platform_type","push_token"]|create_input_simulator%>
-<%-:"Ap_R1",["id","device_type","platform_type"]|create_input_simulator%>
+<%-:"Ap_C",["id","platform_type"]|create_input_simulator%>
+<%-:"Ap_R1",["id","platform_type"]|create_input_simulator%>
 <%-:"Ap_R2",["id"]|create_input_simulator%>
-<%-:"Ap_U",["id","device_type","platform_type"]|create_input_simulator%>
-<%-:"Ap_D",["id","device_type","platform_type"]|create_input_simulator%>
+<%-:"Ap_U",["id","platform_type"]|create_input_simulator%>
+<%-:"Ap_D",["id","platform_type"]|create_input_simulator%>
 
-<%-:"Device_C",["id", "device_id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
-<%-:"Device_R",["id", "device_id"]|create_input_simulator%>
-<%-:"Device_U",["id", "device_id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
-<%-:"Device_D",["id", "device_id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
+<%-:"Device_C",["id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
+<%-:"Device_R",["id"]|create_input_simulator%>
+<%-:"Device_U",["id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
+<%-:"Device_D",["id", "co_id", "ver", "speed", "company", "addr", "product"]|create_input_simulator%>
 
 <%-:"Human_C",["birthday","gender","bloodtype", "job","name","bind_id" ]|create_input_simulator%>
 <%-:"Human_R1",["birthday","gender","bloodtype", "job","name","bind_id" ]|create_input_simulator%>
@@ -46,6 +46,23 @@
 <%-:"Nfc_C",["id","nfc"]|create_input_simulator%>
 <%-:"Nfc_R",["id"]|create_input_simulator%>
 <%-:"Nfc_D",["id","nfc"]|create_input_simulator%>
+
+<%-:"F_C",["id","bind_id","which","pic","minutiae"]|create_input_simulator%>
+<%-:"F_D",["id","nfc","f_id","which","pic","minutiae"]|create_input_simulator%>
+
+<%-:"Fserver_Ri",["minutiae","pic"]|create_input_simulator%>
+<%-:"Fserver_Rv",["minutiae","pic","id","bind_id","nfc"]|create_input_simulator%>
+
+<%-:"Fclient_Ri",["minutiae","pic","STime","CTime","MScore","MTime","is_success","client_action"]|create_input_simulator%>
+<%-:"Fclient_Rv",["minutiae","pic","id","bind_id","nfc","STime","CTime","MScore","MTime","is_success","client_action"]|create_input_simulator%>
+
+<%-:"Info_C",[             "subject","tricker","time","style"]|create_input_simulator%>
+<%-:"Info_R",["subject_pk","subject","tricker","time","style"]|create_input_simulator%>
+<%-:"Info_U",[             "subject","tricker","time","style"]|create_input_simulator%>
+<%-:"Info_D",[             "subject","tricker","time","style"]|create_input_simulator%>
+
+<%-:"Cwb_C",[             "ef_sitename","ef_source","ef_item","ef_date","ef_time","ef_value"]|create_input_simulator%>
+<%-:"Cwb_R",["from","to", "ef_sitename","ef_source","ef_item","ef_date","ef_time"]|create_input_simulator%>
 
 <%-:"Envir_C",[             "envir_pk","datetime","desc","pic_path","temp","humd"]|create_input_simulator%>
 <%-:"Envir_R",["from","to", "envir_pk","datetime","desc","pic_path","temp","humd"]|create_input_simulator%>

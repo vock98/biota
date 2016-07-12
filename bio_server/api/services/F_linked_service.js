@@ -81,12 +81,12 @@ module.exports = {
                         var final_data = yield F_linked_service.write_db( r_array[0], who, input_params );
                         //為了要呈現R1配合human R1需求條件
                         var R1_obj ={
-                            ds_birthday : final_data.ds_birthday,
-                            ds_gender : final_data.ds_gender,
-                            ds_bloodtype : final_data.ds_bloodtype,
-                            ds_job : final_data.ds_job,
-                            ds_name : final_data.ds_name,
-                            ds_bind_id : final_data.ds_bind_id,
+                            birthday : moment(final_data.ds_birthday).toISOString(),
+                            gender : final_data.ds_gender,
+                            bloodtype : final_data.ds_bloodtype,
+                            job : final_data.ds_job,
+                            name : final_data.ds_name,
+                            bind_id : final_data.ds_bind_id,
                         }
                         var back_data =  yield human_service.search1(R1_obj, who );                                                                            
                     }else{

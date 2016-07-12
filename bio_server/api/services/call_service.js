@@ -1,6 +1,26 @@
 var moment = require('moment');
 //此處出現的都是co要用的
 module.exports = {
+    //製作非refernce的obj
+    goclone:function(source) {
+        if (Object.prototype.toString.call(source) === '[object Array]') {
+            var clone = [];
+            for (var i=0; i<source.length; i++) {
+                clone[i] = call_service.goclone(source[i]);
+            }
+            return clone;
+        } else if (typeof(source)=="object") {
+            var clone = {};
+            for (var prop in source) {
+                if (source.hasOwnProperty(prop)) {
+                    clone[prop] =  call_service.goclone(source[prop]);
+                }
+            }
+            return clone;
+        } else {
+            return source;
+        }
+    },
     //撈出f_linked資料的(單一)
 	find_flinked:function(input_cond){
         return new Promise(function(resolve, reject){
@@ -55,13 +75,15 @@ module.exports = {
     },
     //檢查必填及不可填欄位
 	check_fill_nfill:function(input_params, fill_array, nfill_array){
-        return new Promise(function(resolve, reject){
+        return new Promise(function(resolve, reject){            
+            var input_copy = call_service.goclone(input_params);
             var return_array =[];
+            
             _.map(fill_array, function(num){
-                if( !input_params[num] ) return_array.push( "缺少參數:"+num );
+                if( !input_copy[num] ) return_array.push( "缺少參數:"+num );
             });
             _.map(nfill_array, function(num2){
-                if( input_params[num2] ) return_array.push( "不可填寫參數:"+num2 );
+                if( input_copy[num2] ) return_array.push( "不可填寫參數:"+num2 );
             });
                 
             if(return_array.length==0){
@@ -79,33 +101,29 @@ module.exports = {
         } ,
         cond_array = ["改變後1","改變後2" ]
     */
-	check_change_cond:function(input_params, change_rule_obj, cond_array){
+	check_change_cond:function(input_params, change_rule_obj, cond_array, input_type){
         return new Promise(function(resolve, reject){
-            //製作非refernce的obj
-            function goclone(source) {
-                if (Object.prototype.toString.call(source) === '[object Array]') {
-                    var clone = [];
-                    for (var i=0; i<source.length; i++) {
-                        clone[i] = goclone(source[i]);
-                    }
-                    return clone;
-                } else if (typeof(source)=="object") {
-                    var clone = {};
-                    for (var prop in source) {
-                        if (source.hasOwnProperty(prop)) {
-                            clone[prop] = goclone(source[prop]);
-                        }
-                    }
-                    return clone;
-                } else {
-                    return source;
-                }
+            input_type = typeof input_type !== 'undefined' ? input_type : 0;
+            var return_obj1 = call_service.goclone(input_params); //params
+            var return_obj2 ={}; //cond
+            switch(input_type){
+                case 0: //預設查詢條件 全拔除
+                    delete return_obj1["type"];
+                    delete return_obj1["submit_to_link"];
+                break;
+                case 1: //ap_device U專用 拔除1個
+                    delete return_obj1["device_type"];
+                    delete return_obj1["type"];
+                    delete return_obj1["submit_to_link"];
+                break;
+                case 2: //ap_device [R1 R2 D]用 以及 fingerprint_device用 拔除2個
+                    delete return_obj1["device_type"];
+                    delete return_obj1["push_token"];
+                    delete return_obj1["type"];
+                    delete return_obj1["submit_to_link"];
+                break;                
             }
             
-            var return_obj1 = goclone(input_params); //params
-            var return_obj2 ={}; //cond
-            delete return_obj1["type"];//拔除用來當作條件用的
-            delete return_obj1["submit_to_link"];//拔除用來當作條件用的
             _.map(change_rule_obj, function(num,key){
                 if(return_obj1[ key ]!= undefined){
                     return_obj1[ num ] = return_obj1[ key ];

@@ -49,7 +49,7 @@ module.exports = {
                                 resolve(return_data);   
                             }else{
                                 no_call_service.write_log(table_name,"R1_ok", input_params, who, log_type);
-                                find_data[0].human = _.pluck(flinked_data, "ds_human_pk");
+                                find_data[0].human = _.uniq(_.pluck(flinked_data, "ds_human_pk"));
                                 var return_data = no_call_service.add_biota_result(find_data, true, "", "");
                                 resolve(return_data);                                   
                             }
@@ -152,14 +152,16 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var return_obj  = "";
-                var fill_array  = ["id"]; //必填欄位<輸入值>
-                var nfill_array = ["push_token"]; //不可填欄位<輸入值>
+                var fill_array  = []; //必填欄位<輸入值>
+                var nfill_array = []; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
+                console.log(10,input_params);
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
+                console.log(11,input_params);
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     r_array[0].ds_deleted = {"$exists":false}; //補上刪除不可被查
                     var final_data = yield ap_service.find_R1_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
@@ -179,13 +181,13 @@ module.exports = {
             co(function* () {                                                    
                 var return_obj  = "";
                 var fill_array  = ["id"]; //必填欄位<輸入值>
-                var nfill_array = ["device_type", "platform_type", "push_token"]; //不可填欄位<輸入值>
+                var nfill_array = ["platform_type"]; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     r_array[0].ds_deleted = {"$exists":false}; //補上刪除不可被查
                     var final_data = yield ap_service.find_R2_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
@@ -204,14 +206,14 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var return_obj  = "";
-                var fill_array  = ["id", "device_type", "platform_type"]; //必填欄位<輸入值>
-                var nfill_array = ["push_token"]; //不可填欄位<輸入值>
+                var fill_array  = ["id", "platform_type"]; //必填欄位<輸入值>
+                var nfill_array = []; //不可填欄位<輸入值>
                 var cond_array = ["ds_ap_id"];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 1);
                     r_array[1].ds_deleted = {"$exists":false}; //補上刪除不可被查
                     var final_data = yield ap_service.update_db( r_array[1], r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
@@ -230,14 +232,14 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var return_obj  = "";
-                var fill_array  = ["id", "device_type", "platform_type"]; //必填欄位<輸入值>
-                var nfill_array = ["push_token"]; //不可填欄位<輸入值>
+                var fill_array  = ["id", "platform_type"]; //必填欄位<輸入值>
+                var nfill_array = []; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     var final_data = yield ap_service.destroy_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );

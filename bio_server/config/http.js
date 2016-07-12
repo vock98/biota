@@ -164,8 +164,13 @@ module.exports.http = {
             },
             //simulator專用 
             create_input_simulator: function( input_class, input_array ){
+                //因應三個必填 補在此處
+                input_array.push("device_id");
+                input_array.push("push_token");
+                input_array.push("device_type");
+                
                 var final_str = "";
-                final_str +='<div class="'+input_class+' input_div" style="display:none">';                
+                final_str +='<div class="'+input_class+' input_div" style="display:none">';           
                     for(var key in input_array){
                         if(key%4==0){
                             final_str +='<div class="row form-group">';

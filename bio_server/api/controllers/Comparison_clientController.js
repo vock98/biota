@@ -10,8 +10,8 @@
     var log_type = "human";
 module.exports = {
 	/*                                      
-        Ri網址  : http://localhost:1337/api/Comparison_client?type=Ri&minutiae=xxx
-        Rv網址  : http://localhost:1337/api/Comparison_client?type=Rv&minutiae=xxx&id=57725dd57685ce8c10495442&bind_id=aaa
+        Ri網址  : http://localhost:1337/api/Comparison_client?type=Ri&minutiae=xxx&STime=2012&CTime=sss&MScore=111&is_success=true&client_action=true&MTime=2012
+        Rv網址  : http://localhost:1337/api/Comparison_client?type=Rv&minutiae=xxx&STime=2012&CTime=sss&MScore=111&is_success=true&client_action=true&MTime=2012&id=57725dd57685ce8c10495442&bind_id=aaa
     */                                                 
 	redirect: function(req, res) {
         co(function* () {                                                    

@@ -105,7 +105,7 @@ module.exports = {
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     var final_data = yield device_service.write_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
@@ -130,7 +130,7 @@ module.exports = {
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     r_array[0].ds_deleted = {"$exists":false}; //補上刪除不可被查
                     var final_data = yield device_service.find_R_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
@@ -156,7 +156,7 @@ module.exports = {
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     r_array[1].ds_deleted = {"$exists":false}; //補上刪除不可被查
                     var final_data = yield device_service.update_db( r_array[1], r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
@@ -182,7 +182,7 @@ module.exports = {
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 2);
                     var final_data = yield device_service.destroy_db( r_array[0], who, input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
