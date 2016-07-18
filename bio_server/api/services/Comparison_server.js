@@ -14,7 +14,7 @@ module.exports = {
     find_Ri_db: function( search_cond, who, input_params ){
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
-                var f_result = yield call_service.find_flinked(search_cond); //查有沒有指紋
+                var f_result = yield call_service.find_flinked(search_cond); //查有沒有指紋 後續要改用SDK
                 if(!f_result){
                     no_call_service.write_log(table_name,"Ri_no_data", input_params, who, log_type);
                     resolve({human:[]});
@@ -56,7 +56,7 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var return_obj  = "";
-                var fill_array  = ["minutiae"]; //必填欄位<輸入值>
+                var fill_array  = ["minutiae","CTime"]; //必填欄位<輸入值>
                 var nfill_array = ["id","bind_id","nfc"]; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
@@ -92,7 +92,7 @@ module.exports = {
                 delete f_search_cond["ds_human_pk"];
                 delete f_search_cond["ds_bind_id"];
                 delete f_search_cond["ds_nfc_tag_id"];
-                var f_result = yield call_service.find_flinked(f_search_cond); //查有沒有指紋
+                var f_result = yield call_service.find_flinked(f_search_cond); //查有沒有指紋 後續要改用SDK
                 if(!f_result){
                     no_call_service.write_log(table_name,"Rv_no_data", input_params, who, log_type);
                     resolve({human:[]});
@@ -134,7 +134,7 @@ module.exports = {
         return new Promise(function(resolve, reject){
             co(function* () {                                                    
                 var return_obj  = "";
-                var fill_array  = ["minutiae","id","bind_id"]; //必填欄位<輸入值>
+                var fill_array  = ["minutiae","id","bind_id","CTime"]; //必填欄位<輸入值>
                 var nfill_array = []; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                

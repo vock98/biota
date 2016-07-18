@@ -7,25 +7,31 @@
 
 var json2csv = require('json2csv');
 var moment = require('moment');
-
+var co = require('co');
+var Iconv  = require('iconv').Iconv;
 module.exports = {
 	 //列表頁面 http://localhost:1337/ap/list
-	access:function(req,res){             
-            // Send a CSV response          
-            var config = {
-              fields : ['id','name', 'email'],
-              data: [
-                  {id:1,name:2,email:3},
-                  {id:21,name:22,email:23}
-              ]
-            };
+	access:function(req,res){
+            co(function* () {                                                    
+                // Send a CSV response
+                var db_data = yield call_service.find_csv();
+                var config = {
+                  fields : ['Datetime','Action', 'User', 'Description', 'Result'],
+                  data: db_data,
+                };
 
-            json2csv(config, function(err, csv) {
-              if (err) console.log(err);
-              var filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
-              res.attachment(filename);
-              res.end(csv, 'UTF-8');
-            });                     	
-	}, 
+                json2csv(config, function(err, csv) {
+                  if (err) console.log(err);
+                  var filename = "report-" + moment().format("YYYY-MM-DD") + ".csv";
+                  res.attachment(filename);
+                    var iconv = new Iconv('UTF-8', 'BIG5');
+                    content = iconv.convert(csv);
+                  res.end(content, 'UTF-8');
+                });
+            }).catch(function(err){
+                console.log("轉出錯誤",err);
+                res.send("轉出錯誤");
+            });         
+	},
 };
 

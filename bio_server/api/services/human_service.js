@@ -296,7 +296,7 @@ module.exports = {
                     reject(err);
                 }else{
                     var return_array = _.map(find_data, function(num){
-                           return {id: num.f_linked_pk, which:num.f_which_one, pic:num.f_pic_path}
+                           return {id: num.f_linked_pk, which:num.f_which_one, pic:num.f_pic_path, minutiae:num.f_minutiae}
                         });
                     resolve( return_array );
                 }           

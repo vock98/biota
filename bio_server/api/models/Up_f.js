@@ -29,12 +29,18 @@ module.exports = {
         autoIncrement: true,        
         columnName: 'id'
     },
+    f_minutiae:{ type: "string",},
+    f_pic_path:{ type: "string",},
+    ds_human_pk:{ type: "string",},
+    ds_bind_id:{ type: "string",},
+    ds_nfc_tag_id:{ type: "string",},    
     up_STime:{ type: "string",},
-    up_CTime:{  type: "string", },
-    up_MScore:{  type: "string", },
-    up_MTime:{  type: "string", },
+    up_CTime:{  type: "float", },
+    up_MScore:{  type: "float", },
+    up_MTime:{  type: "float", },
     up_is_success:{  type: "string", },
-    up_action:{ type: "string" },
+    up_client_action:{ type: "string" },
+    up_server_action:{ type: "string" },
   }
 };
 

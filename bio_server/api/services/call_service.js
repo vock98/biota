@@ -21,6 +21,46 @@ module.exports = {
             return source;
         }
     },
+    //撈出門禁csv專用資料
+	find_csv:function(){
+        return new Promise(function(resolve, reject){
+            //找出門禁紀錄
+            var cond = {
+                table_name: "Comparison_client"
+            }
+            Db_human_log.find( cond ).exec(function(err,find_data){
+                if(err) reject(new Error("csv error :"+err));
+                var final_data = _.map(find_data,function(one_data){
+                    var default_action ="建立遠端 MatchLog";
+                    var status = one_data.CRUD.substr(one_data.CRUD.indexOf("_")+1); //找到第一個_之後的文字
+                    switch(status){
+                        case "ok":
+                            var default_desc ="建立遠端 MatchLog(MatchLog"+JSON.stringify(one_data.input_cond)+") 成功";                        
+                            break;
+                        case "err":
+                            var default_desc ="建立遠端 MatchLog(MatchLog"+JSON.stringify(one_data.input_cond)+") 錯誤";                        
+                            break;
+                        case "no_data":
+                        case "no_data1":
+                        case "no_data2":
+                            var default_desc ="建立遠端 MatchLog(MatchLog"+JSON.stringify(one_data.input_cond)+") 無資料";                        
+                            break;
+                        default:
+                            var default_desc ="建立遠端 MatchLog(MatchLog"+JSON.stringify(one_data.input_cond)+") 意外狀況";                        
+                            break;
+                    }
+                    var return_obj ={};
+                    return_obj.Datetime     = one_data.createdAt;
+                    return_obj.Action       = status;
+                    return_obj.User         = one_data.who;
+                    return_obj.Description  = default_desc;
+                    return_obj.Result       = "true";
+                    return return_obj;
+                })
+                resolve(final_data);
+            })   
+        });
+    },
     //撈出f_linked資料的(單一)
 	find_flinked:function(input_cond){
         return new Promise(function(resolve, reject){
@@ -80,7 +120,7 @@ module.exports = {
             var return_array =[];
             
             _.map(fill_array, function(num){
-                if( !input_copy[num] ) return_array.push( "缺少參數:"+num );
+                if( input_copy[num] == undefined ) return_array.push( "缺少參數:"+num );
             });
             _.map(nfill_array, function(num2){
                 if( input_copy[num2] ) return_array.push( "不可填寫參數:"+num2 );
@@ -103,11 +143,11 @@ module.exports = {
     */
 	check_change_cond:function(input_params, change_rule_obj, cond_array, input_type){
         return new Promise(function(resolve, reject){
-            input_type = typeof input_type !== 'undefined' ? input_type : 0;
+            input_type = typeof input_type !== 'undefined' ? input_type : 3;
             var return_obj1 = call_service.goclone(input_params); //params
             var return_obj2 ={}; //cond
             switch(input_type){
-                case 0: //預設查詢條件 全拔除
+                case 0: //預設查詢條件 全不拔除
                     delete return_obj1["type"];
                     delete return_obj1["submit_to_link"];
                 break;
@@ -121,7 +161,14 @@ module.exports = {
                     delete return_obj1["push_token"];
                     delete return_obj1["type"];
                     delete return_obj1["submit_to_link"];
-                break;                
+                break;  
+                case 3: //一律不讀取
+                    delete return_obj1["device_id"];
+                    delete return_obj1["device_type"];
+                    delete return_obj1["push_token"];
+                    delete return_obj1["type"];
+                    delete return_obj1["submit_to_link"];
+                break;                  
             }
             
             _.map(change_rule_obj, function(num,key){

@@ -50,10 +50,10 @@
 <%-:"F_C",["id","bind_id","which","pic","minutiae"]|create_input_simulator%>
 <%-:"F_D",["id","nfc","f_id","which","pic","minutiae"]|create_input_simulator%>
 
-<%-:"Fserver_Ri",["minutiae","pic"]|create_input_simulator%>
-<%-:"Fserver_Rv",["minutiae","pic","id","bind_id","nfc"]|create_input_simulator%>
+<%-:"Fserver_Ri",["minutiae","pic","CTime"]|create_input_simulator%>
+<%-:"Fserver_Rv",["minutiae","pic","id","bind_id","nfc","CTime"]|create_input_simulator%>
 
-<%-:"Fclient_Ri",["minutiae","pic","STime","CTime","MScore","MTime","is_success","client_action"]|create_input_simulator%>
+<%-:"Fclient_Ri",["minutiae","pic","id","bind_id","nfc","STime","CTime","MScore","MTime","is_success","client_action"]|create_input_simulator%>
 <%-:"Fclient_Rv",["minutiae","pic","id","bind_id","nfc","STime","CTime","MScore","MTime","is_success","client_action"]|create_input_simulator%>
 
 <%-:"Info_C",[             "subject","tricker","time","style"]|create_input_simulator%>

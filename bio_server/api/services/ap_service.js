@@ -131,10 +131,11 @@ module.exports = {
                 var nfill_array = []; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
+                console.log(11,input_params);
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容
-                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array, 0);
                     var final_data = yield ap_service.write_db( r_array[0], who ,input_params );
                     var back_data =  yield call_service.back_change_cond(final_data, change_obj);
                     resolve( back_data );
@@ -155,9 +156,8 @@ module.exports = {
                 var fill_array  = []; //必填欄位<輸入值>
                 var nfill_array = []; //不可填欄位<輸入值>
                 var cond_array = [];  //拿來當條件的欄位<欄位值>
-                console.log(10,input_params);
+                
                 var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
-                console.log(11,input_params);
                 
                 if(check_fill_nfill == "ok"){
                     //輸入條件正確 修正資料ID內容

@@ -137,7 +137,11 @@ module.exports = {
                         fdata.forEach(function(one_data){
                             var push_obj ={};
                             _.each(cols_array,function(cols){
-                                push_obj[cols] = one_data[cols]||"";
+                                if(one_data[cols]==-998){
+                                    push_obj[cols] = 0;                                    
+                                }else{
+                                    push_obj[cols] = one_data[cols]||"";                                    
+                                }
                             });
                             //----需要特殊處理的另外寫
                             // if(one_data.ef_item){

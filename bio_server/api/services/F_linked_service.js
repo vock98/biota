@@ -43,8 +43,13 @@ module.exports = {
                     resolve(return_data);
                 }else{
                     no_call_service.write_log(table_name,"D_ok", input_params, who, log_type);
-                    var return_data = no_call_service.add_biota_result( {}, true, "", "");
-                    resolve(return_data);
+                    Ds_human.findOne({ds_human_pk:delete_cond.ds_human_pk}).exec(function(err, human_Data){
+                        if(err){                            
+                            reject( err );
+                        }else{
+                            resolve( human_Data );
+                        }
+                    })
                 }
             }) 
         });
@@ -123,7 +128,16 @@ module.exports = {
                     var human_count = yield F_linked_service.check_human( r_array[1], who );
                     if(human_count ==1){
                         var final_data = yield F_linked_service.destroy_db( r_array[0], who, input_params );
-                        var back_data =  yield call_service.back_change_cond(final_data, change_obj);                        
+                                               //為了要呈現R1配合human R1需求條件
+                        var R1_obj ={
+                            birthday : moment(final_data.ds_birthday).toISOString(),
+                            gender : final_data.ds_gender,
+                            bloodtype : final_data.ds_bloodtype,
+                            job : final_data.ds_job,
+                            name : final_data.ds_name,
+                            bind_id : final_data.ds_bind_id,
+                        }
+                        var back_data =  yield human_service.search1(R1_obj, who );
                     }else{
                         //沒有人或者超過人都是人員資料錯誤
                         var back_data = no_call_service.add_biota_result( {}, false, "", "人員資料錯誤");

@@ -17,11 +17,11 @@ module.exports = {
             Info_list.create(create_cond).exec(function(err,create_data){
                 if(err){
                     no_call_service.write_log(table_name,"C_die", input_params, who, log_type);
-                    var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
+                    var return_data = no_call_service.add_biota_result( [], false, err.details, "");
                     resolve(return_data);
                 }else{
                     no_call_service.write_log(table_name,"C_ok", input_params, who, log_type);
-                    var return_data = no_call_service.add_biota_result({}, true, "", "");
+                    var return_data = no_call_service.add_biota_result([], true, "", "");
                     resolve(return_data);                                                     
                 }           
             })   
@@ -33,14 +33,14 @@ module.exports = {
             Info_list.find( search_cond ).exec(function(err,find_data){
                 if(err){
                     no_call_service.write_log(table_name,"R_die", input_params, who, log_type);
-                    var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
+                    var return_data = no_call_service.add_biota_result( [], false, err.details, "");
                     resolve(return_data);
                 }else{
                     //撈取符合的使用者資料
                     if( _.isEmpty(find_data) ){
                         //查無資料
                         no_call_service.write_log(table_name,"R_no_data", input_params, who, log_type);
-                        var return_data = no_call_service.add_biota_result({}, true, "查無資料", "查無資料");
+                        var return_data = no_call_service.add_biota_result([], true, "查無資料", "查無資料");
                         resolve(return_data);       
                     }else{
                         no_call_service.write_log(table_name,"R_ok", input_params, who, log_type);
@@ -57,18 +57,18 @@ module.exports = {
             Info_list.update( search_cond, update_cond ).exec(function(err,update_data){
                 if(err){
                     no_call_service.write_log(table_name,"U_die", input_params, who, log_type);
-                    var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
+                    var return_data = no_call_service.add_biota_result( [], false, err.details, "");
                     resolve(return_data);
                 }else{
                     //撈取符合的使用者資料
                     if( _.isEmpty(update_data) ){
                         //查無資料
                         no_call_service.write_log(table_name,"U_no_data", input_params, who, log_type);
-                        var return_data = no_call_service.add_biota_result({}, true, "查無資料", "查無資料");
+                        var return_data = no_call_service.add_biota_result([], true, "查無資料", "查無資料");
                         resolve(return_data);       
                     }else{
                         no_call_service.write_log(table_name,"U_ok", input_params, who, log_type);
-                        var return_data = no_call_service.add_biota_result({}, true, "", "");
+                        var return_data = no_call_service.add_biota_result([], true, "", "");
                         resolve(return_data);                        
                     }
                 }
@@ -81,7 +81,7 @@ module.exports = {
             Info_list.update( delete_cond ,{"ds_deleted": moment().toISOString()} ).exec(function(err,update_data){
                 if(err){
                     no_call_service.write_log(table_name,"D_die", input_params, who, log_type);
-                    var return_data = no_call_service.add_biota_result( {}, false, err.details, "");
+                    var return_data = no_call_service.add_biota_result( [], false, err.details, "");
                     resolve(return_data);
                 }else{
                     no_call_service.write_log(table_name,"D_ok", input_params, who, log_type);
