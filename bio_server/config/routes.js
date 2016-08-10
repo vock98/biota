@@ -34,7 +34,10 @@ module.exports.routes = {
 
   // '/': { view: 'homepage' },
   //預設首頁導向基本資料維護
-  '/': { controller:'human',action:'human_list',locals:{layout:"layout/normal",active:"human"} },
+  '/': { controller:'common',action:'login',locals:{layout:"layout/normal",active:"human"} },
+  '/login': { controller:'common',action:'login',locals:{layout:"layout/normal",active:"human"} },
+  '/check': { controller:'common',action:'check' },
+  '/logout': { controller:'common',action:'logout' },
   //基本資料管理
     //人員資料管理
         //基本資料維護
@@ -58,20 +61,18 @@ module.exports.routes = {
             '/device/delete/:id/:device_id': { controller:'device',action:'device_delete',locals:{layout:"layout/normal", active:"device"} },
             //設備操作紀錄
             '/log/device_list': { controller:'log',action:'device_list',locals:{layout:"layout/normal", active:"Db_device_log"} },
-/*    
   //使用紀錄報表
     //人員進出報表
     '/table/human': { controller:'table',action:'table_human',locals:{layout:"layout/normal",active:"table"} },
     //設備操作紀錄報表
     '/table/device': { controller:'table',action:'table_device',locals:{layout:"layout/normal",active:"table"} },
     //FRR/FAR分析報表
-    '/table/frr': { controller:'table',action:'table_frr',locals:{layout:"layout/normal",active:"table"} },
-*/    
+    '/table/far': { controller:'table',action:'table_far',locals:{layout:"layout/normal",active:"table"} },  
   //開發者應用程式模擬介面
     //應用程式接口
     '/simulator/pro': { controller:'Simulator',action:'pro',locals:{layout:"layout/normal",active:"Simulator"} },
     //APNS/GCM推播模擬
-    // '/simulator/gcm': { controller:'Simulator',action:'gcm',locals:{layout:"layout/normal",active:"Simulator"} },
+    '/simulator/gcm': { controller:'Simulator',action:'gcm',locals:{layout:"layout/normal",active:"Simulator"} },
   //參考資料載入
     //中央氣象局環境資料
     '/ef_cwb/list': { controller:'ef_cwb',action:'list',locals:{layout:"layout/normal",active:"ef_cwb"}  },

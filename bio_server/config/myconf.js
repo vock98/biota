@@ -2,6 +2,8 @@ module.exports.myconf = {
     //IP位置使用 (目前用於no_call_service的Analy_weather)
     // myip : "52.192.93.236:1337",
     myip : "localhost:1337",
+    my_firstpage : "/human/list",
+    error_firstpage : "/login?error=err",
     //製作下拉選項用的資料
     select_arstyle :[
         { text: "公告", value: "announcement",},

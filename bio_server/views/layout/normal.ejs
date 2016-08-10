@@ -21,8 +21,10 @@
 	<link href="/bower_components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 	<link href="/dist/css/sb-admin-2.css" rel="stylesheet">
 	<link href="/css/style.css" rel="stylesheet">
+    <link href="/bower_components/morrisjs/morris.css" rel="stylesheet">
 	<link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="/bower_components/bootstrap-dialog/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+    <link href="/bower_components/bootstrap-select/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
     <!--CSS END-->
     <!--JS-->
     
@@ -35,26 +37,35 @@
 	<script src="/bower_components/datatables-responsive/js/dataTables.responsive.js"></script>    
 	<script src="/bower_components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
 	<script src="/bower_components/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-TW.js"></script>    
-	<script src="/dist/js/sb-admin-2.js"></script>
+    <script src="/bower_components/raphael/raphael-min.js"></script>
+	<script src="/bower_components/morrisjs/morris.min.js"></script>
+    <script src="/dist/js/sb-admin-2.js"></script>
     <script src="/bower_components/jquery-validation/js/jquery.validate.min.js"></script>
     <script src="/bower_components/jquery-validation/js/additional-methods.min.js"></script>
     <script src="/bower_components/bootstrap-dialog/bootstrap-dialog.min.js"></script>
+    <script src="/bower_components/bootstrap-select/bootstrap-select.min.js"></script>
     <%- partial("../common_variable") %>	
     <!--[if lt IE 9]>
 		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
+
     <!--�ۻsJS END-->
   </head>
  
-  <body>
+  <body>  
     <%- body %>
+    <script>
+        $('.bs-select').selectpicker({
+            iconBase: 'fa',
+            tickIcon: 'fa-check'
+        });
+    </script>
     <!--TEMPLATES-->
     
     <!--TEMPLATES END--> 
-
     <!--SCRIPTS-->
     <script src="/js/dependencies/sails.io.js"></script>
     <!--SCRIPTS END-->
-  </body>
+  </body>  
 </html>

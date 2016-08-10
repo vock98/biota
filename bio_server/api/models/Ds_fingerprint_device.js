@@ -23,11 +23,14 @@ module.exports = {
     刪除註記 ds_deleted  
   */
   attributes: {
-    ds_device_id: {
+    ds_unique:{
         type: "string",
         primaryKey: true,
-        unique: true
+        unique: true,
+        autoIncrement: true,        
+        columnName: 'id'
     },
+    ds_device_id: { type: "string" },
     ds_co_id:{ type: "string" },
     ds_ver:{ type: "string" },
     ds_speed:{ type: "string" },
@@ -39,7 +42,7 @@ module.exports = {
   },
   //unique失效使用
   beforeCreate: function (values, next) {
-    Ds_fingerprint_device.count({ ds_device_id: values.ds_device_id }).exec(function countCB(error, found) {
+    Ds_fingerprint_device.count({ ds_ap_id: values.ds_ap_id, ds_device_id: values.ds_device_id }).exec(function countCB(error, found) {
       if(found==0){
         next();
       }else{

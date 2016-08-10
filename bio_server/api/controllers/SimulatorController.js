@@ -6,10 +6,16 @@
  */
 
 module.exports = {
-	//列表頁面 http://localhost:1337/ap/list
+	//列表頁面 http://localhost:1337/simulator/pro
 	pro:function(req,res){     
         var return_obj = {};
         return_obj.now_url = "應用程式接口";
+        return res.view( false , return_obj );                               	
+	}, 
+    //列表頁面 http://localhost:1337/simulator/gcm
+	gcm:function(req,res){     
+        var return_obj = {};
+        return_obj.now_url = "APNS/GCM推播模擬";
         return res.view( false , return_obj );                               	
 	}, 
 };

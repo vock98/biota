@@ -61,6 +61,133 @@ module.exports = {
             })   
         });
     },
+    //撈出天氣資料 給呈現圖表使用(手動輸入)
+	find_self_weather:function(input_cond){
+        return new Promise(function(resolve, reject){
+            Ef_envir.find( input_cond ).exec(function(err,find_data){
+                if(err) reject(new Error("Ef_envir error :"+err));
+                var return_obj = _.map(find_data, function(one_data) {
+                    return {
+                        datetime: moment(one_data.ef_datetime).format("YYYY-MM-DD HH:mm"), 
+                            temp: one_data.ef_temp, 
+                            humd: one_data.ef_humd,
+                    };
+                });
+                resolve(return_obj);
+            })   
+        });
+    },
+    //撈出AP做成option
+	find_ap_option:function( input_sitename ){
+        return new Promise(function(resolve, reject){
+            Ds_fingerprint_ap.find().exec(function(err,find_data){
+                if(err) reject(new Error("Ds_fingerprint_ap error :"+err));
+                var sitename_obj = _.uniq(_.pluck(find_data,"ds_ap_id"));
+                var return_obj = _.map(sitename_obj, function(one_data) {
+                    return {
+                        text: one_data, 
+                        value: one_data
+                    };
+                });
+                resolve(return_obj);
+            })   
+        });
+    },
+    //撈出設備紀錄
+	find_device_record:function(input_ap){
+        return new Promise(function(resolve, reject){
+            var options = { 
+                table_name:["Ds_fingerprint_ap","Ds_fingerprint_device"],
+                createdAt:{ '>=': moment().subtract(50, 'day').startOf('day').toISOString() , '<=': moment().endOf('day').toISOString() }
+            };
+            
+            Db_device_log.find( options ).exec(function(err,find_data){ 
+                if(err) reject(new Error("Db_device_log error :"+err));
+                var first_array=[];
+                var return_obj=[];
+                
+                _.each(find_data, function(one_data) {
+                    if(one_data.input_cond.id != input_ap)return;
+                    var now_day =  moment(one_data.createdAt).format("YYYY-MM-DD");
+                    if(!first_array[now_day])first_array[now_day] = {
+                                                                        datetime : now_day,
+                                                                        success : 0,
+                                                                        fail : 0,
+                                                                    };
+                    
+                    if(one_data.CRUD.substr(2) == "ok"){
+                        first_array[now_day]["success"] = first_array[now_day]["success"]+1;
+                    }else{
+                        first_array[now_day]["fail"] = first_array[now_day]["fail"]+1;                        
+                    }
+                });
+                //都用.each會同步
+                for(var key in first_array){
+                    return_obj.push(first_array[key]);                    
+                }
+
+                resolve(return_obj);
+            })   
+        });
+    },
+    //撈出天氣sitename做成optiono
+	find_nation_option:function( input_sitename ){
+        return new Promise(function(resolve, reject){
+            Ef_cwb.find({ef_source:"NOW"}).exec(function(err,find_data){
+                if(err) reject(new Error("Ef_envir error :"+err));
+                var sitename_obj = _.uniq(_.pluck(find_data,"ef_sitename"));
+                var return_obj = _.map(sitename_obj, function(one_data) {
+                    return {
+                        text: one_data, 
+                        value: one_data
+                    };
+                });
+                resolve(return_obj);
+            })   
+        });
+    },
+    //撈出天氣資料 給呈現圖表使用(氣象局輸入)
+	find_nation_weather:function(input_sitename){
+        return new Promise(function(resolve, reject){
+            //WDSD = 風速 TEMP = 溫度 HUMD = 相對濕度 PRES = 氣壓 H_24R = 日累積雨量  
+            var options = { 
+                ef_sitename: input_sitename,
+                ef_item:["TEMP","HUMD"],
+                ef_date:{ '>=': moment().subtract(50, 'day').format("YYYY-MM-DD"), '<=': moment().format("YYYY-MM-DD") }
+            };
+            Ef_cwb.find( options ).exec(function(err,find_data){ 
+                if(err) reject(new Error("Ef_envir error :"+err));
+                var first_array=[];
+                var return_obj=[];
+                
+                _.each(find_data, function(one_data) {
+                    var temp_array = _.without([
+                        one_data.ef_h00,one_data.ef_h10,one_data.ef_h20,
+                        one_data.ef_h01,one_data.ef_h11,one_data.ef_h21,
+                        one_data.ef_h02,one_data.ef_h12,one_data.ef_h22,
+                        one_data.ef_h03,one_data.ef_h13,one_data.ef_h23,
+                        one_data.ef_h04,one_data.ef_h14,
+                        one_data.ef_h05,one_data.ef_h15,
+                        one_data.ef_h06,one_data.ef_h16,
+                        one_data.ef_h07,one_data.ef_h17,
+                        one_data.ef_h08,one_data.ef_h18,
+                        one_data.ef_h09,one_data.ef_h19,                                       
+                    ],0);
+                    var sum = _.reduce( temp_array, function(memo, num){ return memo + num; }, 0); //算出總和
+                    var average = Math.round(sum / (temp_array.length) *100 )/100;
+                    if(!first_array[one_data.ef_date])first_array[one_data.ef_date] = {};
+                    first_array[one_data.ef_date]["datetime"] = one_data.ef_date;
+                    first_array[one_data.ef_date][one_data.ef_item] = average;
+                });
+                //都用.each會同步
+                for(var key in first_array){
+                    return_obj.push(first_array[key]);                    
+                }
+
+                resolve(return_obj);
+            })   
+        });
+    },
     //撈出f_linked資料的(單一)
 	find_flinked:function(input_cond){
         return new Promise(function(resolve, reject){

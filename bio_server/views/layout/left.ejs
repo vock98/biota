@@ -14,6 +14,11 @@
     var a1212 = ["指紋機設備設定"];
     var a1213 = ["設備操作記錄"];
     
+    var b1 = ["人員進出報表","設備操作記錄報表","FAR 分析報表"];    
+    var b11 = ["人員進出報表"];
+    var b12 = ["設備操作記錄報表"];
+    var b13 = ["FAR 分析報表"];    
+                                    
     var C1 = ["應用程式接口","APNS/GCM推播模擬"];    
     var C11 = ["應用程式接口"];
     var C12 = ["APNS/GCM推播模擬"];
@@ -41,8 +46,8 @@
 
 			<ul class="nav navbar-top-links navbar-right">
 				<li>
-					<a href="#">
-						<span>Hi, Lightman</span>
+					<a href="/logout">
+						<span>Hi, Biota</span>
 						<i class="fa fa-sign-out fa-fw"></i>
 					</a>
 				</li>
@@ -92,19 +97,17 @@
 							<!-- /.nav-second-level -->
 						</li>
 
-						<li>
+						<li <%-active_or_not(now_url, b1 ) %>>
 							<a href="B.html"><i class="fa fa-bar-chart-o fa-fw"></i> 使用記錄報表<span class="fa arrow"></span></a>
-							<ul class="nav nav-second-level">
-								<!--
-                                    <li>
-                                        <a href="#">人員進出報表</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">設備操作記錄報表</a>
-                                    </li>
-                                -->
-								<li>
-									<a href="#"> FAR 分析報表</a>
+							<ul class="nav nav-second-level">								
+                                <li <%-active_or_not(now_url, b11 ) %>>
+                                    <a href="/table/human">人員進出報表</a>
+                                </li>
+                                <li <%-active_or_not(now_url, b12 ) %>>
+                                    <a href="/table/device">設備操作記錄報表</a>
+                                </li>                                
+								<li <%-active_or_not(now_url, b13 ) %>>
+									<a href="/table/far"> FAR 分析報表</a>
 								</li>
 							</ul>
 							<!-- /.nav-second-level -->
@@ -117,7 +120,7 @@
 									<a href="/simulator/pro">應用程式接口</a>
 								</li>
 								<li <%-active_or_not(now_url, C12 ) %>>
-									<a href="#">APNS / GCM 推播模擬</a>
+									<a href="/simulator/gcm">APNS / GCM 推播模擬</a>
 								</li>
 							</ul>
 							<!-- /.nav-second-level -->

@@ -1,6 +1,45 @@
 <script>
 //這邊是共用JS
 
+//產生連續圖(向下著色) 因為只有用一次 就寫死其他資訊
+function continue_diagram( input_data ){
+    Morris.Area({
+		element: 'morris-area-chart',
+		data: input_data,
+		xkey: 'datetime',
+		ykeys: ['TEMP'],
+		labels: ['溫度'],
+		pointSize: 2,
+		hideHover: 'auto',
+		resize: true
+	});
+    
+    Morris.Area({
+		element: 'morris-area-chart2',
+		data: input_data,
+		xkey: 'datetime',
+		ykeys: [ 'HUMD'],
+		labels: [ '濕度'],
+		pointSize: 2,
+		hideHover: 'auto',
+		resize: true
+	});
+}
+
+//產生折線圖
+function continue_line( input_data ){
+    Morris.Line({
+		element: 'morris-line-chart',
+		data: input_data,
+		xkey: 'datetime',
+		ykeys: ['success','fail'],
+		labels: ['成功','失敗'],
+		hideHover: 'auto',
+		resize: true
+	});
+}
+
+
 //為了不使用英文版的datatable 乾脆自己重跑一次 
 function create_datatable( input_id ){
     $('#'+input_id).DataTable({                
@@ -206,6 +245,9 @@ function check_default(type , names , default_value){
                 $(this).prop("selected", "true");
             }
         });
+        if($(".bs-select[name="+names+"]").length>0){
+            $("#"+names).selectpicker('val', default_value);            
+        }
     }else if(type=="img"){
        $("#"+names).parent().find("img").prop("src",default_value);
     }else if(type=="base64img"){
