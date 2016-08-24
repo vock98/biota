@@ -172,7 +172,7 @@ module.exports = {
                         one_data.ef_h07,one_data.ef_h17,
                         one_data.ef_h08,one_data.ef_h18,
                         one_data.ef_h09,one_data.ef_h19,                                       
-                    ],0);
+                    ],0,-998);
                     var sum = _.reduce( temp_array, function(memo, num){ return memo + num; }, 0); //算出總和
                     var average = Math.round(sum / (temp_array.length) *100 )/100;
                     if(!first_array[one_data.ef_date])first_array[one_data.ef_date] = {};
