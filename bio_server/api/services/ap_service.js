@@ -4,6 +4,8 @@ var change_obj = {
     "id"            : "ds_ap_id",
     "device_type"   : "ds_device_type",
     "platform_type" : "ds_platform_type",
+    "lat"           : "ds_lat",
+    "lng"           : "ds_lng",
     "push_token"    : "ds_push_token"
 }
     var table_name = "Ds_fingerprint_ap";

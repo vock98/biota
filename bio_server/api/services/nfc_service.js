@@ -147,5 +147,30 @@ module.exports = {
             });   
         });
     },
+    //新增主function 
+    destroy_all: function(input_params ,who){
+        return new Promise(function(resolve, reject){
+            co(function* () {                                                    
+                var return_obj  = "";
+                var fill_array  = ["id"]; //必填欄位<輸入值>
+                var nfill_array = []; //不可填欄位<輸入值>
+                var cond_array = [];  //拿來當條件的欄位<欄位值>
+                var check_fill_nfill = yield call_service.check_fill_nfill(input_params, fill_array, nfill_array);                
+                
+                if(check_fill_nfill == "ok"){
+                    //輸入條件正確 修正資料ID內容
+                    var r_array =  yield call_service.check_change_cond(input_params, change_obj, cond_array);
+                    var final_data = yield nfc_service.destroy_db( r_array[0], who, input_params );
+                    var back_data =  yield call_service.back_change_cond(final_data, change_obj);
+                    resolve( back_data );
+                }else{
+                    //輸入條件有誤 直接回傳錯誤JSON
+                    resolve( check_fill_nfill );
+                }
+            }).catch(function(err){
+                console.log(table_name+"_third_routes_error_d",err);
+            });   
+        });
+    },
 };
 

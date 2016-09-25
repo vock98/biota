@@ -37,6 +37,8 @@ module.exports = {
         type: "string",
         defaultsTo: ''
     },
+    ds_lat:{ type: "string" },
+    ds_lng:{ type: "string" },
     ds_deleted:{ type: "datetime" } //沒有值代表還沒刪除
   },
   //unique失效使用

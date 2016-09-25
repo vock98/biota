@@ -14,6 +14,7 @@ module.exports = {
         C網址   : http://localhost:1337/api/ds_nfc?type=C&id=11&nfc=cc
         R網址   : http://localhost:1337/api/ds_nfc?type=R&id=11
         D網址   : http://localhost:1337/api/ds_nfc?type=D&id=11&nfc=cc
+        all_D網址   : http://localhost:1337/api/ds_nfc?type=all_D&id=11
     */
 	redirect: function(req, res) {
         co(function* () {                                                    
@@ -27,6 +28,7 @@ module.exports = {
                 // case "R2": return_obj = yield nfc_service.search2( params ,who); break;
                 // case "U" : return_obj = yield nfc_service.update( params ,who); break;
                 case "D" : return_obj = yield nfc_service.destroy( params ,who); break;
+                case "all_D" : return_obj = yield nfc_service.destroy_all( params ,who); break;
                 default: return_obj = no_call_service.add_biota_result( {} , false , "type 不正確" , ["type 不正確"] );
             }
             var submit_to_link = req.param("submit_to_link");
