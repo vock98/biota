@@ -1,4 +1,5 @@
 var moment = require('moment');
+var co = require('co');
 //此處出現的都是co要用的
 module.exports = {
     //製作非refernce的obj
@@ -188,13 +189,18 @@ module.exports = {
             })   
         });
     },
-    //撈出f_linked資料的(單一)
+    //撈出f_linked資料的
 	find_flinked:function(input_cond){
         return new Promise(function(resolve, reject){
-            F_linked.findOne( input_cond ).exec(function(err,find_data){
-                if(err) reject(new Error("f_linked error :"+err));
-                resolve(find_data);
-            })   
+            co(function* () {  
+                F_linked.find(input_cond).exec(function(err,find_data){
+                    if(err) reject(new Error("f_linked error :"+err));
+                    var minu_array = _.pluck(find_data,"f_minutiae");
+                    resolve(minu_array);
+                }) 
+            }).catch(function(err){
+                reject(err);
+            });                
         });
     },
     //撈出human資料的(單一)
