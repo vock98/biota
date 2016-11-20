@@ -41,13 +41,8 @@ function get_url_callback_xml(input_url){
 //寫入DB
 function get_url_callback(result_obj){
     return new Promise(function(resolve, reject){
-        request.post('http://'+sails.config.myconf.myip+'/api/Ef_cwb', {form:result_obj},function(error, response, body){
-            if (!error && response.statusCode == 200) {      
-                resolve( body );
-            }else{
-                reject("get_url_callback 失敗");
-            }
-        });   
+        // var return_obj = yield cwb_service.create( result_obj , "auto_write");
+        resolve(null);
     });
 }
 
@@ -106,22 +101,35 @@ function write_Analy_weather(input_params){
 module.exports.cron = {
     // 取得中央氣象局的雨量資料 15分鐘跑一次
     get_cwb: {
-        // schedule: '*/15 * * * * *', 
+        // schedule: '*/5 * * * * *', 
         schedule: '0 */15 * * * *',
         onTick: function() { 
             co(function* () {                
                 console.log('開始取得中央氣象局的資料');
                 var rain_xml_data = yield get_url_callback_xml( Rain_url ); //取得下雨相關資訊xml
-                var rain_data = yield write_Analy_weather( rain_xml_data ); //換得下雨資訊data                
+                var rain_data = yield write_Analy_weather( rain_xml_data ); //換得下雨資訊data 
+                var rain_url_data = "";
                     for(var key in rain_data){
                         // console.log(rain_data[key]);
-                        yield get_url_callback(rain_data[key]);
+                        var rain_url_data = yield  cwb_service.create( rain_data[key] , "auto_write");
+                        // var rain_url_data = yield get_url_callback(rain_data[key]);
                     }
                 var weather_xml_data = yield get_url_callback_xml( Now_url ); //取得天氣相關資訊xml
                 var weather_data = yield write_Analy_weather( weather_xml_data ); //寫入天氣資訊data
+                var weather_url_data = "";
                     for(var key in weather_data){
-                        yield get_url_callback(weather_data[key]);
-                    }
+                        var rain_url_data = yield  cwb_service.create( weather_data[key] , "auto_write");
+                        // var weather_url_data = yield get_url_callback(weather_data[key]);
+                    }       
+
+                //為了記憶體 把這些資料通通清空
+                rain_xml_data = null;
+                rain_data = null;
+                rain_url_data = null;
+                weather_xml_data = null;
+                weather_data = null;
+                weather_url_data = null;                
+                
                 console.log('結束取得中央氣象局的資料');
             }).catch(function(err){
                 console.log("cron_get_cwb_error",err);

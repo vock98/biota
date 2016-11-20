@@ -1,0 +1,5 @@
+{
+  "name"   : "biota_mem_control",
+  "script" : "app.js",
+  "max_memory_restart" : "500M"
+}
