@@ -341,5 +341,60 @@ module.exports = {
             resolve( return_obj1 );
         });
     },
+    //撈出所有human資料
+	Client_allHuman:function(){
+        return new Promise(function(resolve, reject){
+            Ds_human.find().exec(function(err,find_data){
+                if(err) reject(new Error("find_allHuman error :"+err));
+                resolve(find_data);
+            })  
+        });
+    },
+    //撈出對應指紋
+	Client_flinked:function(input_human_id){
+        return new Promise(function(resolve, reject){
+            F_linked.find({ds_human_pk: input_human_id}).exec(function(err,find_data){
+                if(err) reject(new Error("find_allHuman error :"+err));
+                //找到之後做轉換
+                var return_array =[];
+                for(var key in find_data){
+                    var one_data = find_data[key];
+                    switch(one_data.f_which_one){
+                        case "r-thumb" : var fp="R1"; break;
+                        case "r-index" : var fp="R2"; break;
+                        case "r-middle": var fp="R3"; break;
+                        case "r-ring"  : var fp="R4"; break;
+                        case "r-pinky" : var fp="R5"; break;
+                        case "l-thumb" : var fp="L1"; break;
+                        case "l-index" : var fp="L2"; break;
+                        case "l-middle": var fp="L3"; break;
+                        case "l-ring"  : var fp="L4"; break;
+                        case "l-pinky" : var fp="L5"; break;
+                        default: var fp=""; break;
+                    }
+                    var input_obj ={
+                        "finger_part" : fp,
+                        "quality" : 1, 
+                        "minute" : one_data.f_minutiae, 
+                        "online_f_id" : one_data.f_linked_pk
+                    }
+                    return_array.push(input_obj);
+                };
+                
+                resolve(return_array);
+            });  
+        });
+    },
+    //撈出對應nfc
+	Client_nfc:function(input_human_id){
+        return new Promise(function(resolve, reject){
+            Ds_nfc.find({ds_human_pk: input_human_id}).exec(function(err,find_data){
+                if(err) reject(new Error("find_allHuman error :"+err));
+                //找到之後做轉換
+                var return_array =_.pluck(find_data, "ds_nfc_tag_id");
+                resolve(return_array);
+            })  
+        });
+    },
 };
 

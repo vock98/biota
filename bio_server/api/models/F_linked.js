@@ -40,6 +40,28 @@ module.exports = {
     f_dat_path:{ type: "string" },
     f_pic_path:{ type: "string" },
     f_minutiae:{ type: "string" },
+  },
+  //unique失效使用
+  beforeCreate: function (values, next) {
+        function padRight(str,lenght){
+            if(str.length >= lenght)
+                return str;
+            else
+                return padRight(str+"0",lenght);
+        }
+      var now_minu = values.f_minutiae;      
+      var new_minu = "錯誤";
+      
+      if(now_minu.length==1024){
+        var new_minu = now_minu;
+      }else if(now_minu.length<1024){
+        var new_minu = padRight(now_minu+"0",1024);
+      }else if(now_minu.length>1024){
+        var new_minu = now_minu.substr(0,1024)
+      }
+
+      values.f_minutiae = new_minu;
+      next();
   }
 };
 

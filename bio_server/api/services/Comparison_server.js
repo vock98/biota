@@ -1,3 +1,4 @@
+/*
 var moment = require('moment');
 var co = require('co');
 var change_obj = {
@@ -326,6 +327,6 @@ module.exports = {
             });   
         });
     },
-    
 };
 
+    */

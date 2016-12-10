@@ -39,6 +39,45 @@ module.exports = {
             return res.send( table_name+"_second_routes_error");
         });
     },
+    /*
+        用途 : 寫入原本crontab要抓取的所有資料
+        輸入 : 無
+        輸出 : 無
+        不可輸入值: 無
+        快速連結 : http://localhost:1337/api/Ef_cwb/crontab_add
+    */
+	crontab_add: function(req, res) {
+        co(function* () {                
+            console.log('開始取得中央氣象局的資料');
+            var Rain_url = "http://opendata.cwb.gov.tw/opendataapi?dataid=O-A0002-001&authorizationkey=CWB-37305A70-2D5B-4816-B5BA-C1F59EDF1678";
+            var Now_url = "http://opendata.cwb.gov.tw/opendataapi?dataid=O-A0003-001&authorizationkey=CWB-37305A70-2D5B-4816-B5BA-C1F59EDF1678";
+            var rain_xml_data = yield cwb_service.get_url_callback_xml( Rain_url ); //取得下雨相關資訊xml
+            var rain_data = yield cwb_service.write_Analy_weather( rain_xml_data ); //換得下雨資訊data 
+            var rain_url_data = "";
+                for(var key in rain_data){
+                    var rain_url_data = yield  cwb_service.create( rain_data[key] , "auto_write");
+                }
+            var weather_xml_data = yield cwb_service.get_url_callback_xml( Now_url ); //取得天氣相關資訊xml
+            var weather_data = yield cwb_service.write_Analy_weather( weather_xml_data ); //寫入天氣資訊data
+            var weather_url_data = "";
+                for(var key in weather_data){
+                    var rain_url_data = yield  cwb_service.create( weather_data[key] , "auto_write");
+                }       
+
+            //為了記憶體 把這些資料通通清空
+            rain_xml_data = null;
+            rain_data = null;
+            rain_url_data = null;
+            weather_xml_data = null;
+            weather_data = null;
+            weather_url_data = null;                
+            
+            return res.send('結束取得中央氣象局的資料');
+        }).catch(function(err){
+            console.log("cron_get_cwb_error",err);
+            return res.send("error");
+        });
+    },
 	/*
         用途 : 查看內容
         輸入 : 無
@@ -67,7 +106,13 @@ module.exports = {
                     return res.json(find_data);                               
                 }
         })
-    },        
+    },    
+    //用來清除資料用的
+    // ddd2: function(req, res) {
+        // Ef_cwb.destroy({}).exec(function(err,find_data){
+            // return res.send("ok");                               
+        // })
+    // },     
     list: function(req, res) {
         var return_obj = {};
         return_obj.now_url = "中央氣象局環境資料";

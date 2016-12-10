@@ -1,5 +1,11 @@
 var moment = require('moment');
 var co = require('co');
+var http = require('http');
+var xml2js = require('xml2js');
+var request = require('request');
+var co = require('co');
+var moment = require('moment');
+
 var change_obj = {
     "ef_sitename"   : "ef_sitename",
     "ef_source"  : "ef_source",
@@ -126,5 +132,75 @@ module.exports = {
             });   
         });
     },
+    //拿到官方XML
+    get_url_callback_xml: function(input_url){
+        return new Promise(function(resolve, reject){
+            request( input_url , function (error, response, body) {
+                if (!error && response.statusCode == 200) {      
+                    xml2js.parseString(body, function(err, result) {            
+                        if (err) {
+                            console.log("xml_error",err);
+                            reject("xml_error");
+                        } else {
+                            resolve( result );
+                        }
+                    });
+                }else{
+                    reject("讀取"+input_url+"失敗");
+                }
+            })   
+        });
+    },
+    //拆解氣象局資料
+    write_Analy_weather: function(input_params){
+        return new Promise(function(resolve, reject){
+            var table_name = "Ef_cwb";
+            var log_type = "out";        
+            var data_params = input_params.cwbopendata;
+            var final_array = [];
+
+            //拆解各區域資料
+            _.each(data_params.location, function(ldata){
+                if(data_params.dataid == "CWB_A0002"){                
+                    //資料名稱 MIN_10 = 十分鐘內雨量                
+                    final_array.push({
+                        ef_sitename : ldata.locationName[0], //觀測站名稱
+                        ef_date : moment(ldata.time[0].obsTime[0]).format('YYYY-MM-DD'),//紀錄日期
+                        ef_time : moment(ldata.time[0].obsTime[0]).format('HH'), //紀錄時間
+                        type : "C",//使用寫入
+                        ef_source : "RAIN", //資料來源
+                        ef_item : "MIN_10",
+                        ef_value : _.findWhere(ldata.weatherElement, {elementName: ["MIN_10"]}).elementValue[0].value[0]
+                    });       
+                }else if(data_params.dataid == "CWB_A0003"){          
+                    //資料名稱
+                    //WDSD = 風速 TEMP = 溫度 HUMD = 相對濕度 PRES = 氣壓 H_24R = 日累積雨量            
+                    var four_add = ["TEMP","HUMD","PRES","WDSD"]
+                    _.each(four_add,function(key){
+                        final_array.push({
+                            ef_sitename : ldata.locationName[0], //觀測站名稱
+                            ef_date : moment(ldata.time[0].obsTime[0]).format('YYYY-MM-DD'),//紀錄日期
+                            ef_time : moment(ldata.time[0].obsTime[0]).format('HH'), //紀錄時間
+                            type : "C",//使用寫入
+                            ef_source : "NOW", //資料來源
+                            ef_item : key,
+                            ef_value : _.findWhere(ldata.weatherElement, {elementName: [key]}).elementValue[0].value[0]
+                        });    
+                    });
+                    final_array.push({
+                        ef_sitename : ldata.locationName[0], //觀測站名稱
+                        ef_date : moment(ldata.time[0].obsTime[0]).format('YYYY-MM-DD'),//紀錄日期
+                        ef_time : moment(ldata.time[0].obsTime[0]).format('HH'), //紀錄時間
+                        type : "C",//使用寫入
+                        ef_source : "NOW", //資料來源
+                        ef_item : "H_24R",
+                        ef_value : _.findWhere(ldata.weatherElement, {elementName: ["24R"]}).elementValue[0].value[0]
+                    });
+                }      
+            });    
+                resolve(final_array);                     
+        });
+    },   
+    
 };
 

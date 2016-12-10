@@ -8,7 +8,8 @@
 │    │    └─────────────── hour (0 - 23)
 │    └──────────────────── minute (0 - 59)
 └───────────────────────── second (0 - 59, OPTIONAL)
-*/
+
+
 var http = require('http');
 var xml2js = require('xml2js');
 var fs = require('fs');
@@ -41,7 +42,7 @@ function get_url_callback_xml(input_url){
 //寫入DB
 function get_url_callback(result_obj){
     return new Promise(function(resolve, reject){
-        // var return_obj = yield cwb_service.create( result_obj , "auto_write");
+        var return_obj = yield cwb_service.create( result_obj , "auto_write");
         resolve(null);
     });
 }
@@ -101,8 +102,8 @@ function write_Analy_weather(input_params){
 module.exports.cron = {
     // 取得中央氣象局的雨量資料 15分鐘跑一次
     get_cwb: {
-        // schedule: '*/5 * * * * *', 
-        schedule: '0 */15 * * * *',
+        // schedule: '* /5 * * * * *', 
+        // schedule: '0 * /15 * * * *',
         onTick: function() { 
             co(function* () {                
                 console.log('開始取得中央氣象局的資料');
@@ -142,3 +143,4 @@ module.exports.cron = {
         },
     },
 };
+*/    

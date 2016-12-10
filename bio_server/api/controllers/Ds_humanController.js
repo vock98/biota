@@ -6,10 +6,12 @@
  */
     var co = require('co');
     var moment = require("moment");
+    var sha1 = require('sha1');
     var table_name = "Ds_human";
     var log_type = "human";
 module.exports = {
 	/*
+        client  : http://localhost:1337/api/Ds_human/server_allData
         all網址 : http://localhost:1337/api/Ds_human/find
         C網址   : http://localhost:1337/api/Ds_human?type=C&name=kk
         R1網址  : http://localhost:1337/api/Ds_human?type=R1&name=kk
@@ -59,6 +61,48 @@ module.exports = {
                     return res.json(find_data);                               
                 } 
         })
+    },
+    /*  
+        用途 : 取出線上所有資料
+        輸入 : 無
+        輸出 : 整個DB
+        不可輸入值: 無
+        快速連結 : http://localhost:1337/api/Ds_human/server_allData
+    */
+	server_allData: function(req, res){   
+        co(function* () {
+            var return_json =[];
+            var all_human = yield call_service.Client_allHuman();            
+            if(all_human.length>0){
+                for(var key in all_human){
+                    var one_obj ={};
+                    var one_man = all_human[key];
+                    var finger = yield call_service.Client_flinked(one_man.ds_human_pk);       
+                    var nfc = yield call_service.Client_nfc(one_man.ds_human_pk);
+                    one_obj.birthday = one_man.ds_birthday;
+                    one_obj.gender   = one_man.ds_gender;
+                    one_obj.bloodtype= one_man.ds_bloodtype;
+                    one_obj.job      = one_man.ds_job;
+                    one_obj.name     = one_man.ds_name;
+                    one_obj.bind_id  = one_man.ds_bind_id;
+                    one_obj.manager  = one_man.ds_is_manager;
+                    one_obj.online_id   = one_man.ds_human_pk;
+                    one_obj.uniq_id     = sha1(one_man.ds_name + one_man.createdAt);
+                    one_obj.create_time = one_man.createdAt;
+                    one_obj.update_time = one_man.updatedAt;                    
+                    one_obj.nfc_card = nfc;
+                    one_obj.finger = finger;
+                    
+                    return_json.push(one_obj);
+                }
+                return res.json(return_json);
+            }else{                                                    
+                return res.json([]);
+            }
+        }).catch(function(err){
+            console.log(table_name+"_second_routes_error",err);
+            return res.send( table_name+"_second_routes_error");
+        });
     },
     /*
         ajax撈取全部資料專用
